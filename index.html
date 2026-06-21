@@ -45,9 +45,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.2rem;
+            gap: 1rem;
             width: 100%;
-            max-width: 750px;
+            max-width: 850px;
             transition: opacity 0.5s ease, filter 0.5s ease;
         }
         .main-container.game-over-mode {
@@ -59,7 +59,7 @@
         .logo-container {
             width: 100%;
             text-align: center;
-            padding: 0.3rem 0;
+            padding: 0.2rem 0;
             margin-bottom: -0.3rem;
             cursor: pointer;
             position: relative;
@@ -145,9 +145,16 @@
             padding: 0.2rem 0;
             border-top: 1px solid #ff6b7c22;
             width: 100%;
-            max-width: 400px;
+            max-width: 500px;
+            transition: all 0.3s ease;
+        }
+        .credits.switched {
+            color: #ff6b7c66;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
         }
         .credits span { color: #ff6b7c66; }
+        .credits.switched span { color: #ff6b7caa; }
 
         .how-to-play-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
@@ -169,34 +176,51 @@
             box-shadow: 0 0 40px rgba(255,43,79,0.2);
             transform: scale(1.02);
         }
-
-        .heart-counter {
-            background: rgba(26,26,46,0.85);
-            backdrop-filter: blur(6px);
-            border-radius: 3rem;
-            padding: 1.5rem 2.5rem 1.2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 3px #ff3b5c55 inset;
-            text-align: center;
-            width: 100%;
-            border: 2px solid #ff6b7c66;
-            position: relative;
+        .how-to-play-btn.switched {
+            font-size: 1.3rem;
+            border-color: #ff6b7c88;
+            color: #ff6b7cbb;
+            animation: btnPulse 1s ease-in-out infinite alternate;
         }
-        .heart-counter .player-label {
-            font-size: 1rem;
+        @keyframes btnPulse {
+            0% { box-shadow: 0 0 20px rgba(255,43,79,0.1); }
+            100% { box-shadow: 0 0 50px rgba(255,43,79,0.3); }
+        }
+
+        /* === MODO 2 JUGADORES === */
+        .players-container {
+            display: flex;
+            gap: 2rem;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .player-card {
+            flex: 1;
+            min-width: 280px;
+            background: rgba(26,26,46,0.7);
+            backdrop-filter: blur(6px);
+            border-radius: 2rem;
+            padding: 1.2rem 1.5rem 1rem;
+            border: 2px solid #ff6b7c44;
+            transition: all 0.3s ease;
+        }
+        .player-card .player-label {
+            font-size: 1.2rem;
             color: #ff6b7caa;
             letter-spacing: 4px;
-            margin-bottom: 0.2rem;
+            text-align: center;
             text-transform: uppercase;
+            margin-bottom: 0.3rem;
         }
-        .hearts-container {
+        .player-card .hearts-container {
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
-            margin: 0.2rem 0 0.3rem 0;
+            gap: 1.2rem;
             flex-wrap: wrap;
         }
-        .heart {
-            font-size: 5rem;
+        .player-card .heart {
+            font-size: 4.5rem;
             line-height: 1;
             cursor: pointer;
             transition: transform 0.15s ease, filter 0.2s, opacity 0.2s;
@@ -204,16 +228,15 @@
             color: #ff2b4f;
             filter: drop-shadow(0 8px 12px #00000077);
             transform: scale(1);
-            position: relative;
         }
-        .heart:hover {
+        .player-card .heart:hover {
             transform: scale(1.12);
             filter: drop-shadow(0 0 22px #ff3b5c);
         }
-        .heart:active {
+        .player-card .heart:active {
             transform: scale(0.85);
         }
-        .heart.lost {
+        .player-card .heart.lost {
             color: #ff2b4f;
             text-shadow: 0 0 20px #ff2b4f66;
             filter: drop-shadow(0 0 15px #ff2b4f44);
@@ -222,101 +245,171 @@
             pointer-events: none;
             opacity: 0.5;
         }
-        .heart.breaking {
+        .player-card .heart.breaking {
             animation: breakHeart 1.2s ease-out forwards;
             pointer-events: none !important;
         }
         @keyframes breakHeart {
-            0% { transform: scale(1) rotate(0deg); opacity: 1; color: #ff2b4f; text-shadow: 0 0 30px #ff2b4f; }
-            25% { transform: scale(1.4) rotate(-15deg); color: #ff4455; text-shadow: 0 0 60px #ff2b4f; }
-            50% { transform: scale(1.6) rotate(10deg) translateY(-20px); color: #ff0020; text-shadow: 0 0 80px #ff0020; }
-            75% { transform: scale(1.8) rotate(-5deg) translateY(-40px); color: #cc0018; text-shadow: 0 0 100px #cc0018; opacity: 0.8; }
-            100% { transform: scale(2.5) rotate(20deg) translateY(-80px); color: #880010; text-shadow: 0 0 120px #880010; opacity: 0; }
+            0% { transform: scale(1) rotate(0deg); opacity: 1; text-shadow: 0 0 30px #ff2b4f; }
+            25% { transform: scale(1.4) rotate(-15deg); text-shadow: 0 0 60px #ff2b4f; }
+            50% { transform: scale(1.6) rotate(10deg) translateY(-20px); text-shadow: 0 0 80px #ff2b4f; }
+            75% { transform: scale(1.8) rotate(-5deg) translateY(-40px); text-shadow: 0 0 100px #ff2b4f; opacity: 0.8; }
+            100% { transform: scale(2.5) rotate(20deg) translateY(-80px); text-shadow: 0 0 120px #ff2b4f; opacity: 0; }
         }
 
-        .reset-btn {
+        .player-card .reset-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             background: #ff3b5c;
             border: none;
             color: #1a1a2e;
-            font-size: 1.4rem;
+            font-size: 1rem;
             font-weight: bold;
-            padding: 0.6rem 1.8rem;
+            padding: 0.4rem 1.2rem;
             margin-top: 0.3rem;
             border-radius: 60px;
             cursor: pointer;
-            box-shadow: 0 6px 0 #881a2a, 0 12px 30px #000000aa;
+            box-shadow: 0 4px 0 #881a2a, 0 8px 20px #000000aa;
             transition: all 0.08s linear;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             border: 2px solid #ff9eae;
             width: fit-content;
             margin-left: auto;
             margin-right: auto;
             display: none;
         }
-        .reset-btn.visible { display: block; }
-        .reset-btn:hover {
+        .player-card .reset-btn.visible { display: block; }
+        .player-card .reset-btn:hover {
             background: #ff4f6e;
             transform: scale(1.03);
-            box-shadow: 0 6px 0 #881a2a, 0 15px 35px #000000dd;
         }
-        .reset-btn:active {
+        .player-card .reset-btn:active {
             transform: translateY(4px);
-            box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
+            box-shadow: 0 0px 0 #881a2a;
         }
 
-        .youtube-search {
+        .player-card .player-status {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ff6b7c66;
+            margin-top: 0.2rem;
+            letter-spacing: 2px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .player-card .player-status.win {
+            color: #ff6b7c;
+            font-size: 1.1rem;
+            animation: statusPulse 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes statusPulse {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+
+        .color-picker-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .color-picker-container .color-btn {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .color-picker-container .color-btn:hover {
+            transform: scale(1.15);
+        }
+        .color-picker-container .color-btn.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        /* === REPRODUCTOR PERSONALIZADO === */
+        .custom-player {
             width: 100%;
-            background: rgba(26,26,46,0.8);
+            background: rgba(26,26,46,0.7);
             backdrop-filter: blur(8px);
             border-radius: 2rem;
-            padding: 1rem 1.5rem;
+            padding: 1.2rem 1.5rem 1.5rem;
             border: 2px solid #ff6b7c44;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        .custom-player .player-container {
+            position: relative;
+            width: 100%;
+            background: #0a0a1a;
+            border-radius: 1.2rem;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            border: 2px solid #ff6b7c33;
+        }
+        .custom-player .player-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        .custom-player .player-container .placeholder {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            color: #ff6b7c44;
+            font-size: 1.5rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            gap: 0.5rem;
+            background: #0a0a1a;
+        }
+        .custom-player .player-container .placeholder .icon {
+            font-size: 4rem;
+        }
+        .custom-player .player-container .placeholder .msg {
+            font-size: 1.1rem;
+            color: #ff6b7c66;
+            letter-spacing: 2px;
+        }
+        .custom-player .player-controls {
             display: flex;
             gap: 0.8rem;
+            margin-top: 0.8rem;
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
-            transition: opacity 0.5s ease;
         }
-        .youtube-search.hidden {
-            opacity: 0;
-            pointer-events: none;
-            height: 0;
-            padding: 0;
-            margin: 0;
-            overflow: hidden;
-            border: none;
-        }
-        .youtube-search .search-icon { font-size: 1.4rem; color: #ff6b7c88; flex-shrink: 0; }
-        .youtube-search input {
+        .custom-player .player-controls input {
             flex: 1;
             min-width: 180px;
-            padding: 0.8rem 1.2rem;
+            padding: 0.7rem 1.2rem;
             border-radius: 60px;
             border: 2px solid #ff6b7c33;
             background: rgba(255,255,255,0.06);
             color: #fff;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-family: 'Segoe UI', Arial, sans-serif;
             outline: none;
             transition: all 0.3s ease;
         }
-        .youtube-search input::placeholder { color: #8888aa; }
-        .youtube-search input:focus {
+        .custom-player .player-controls input::placeholder { color: #8888aa; }
+        .custom-player .player-controls input:focus {
             border-color: #ff3b5c;
             background: rgba(255,255,255,0.10);
             box-shadow: 0 0 30px #ff3b5c22;
         }
-        .youtube-search button {
-            padding: 0.8rem 1.8rem;
+        .custom-player .player-controls button {
+            padding: 0.7rem 1.8rem;
             border-radius: 60px;
             border: none;
             background: linear-gradient(135deg, #ff3b5c, #dd0028);
             color: #1a1a2e;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.25s ease;
@@ -324,113 +417,22 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.25);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
-        .youtube-search button:hover {
+        .custom-player .player-controls button:hover {
             background: linear-gradient(135deg, #ff4f6e, #ee0038);
             transform: scale(1.02);
         }
-        .youtube-search button:active {
+        .custom-player .player-controls button:active {
             transform: translateY(4px);
             box-shadow: 0 0px 0 #881a2a;
         }
-
-        .youtube-results {
-            width: 100%;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), 
-                        opacity 0.4s ease, 
-                        padding 0.4s ease;
-            opacity: 0;
-            background: rgba(26,26,46,0.7);
-            backdrop-filter: blur(10px);
-            border-radius: 2rem;
-            padding: 0 1.5rem;
-            border: 2px solid transparent;
-            position: relative;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-        }
-        .youtube-results.active {
-            max-height: 750px;
-            opacity: 1;
-            padding: 1.8rem 1.8rem 1.5rem;
-            border-color: #ff6b7c55;
-            overflow-y: auto;
-        }
-        .youtube-results iframe {
-            width: 100%;
-            height: 350px;
-            border-radius: 1.2rem;
-            border: 2px solid #ff6b7c33;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
-            transition: border-color 0.3s ease;
-            background: #0a0a1a;
-        }
-        .youtube-results iframe:hover {
-            border-color: #ff6b7c77;
-        }
-        .youtube-results .video-info {
-            margin-top: 0.8rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.04);
-            border-radius: 1rem;
-            border: 1px solid #ff6b7c22;
-            text-align: center;
-        }
-        .youtube-results .video-title {
-            color: #ffb3b3;
-            font-size: 1.05rem;
-            font-weight: bold;
-            word-break: break-word;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            letter-spacing: 0.3px;
-            text-shadow: 0 0 20px rgba(255,50,80,0.1);
-        }
-        .youtube-results .video-creator {
-            color: #ff6b7c88;
-            font-size: 0.9rem;
-            margin-top: 0.2rem;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            letter-spacing: 0.5px;
-        }
-        .youtube-results .video-creator span {
-            color: #ff6b7cbb;
-        }
-        .youtube-results .close-btn {
-            position: absolute;
-            top: 0.6rem;
-            right: 0.6rem;
-            background: #ff3b5c;
-            border: none;
-            color: #1a1a2e;
-            font-size: 1.2rem;
-            border-radius: 50%;
-            width: 2.4rem;
-            height: 2.4rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-            z-index: 10;
-            box-shadow: 0 2px 15px rgba(255,43,79,0.3);
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-        .youtube-results .close-btn:hover {
-            transform: scale(1.1) rotate(90deg);
-            background: #ff4f6e;
-            box-shadow: 0 2px 25px rgba(255,43,79,0.5);
-        }
-        .youtube-results .close-btn:active {
-            transform: scale(0.9);
+        .custom-player .player-controls button.switched {
+            background: linear-gradient(135deg, #ff6b7c, #ff2b4f);
+            font-size: 1.1rem;
+            animation: btnPulse 1s ease-in-out infinite alternate;
         }
 
-        .youtube-results::-webkit-scrollbar { width: 6px; }
-        .youtube-results::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 10px; }
-        .youtube-results::-webkit-scrollbar-thumb { background: #ff3b5c66; border-radius: 10px; }
-        .youtube-results::-webkit-scrollbar-thumb:hover { background: #ff3b5c99; }
-
+        /* === GAME OVER OVERLAY === */
         .game-over-overlay {
             position: fixed;
             top: 0;
@@ -493,9 +495,13 @@
             text-align: center;
             line-height: 1.4;
             padding: 0 1rem;
+            cursor: pointer;
         }
         .game-over-overlay .go-sub.shaking-text {
             animation: textShake 0.15s ease-in-out infinite;
+        }
+        .game-over-overlay .go-sub.clickable {
+            cursor: pointer;
         }
         @keyframes textShake {
             0%, 100% { transform: translate(0,0) rotate(0deg); }
@@ -541,229 +547,26 @@
             box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
         }
         body.game-over-active { overflow: hidden; }
-        .youtube-search.hidden, .youtube-results.hidden { display: none !important; }
 
-        /* === TUTORIAL VHS 4:3 === */
-        .tutorial-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.92);
-            backdrop-filter: blur(8px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 30000;
-            flex-direction: column;
-            padding: 20px;
-        }
-        .tutorial-overlay.active { display: flex; }
-
-        .tv-container {
-            position: relative;
-            width: 100%;
-            max-width: 560px;
-            background: #1a1a2e;
-            border-radius: 2rem;
-            padding: 2rem 2rem 3rem;
-            border: 3px solid #ff6b7c55;
-            box-shadow: 0 0 60px rgba(255,43,79,0.15), inset 0 0 60px rgba(255,43,79,0.05);
-        }
-        .tv-container .tv-screen {
-            background: #0a0a1a;
-            border-radius: 1.2rem;
-            padding: 0.5rem;
-            border: 2px solid #ff6b7c33;
-            position: relative;
-            overflow: hidden;
-            aspect-ratio: 4 / 3;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-        }
-        .tv-container .tv-screen video {
-            width: 100%;
-            height: 100%;
-            border-radius: 0.8rem;
-            display: none;
-            background: #000;
-            object-fit: contain;
-        }
-        .tv-container .tv-screen .placeholder {
-            color: #ff6b7c44;
-            text-align: center;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 1rem;
-        }
-        .tv-container .tv-screen .placeholder .icon {
-            font-size: 4rem;
-        }
-        .tv-container .tv-screen .placeholder .msg {
-            font-size: 1.1rem;
-            color: #ff6b7c66;
-            letter-spacing: 2px;
-        }
-        .tv-container .tv-screen .placeholder .play-btn {
-            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
-            background: #ff3b5c;
-            border: none;
-            color: #1a1a2e;
-            font-size: 1.2rem;
-            font-weight: bold;
-            padding: 0.6rem 2rem;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.2);
-        }
-        .tv-container .tv-screen .placeholder .play-btn:hover {
-            background: #ff4f6e;
-            transform: scale(1.02);
-            box-shadow: 0 4px 0 #881a2a, 0 12px 35px rgba(255,43,79,0.3);
-        }
-        .tv-container .tv-screen .placeholder .play-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #881a2a;
-        }
-        .tv-container .tv-screen .scanlines {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: repeating-linear-gradient(0deg, 
-                transparent 0px, 
-                transparent 3px, 
-                rgba(0,0,0,0.08) 3px, 
-                rgba(0,0,0,0.08) 4px);
-            z-index: 2;
-            border-radius: 0.8rem;
-        }
-        .tv-container .tv-screen .vignette {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%);
-            z-index: 1;
-            border-radius: 0.8rem;
-        }
-        .tv-container .tv-brand {
-            position: absolute;
-            bottom: 0.8rem;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ff6b7c33;
-            font-size: 0.8rem;
-            letter-spacing: 6px;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            text-transform: uppercase;
-        }
-
-        /* === CINTA VHS GRANDE === */
-        .vhs-tape-drag {
-            width: 150px;
-            height: 150px;
-            margin: 1.5rem auto 0;
-            background: transparent;
-            border: none;
-            cursor: grab;
-            transition: all 0.3s ease;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            user-select: none;
-        }
-        .vhs-tape-drag:hover {
-            transform: scale(1.08);
-            filter: drop-shadow(0 0 40px rgba(255,43,79,0.2));
-        }
-        .vhs-tape-drag:active {
-            cursor: grabbing;
-        }
-        .vhs-tape-drag img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 8px 30px rgba(0,0,0,0.6));
-            pointer-events: none;
-        }
-        .vhs-tape-drag.dragging {
-            opacity: 0.4;
-            transform: scale(0.85);
-        }
-
-        .tv-container.drag-over .tv-screen {
-            border-color: #ff6b7c;
-            box-shadow: 0 0 50px rgba(255,43,79,0.4);
-        }
-
-        .tutorial-close-btn {
-            position: absolute;
-            top: 0.8rem;
-            right: 1.2rem;
-            background: #ff3b5c;
-            border: none;
-            color: #1a1a2e;
-            font-size: 1.4rem;
-            border-radius: 50%;
-            width: 2.8rem;
-            height: 2.8rem;
-            cursor: pointer;
-            font-weight: bold;
-            transition: all 0.2s;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            box-shadow: 0 2px 20px rgba(255,43,79,0.3);
-            z-index: 10;
-        }
-        .tutorial-close-btn:hover {
-            transform: scale(1.1) rotate(90deg);
-            background: #ff4f6e;
-        }
-
-        @media (max-width: 600px) {
+        @media (max-width: 650px) {
+            .players-container { flex-direction: column; gap: 1rem; }
+            .player-card { min-width: unset; }
             .logo-text { font-size: 3.5rem; letter-spacing: 4px; }
             .logo-sub { font-size: 0.8rem; letter-spacing: 6px; }
-            .heart { font-size: 3.8rem; }
-            .hearts-container { gap: 1rem; }
-            .heart-counter { padding: 1.2rem 1.5rem 1rem; }
-            .reset-btn { font-size: 1.1rem; padding: 0.5rem 1.4rem; }
-            .youtube-search { padding: 0.8rem 1rem; }
-            .youtube-search input { min-width: 120px; font-size: 0.85rem; padding: 0.6rem 1rem; }
-            .youtube-search button { font-size: 0.8rem; padding: 0.6rem 1.2rem; }
-            .youtube-results iframe { height: 220px; }
-            .youtube-results.active { padding: 1rem; }
-            .youtube-results .video-title { font-size: 0.9rem; }
-            .youtube-results .video-creator { font-size: 0.8rem; }
+            .player-card .heart { font-size: 3.5rem; }
             .game-over-overlay .go-text { font-size: 3.5rem; letter-spacing: 6px; }
             .game-over-overlay .go-sub { font-size: 1.2rem; }
             .game-over-overlay .go-reset-btn { font-size: 1.3rem; padding: 0.6rem 1.8rem; }
-            .credits { font-size: 0.7rem; }
-            .tv-container { padding: 1rem; }
-            .tv-container .tv-screen { aspect-ratio: 4/3; }
-            .vhs-tape-drag { width: 100px; height: 100px; }
+            .credits { font-size: 0.65rem; }
             .how-to-play-btn { font-size: 0.9rem; padding: 0.5rem 1.5rem; }
-            .tv-container .tv-screen .placeholder .msg { font-size: 0.9rem; }
-            .tv-container .tv-screen .placeholder .play-btn { font-size: 1rem; padding: 0.5rem 1.5rem; }
+            .custom-player { padding: 0.8rem 1rem; }
+            .custom-player .player-controls input { min-width: 120px; font-size: 0.8rem; }
+            .custom-player .player-controls button { font-size: 0.8rem; padding: 0.5rem 1.2rem; }
         }
         @media (max-width: 400px) {
-            .heart { font-size: 3rem; }
-            .hearts-container { gap: 0.6rem; }
+            .player-card .heart { font-size: 2.8rem; }
             .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
-            .youtube-results iframe { height: 170px; }
             .game-over-overlay .go-text { font-size: 2.8rem; letter-spacing: 4px; }
-            .vhs-tape-drag { width: 80px; height: 80px; }
         }
     </style>
 </head>
@@ -772,37 +575,12 @@
 <!-- GAME OVER OVERLAY -->
 <div class="game-over-overlay" id="gameOverOverlay">
     <div class="go-text" id="goText">GAME OVER</div>
-    <div class="go-sub" id="goSubText">❤️ Haz perdido todos tus corazones</div>
+    <div class="go-sub" id="goSubText">💀 Has perdido todos tus corazones</div>
     <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
-<!-- TUTORIAL VHS -->
-<div class="tutorial-overlay" id="tutorialOverlay">
-    <div class="tv-container" id="tvContainer">
-        <button class="tutorial-close-btn" id="tutorialCloseBtn">✕</button>
-        <div class="tv-screen" id="tvScreen">
-            <div class="vignette"></div>
-            <div class="scanlines"></div>
-            <div id="tvPlaceholder" class="placeholder">
-                <div class="icon">📼</div>
-                <div class="msg">Arrastra la cinta VHS a la TV</div>
-                <button class="play-btn" id="playVideoBtn">▶ Reproducir</button>
-            </div>
-            <video id="tutorialVideo" style="display:none;" controls>
-                <source src="Tutoriall.mp4" type="video/mp4">
-                Tu navegador no soporta el video.
-            </video>
-        </div>
-        <div class="tv-brand">✦ VHS 4:3 ✦</div>
-    </div>
-
-    <!-- Cinta VHS GRANDE -->
-    <div class="vhs-tape-drag" id="vhsTapeDrag" draggable="true">
-        <img src="VHS.png" alt="VHS" id="vhsImage">
-    </div>
-</div>
-
 <div class="main-container" id="mainContainer">
+    <!-- LOGO -->
     <div class="logo-container" id="logoContainer">
         <div class="logo-text" id="logoText">NoTeRias</div>
         <div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div>
@@ -810,31 +588,63 @@
 
     <button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
 
-    <div class="heart-counter" id="heartCounter">
-        <div class="player-label" id="playerLabel">👤 TÚ</div>
-        <div class="hearts-container" id="heartsContainer">
-            <span class="heart" data-index="0">❤️</span>
-            <span class="heart" data-index="1">❤️</span>
-            <span class="heart" data-index="2">❤️</span>
+    <!-- MODO 2 JUGADORES -->
+    <div class="players-container" id="playersContainer">
+        <!-- Jugador 1 -->
+        <div class="player-card" id="player1Card">
+            <div class="player-label" id="player1Label">👤 JUGADOR 1</div>
+            <div class="hearts-container" id="hearts1">
+                <span class="heart" data-player="1" data-index="0">❤️</span>
+                <span class="heart" data-player="1" data-index="1">❤️</span>
+                <span class="heart" data-player="1" data-index="2">❤️</span>
+            </div>
+            <div class="color-picker-container" id="colorPicker1">
+                <button class="color-btn active" data-player="1" data-color="#ff2b4f" style="background:#ff2b4f;"></button>
+                <button class="color-btn" data-player="1" data-color="#4fc3f7" style="background:#4fc3f7;"></button>
+                <button class="color-btn" data-player="1" data-color="#66bb6a" style="background:#66bb6a;"></button>
+                <button class="color-btn" data-player="1" data-color="#ffa726" style="background:#ffa726;"></button>
+                <button class="color-btn" data-player="1" data-color="#ab47bc" style="background:#ab47bc;"></button>
+            </div>
+            <button class="reset-btn" id="resetBtn1">⟳ Reiniciar</button>
+            <div class="player-status" id="status1">❤️ 3 corazones</div>
         </div>
-        <button id="resetBtn" class="reset-btn">⟳ Volver a intentar</button>
+
+        <!-- Jugador 2 -->
+        <div class="player-card" id="player2Card">
+            <div class="player-label" id="player2Label">👤 JUGADOR 2</div>
+            <div class="hearts-container" id="hearts2">
+                <span class="heart" data-player="2" data-index="0">❤️</span>
+                <span class="heart" data-player="2" data-index="1">❤️</span>
+                <span class="heart" data-player="2" data-index="2">❤️</span>
+            </div>
+            <div class="color-picker-container" id="colorPicker2">
+                <button class="color-btn active" data-player="2" data-color="#ff2b4f" style="background:#ff2b4f;"></button>
+                <button class="color-btn" data-player="2" data-color="#4fc3f7" style="background:#4fc3f7;"></button>
+                <button class="color-btn" data-player="2" data-color="#66bb6a" style="background:#66bb6a;"></button>
+                <button class="color-btn" data-player="2" data-color="#ffa726" style="background:#ffa726;"></button>
+                <button class="color-btn" data-player="2" data-color="#ab47bc" style="background:#ab47bc;"></button>
+            </div>
+            <button class="reset-btn" id="resetBtn2">⟳ Reiniciar</button>
+            <div class="player-status" id="status2">❤️ 3 corazones</div>
+        </div>
     </div>
 
-    <div class="youtube-search" id="youtubeSearch">
-        <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Pega la URL de YouTube..." value="">
-        <button id="searchBtn"><span class="btn-icon">▶</span> Cargar</button>
-    </div>
-    <div class="youtube-results" id="youtubeResults">
-        <button class="close-btn" id="closeResults">✕</button>
-        <div id="videoContainer"></div>
-        <div class="video-info" id="videoInfo" style="display:none;">
-            <div class="video-title" id="videoTitle">Título del video</div>
-            <div class="video-creator" id="videoCreator">👤 <span id="creatorName">Creador</span></div>
+    <!-- REPRODUCTOR PERSONALIZADO -->
+    <div class="custom-player" id="customPlayer">
+        <div class="player-container" id="playerContainer">
+            <div id="playerPlaceholder" class="placeholder">
+                <div class="icon">🎬</div>
+                <div class="msg" id="playerPlaceholderMsg">PON EL LINK DEL YUTU POJKE SI AJAJAJAJA</div>
+            </div>
+            <iframe id="playerIframe" style="display:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="player-controls">
+            <input type="text" id="playerInput" placeholder="PON EL LINK DEL YUTU POJKE SI AJAJAJAJA">
+            <button id="playerLoadBtn">JAJAJA</button>
         </div>
     </div>
 
-    <div class="credits">
+    <div class="credits" id="creditsText">
         <span>CC0</span> Raphapro900 <span>- V1.0</span>
     </div>
 </div>
@@ -849,50 +659,53 @@
 <audio id="wthbAudio" preload="auto"><source src="WTHB.mp3" type="audio/mpeg"></audio>
 <audio id="logoPressAudio" preload="auto" loop><source src="LogoPress.mp3" type="audio/mpeg"></audio>
 <audio id="shhAudio" preload="auto"><source src="Shh.mp3" type="audio/mpeg"></audio>
+<audio id="xddAudio" preload="auto"><source src="XDD.mp3" type="audio/mpeg"></audio>
 
 <script>
     (function() {
         // ============================================================
         // ESTADO
         // ============================================================
-        let hearts = [true, true, true];
+        let logoState = 0; // 0 = "NoTeRias", 1 = "Ríe"
         let isGameOver = false;
         let isMusicPlaying = false;
-        let logoState = 0;
-        let isWin = false;
-        let areHeartsLaughing = false;
+
+        // Jugadores
+        const players = {
+            1: { hearts: [true, true, true], color: '#ff2b4f', won: false },
+            2: { hearts: [true, true, true], color: '#ff2b4f', won: false }
+        };
 
         // ============================================================
         // DOM
         // ============================================================
-        const heartElements = document.querySelectorAll('.heart');
-        const resetBtn = document.getElementById('resetBtn');
-        const searchInput = document.getElementById('searchInput');
-        const searchBtn = document.getElementById('searchBtn');
-        const youtubeResults = document.getElementById('youtubeResults');
-        const videoContainer = document.getElementById('videoContainer');
-        const closeResultsBtn = document.getElementById('closeResults');
-        const youtubeSearch = document.getElementById('youtubeSearch');
-        const mainContainer = document.getElementById('mainContainer');
-        const audioElement = document.getElementById('gameOverAudio');
-        const winAudio = document.getElementById('winAudio');
-        const gameOverOverlay = document.getElementById('gameOverOverlay');
-        const goResetBtn = document.getElementById('goResetBtn');
-        const goText = document.getElementById('goText');
-        const goSubText = document.getElementById('goSubText');
         const logoContainer = document.getElementById('logoContainer');
         const logoText = document.getElementById('logoText');
         const logoSub = document.getElementById('logoSub');
-
-        // TUTORIAL VHS
         const howToPlayBtn = document.getElementById('howToPlayBtn');
-        const tutorialOverlay = document.getElementById('tutorialOverlay');
-        const tutorialCloseBtn = document.getElementById('tutorialCloseBtn');
-        const vhsTapeDrag = document.getElementById('vhsTapeDrag');
-        const tvPlaceholder = document.getElementById('tvPlaceholder');
-        const tvContainer = document.getElementById('tvContainer');
-        const tutorialVideo = document.getElementById('tutorialVideo');
-        const playVideoBtn = document.getElementById('playVideoBtn');
+        const creditsText = document.getElementById('creditsText');
+        const goText = document.getElementById('goText');
+        const goSubText = document.getElementById('goSubText');
+        const goResetBtn = document.getElementById('goResetBtn');
+        const gameOverOverlay = document.getElementById('gameOverOverlay');
+        const mainContainer = document.getElementById('mainContainer');
+
+        // Jugadores DOM
+        const hearts1 = document.querySelectorAll('#hearts1 .heart');
+        const hearts2 = document.querySelectorAll('#hearts2 .heart');
+        const resetBtn1 = document.getElementById('resetBtn1');
+        const resetBtn2 = document.getElementById('resetBtn2');
+        const status1 = document.getElementById('status1');
+        const status2 = document.getElementById('status2');
+        const player1Label = document.getElementById('player1Label');
+        const player2Label = document.getElementById('player2Label');
+
+        // Reproductor
+        const playerInput = document.getElementById('playerInput');
+        const playerLoadBtn = document.getElementById('playerLoadBtn');
+        const playerIframe = document.getElementById('playerIframe');
+        const playerPlaceholder = document.getElementById('playerPlaceholder');
+        const playerPlaceholderMsg = document.getElementById('playerPlaceholderMsg');
 
         // AUDIOS
         const underAudio = document.getElementById('underAudio');
@@ -902,79 +715,41 @@
         const wthbAudio = document.getElementById('wthbAudio');
         const logoPressAudio = document.getElementById('logoPressAudio');
         const shhAudio = document.getElementById('shhAudio');
+        const xddAudio = document.getElementById('xddAudio');
+        const gameOverAudio = document.getElementById('gameOverAudio');
+        const winAudio = document.getElementById('winAudio');
 
         // ============================================================
-        // AUDIO FUNCTIONS
+        // FUNCIONES DE AUDIO
         // ============================================================
         function playLogoPress() {
-            try {
-                logoPressAudio.currentTime = 0;
-                logoPressAudio.volume = 0.8;
-                logoPressAudio.loop = true;
-                logoPressAudio.play().catch(() => {});
-            } catch(e) {}
+            try { logoPressAudio.currentTime = 0; logoPressAudio.volume = 0.8; logoPressAudio.loop = true; logoPressAudio.play().catch(() => {}); } catch(e) {}
         }
-
         function stopLogoPress() {
-            try {
-                logoPressAudio.pause();
-                logoPressAudio.currentTime = 0;
-                logoPressAudio.loop = false;
-            } catch(e) {}
+            try { logoPressAudio.pause(); logoPressAudio.currentTime = 0; logoPressAudio.loop = false; } catch(e) {}
         }
-
         function playShh() {
-            try {
-                shhAudio.currentTime = 0;
-                shhAudio.volume = 0.8;
-                shhAudio.play().catch(() => {});
-            } catch(e) {}
+            try { shhAudio.currentTime = 0; shhAudio.volume = 0.8; shhAudio.play().catch(() => {}); } catch(e) {}
         }
-
         function playUnder() {
-            try {
-                underAudio.currentTime = 0;
-                underAudio.volume = 0.8;
-                underAudio.play().catch(() => {});
-            } catch(e) {}
+            try { underAudio.currentTime = 0; underAudio.volume = 0.8; underAudio.play().catch(() => {}); } catch(e) {}
         }
-
         function playRandomExclamation() {
             const audios = [ayNoAudio, ayAudio, nooAudio, wthbAudio];
             const audio = audios[Math.floor(Math.random() * audios.length)];
-            try {
-                audio.currentTime = 0;
-                audio.volume = 0.8;
-                audio.play().catch(() => {});
-            } catch(e) {}
+            try { audio.currentTime = 0; audio.volume = 0.8; audio.play().catch(() => {}); } catch(e) {}
         }
-
+        function playXDD() {
+            try { xddAudio.currentTime = 0; xddAudio.volume = 0.9; xddAudio.play().catch(() => {}); } catch(e) {}
+        }
         function playGameOverMusic() {
-            try {
-                if (isMusicPlaying) return;
-                audioElement.currentTime = 0;
-                audioElement.volume = 1.0;
-                audioElement.play().then(() => { isMusicPlaying = true; }).catch(() => {});
-            } catch(e) {}
+            try { if (isMusicPlaying) return; gameOverAudio.currentTime = 0; gameOverAudio.volume = 1.0; gameOverAudio.play().then(() => { isMusicPlaying = true; }).catch(() => {}); } catch(e) {}
         }
-
         function playWinMusic() {
-            try {
-                if (isMusicPlaying) return;
-                winAudio.currentTime = 0;
-                winAudio.volume = 1.0;
-                winAudio.play().then(() => { isMusicPlaying = true; }).catch(() => {});
-            } catch(e) {}
+            try { if (isMusicPlaying) return; winAudio.currentTime = 0; winAudio.volume = 1.0; winAudio.play().then(() => { isMusicPlaying = true; }).catch(() => {}); } catch(e) {}
         }
-
         function stopGameOverMusic() {
-            try {
-                if (!audioElement.paused) audioElement.pause();
-                if (!winAudio.paused) winAudio.pause();
-                audioElement.currentTime = 0;
-                winAudio.currentTime = 0;
-                isMusicPlaying = false;
-            } catch(e) {}
+            try { if (!gameOverAudio.paused) gameOverAudio.pause(); if (!winAudio.paused) winAudio.pause(); gameOverAudio.currentTime = 0; winAudio.currentTime = 0; isMusicPlaying = false; } catch(e) {}
         }
 
         function shakeScreen() {
@@ -985,114 +760,245 @@
         }
 
         // ============================================================
-        // UI
+        // UI CORAZONES
         // ============================================================
-        function updateHeartsUI() {
-            heartElements.forEach((el, index) => {
-                if (hearts[index]) {
+        function getHeartEmoji(alive, isLaughMode) {
+            if (isLaughMode) {
+                return alive ? '🤣' : '😂';
+            }
+            return alive ? '❤️' : '💔';
+        }
+
+        function updatePlayerUI(playerId) {
+            const player = players[playerId];
+            const hearts = playerId === 1 ? hearts1 : hearts2;
+            const status = playerId === 1 ? status1 : status2;
+            const isLaughMode = logoState === 1;
+
+            hearts.forEach((el, index) => {
+                const alive = player.hearts[index];
+                el.textContent = getHeartEmoji(alive, isLaughMode);
+                if (alive) {
                     el.classList.remove('lost', 'breaking');
-                    el.textContent = areHeartsLaughing ? '😂' : '❤️';
+                    el.style.color = player.color;
+                    el.style.textShadow = `0 8px 25px ${player.color}88`;
+                    el.style.filter = `drop-shadow(0 8px 12px #00000077)`;
                 } else {
                     el.classList.add('lost');
-                    el.textContent = areHeartsLaughing ? '💔' : '💔';
+                    el.style.color = player.color + '66';
+                    el.style.textShadow = `0 0 20px ${player.color}44`;
+                    el.style.filter = `drop-shadow(0 0 15px ${player.color}33)`;
                 }
             });
-        }
 
-        // ============================================================
-        // LOGO
-        // ============================================================
-        function toggleLogo() {
-            if (isGameOver) return;
-
-            logoContainer.classList.remove('shaking-logo', 'shaking-loop');
-            void logoContainer.offsetWidth;
-
-            if (logoState === 0) {
-                logoText.textContent = 'Ríe';
-                logoText.classList.add('switched');
-                logoSub.textContent = '★ laugh & enjoy ★';
-                logoSub.classList.add('switched');
-                logoState = 1;
-                areHeartsLaughing = true;
-                updateHeartsUI();
-                playLogoPress();
-                logoContainer.classList.add('shaking-loop');
+            const aliveCount = player.hearts.filter(h => h).length;
+            const total = player.hearts.length;
+            const label = playerId === 1 ? player1Label : player2Label;
+            if (logoState === 1) {
+                label.textContent = `👤 JUGADOR ${playerId} 🤣`;
             } else {
-                logoText.textContent = 'NoTeRias';
-                logoText.classList.remove('switched');
-                logoSub.textContent = '★ play & enjoy ★';
-                logoSub.classList.remove('switched');
-                logoState = 0;
-                areHeartsLaughing = false;
-                updateHeartsUI();
-                stopLogoPress();
-                playShh();
-                logoContainer.classList.remove('shaking-loop');
-                logoContainer.classList.add('shaking-logo');
-                setTimeout(() => {
-                    logoContainer.classList.remove('shaking-logo');
-                }, 1200);
+                label.textContent = `👤 JUGADOR ${playerId}`;
+            }
+
+            if (aliveCount === 0) {
+                if (logoState === 1) {
+                    status.textContent = '🤣¡PERDISTE! AJAJAJA';
+                    status.className = 'player-status win';
+                } else {
+                    status.textContent = '💀 ¡Has perdido!';
+                    status.className = 'player-status';
+                }
+            } else {
+                status.textContent = `${'❤️'.repeat(aliveCount)} ${aliveCount} corazones`;
+                status.className = 'player-status';
+            }
+
+            // Mostrar reset si perdió
+            const resetBtn = playerId === 1 ? resetBtn1 : resetBtn2;
+            if (aliveCount === 0) {
+                resetBtn.classList.add('visible');
+            } else {
+                resetBtn.classList.remove('visible');
             }
         }
 
+        function updateAllPlayers() {
+            updatePlayerUI(1);
+            updatePlayerUI(2);
+        }
+
         // ============================================================
-        // JUEGO
+        // CLICK EN CORAZÓN
+        // ============================================================
+        function handleHeartClick(e) {
+            if (isGameOver) return;
+            const el = e.currentTarget;
+            const playerId = parseInt(el.dataset.player);
+            const index = parseInt(el.dataset.index);
+            const player = players[playerId];
+
+            if (!player.hearts[index]) return;
+
+            player.hearts[index] = false;
+            updatePlayerUI(playerId);
+            shakeScreen();
+            playUnder();
+
+            const aliveCount = player.hearts.filter(h => h).length;
+            if (aliveCount === 1) {
+                playRandomExclamation();
+            }
+
+            checkLoseCondition();
+        }
+
+        // ============================================================
+        // COLOR PICKER
+        // ============================================================
+        document.querySelectorAll('.color-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const playerId = parseInt(this.dataset.player);
+                const color = this.dataset.color;
+                const player = players[playerId];
+
+                // Desactivar todos los del mismo jugador
+                const container = playerId === 1 ? document.getElementById('colorPicker1') : document.getElementById('colorPicker2');
+                container.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+
+                this.classList.add('active');
+                player.color = color;
+                updatePlayerUI(playerId);
+            });
+        });
+
+        // ============================================================
+        // REINICIAR JUGADOR
+        // ============================================================
+        function resetPlayer(playerId) {
+            const player = players[playerId];
+            player.hearts = [true, true, true];
+            player.won = false;
+            updatePlayerUI(playerId);
+            const resetBtn = playerId === 1 ? resetBtn1 : resetBtn2;
+            resetBtn.classList.remove('visible');
+            checkLoseCondition();
+        }
+
+        resetBtn1.addEventListener('click', () => resetPlayer(1));
+        resetBtn2.addEventListener('click', () => resetPlayer(2));
+
+        // ============================================================
+        // CONDICIÓN DE DERROTA / VICTORIA
         // ============================================================
         function checkLoseCondition() {
-            const allLost = hearts.every(h => h === false);
-            const allAlive = hearts.every(h => h === true);
-            
-            if (allAlive && areHeartsLaughing && !isGameOver) {
+            const p1Alive = players[1].hearts.filter(h => h).length;
+            const p2Alive = players[2].hearts.filter(h => h).length;
+            const isLaughMode = logoState === 1;
+
+            // Si ambos perdieron
+            if (p1Alive === 0 && p2Alive === 0 && !isGameOver) {
                 isGameOver = true;
-                isWin = true;
-                resetBtn.classList.add('visible');
-                shakeScreen();
                 stopLogoPress();
                 logoContainer.classList.remove('shaking-loop');
-                setTimeout(() => { playWinMusic(); }, 300);
-                setTimeout(() => {
-                    showGameOverOverlay('GANASTE XDDD', '🤣TE REÍSTE DEMASIA- AY- AJAJAJAJAJAJAJA XDDDDDD');
-                }, 600);
+                shakeScreen();
+                if (isLaughMode) {
+                    setTimeout(() => { playWinMusic(); }, 300);
+                    setTimeout(() => {
+                        showGameOverOverlay('GANASTE XDD', '🤣 TE REÍSTE MUCHAS VECE- AY... AJAJAJAJAJAJAJAJ IJIJIJI');
+                        goSubText.classList.add('clickable');
+                    }, 600);
+                } else {
+                    setTimeout(() => { playGameOverMusic(); }, 300);
+                    setTimeout(() => {
+                        showGameOverOverlay('GAME OVER', '💀PERDISTE TODOS TUS CORAZONES');
+                    }, 600);
+                }
                 return;
             }
-            
-            if (allLost && !isGameOver) {
+
+            // Si un jugador ganó (el otro perdió y el que ganó tiene todos vivos)
+            if (p1Alive === 3 && p2Alive === 0 && !isGameOver) {
                 isGameOver = true;
-                isWin = false;
-                resetBtn.classList.add('visible');
-                heartElements.forEach(el => {
-                    if (el.classList.contains('lost')) {
-                        el.classList.remove('lost');
-                        el.classList.add('breaking');
-                        el.textContent = areHeartsLaughing ? '😂' : '❤️';
-                    }
-                });
-                shakeScreen();
+                players[1].won = true;
                 stopLogoPress();
                 logoContainer.classList.remove('shaking-loop');
-                setTimeout(() => { playGameOverMusic(); }, 300);
-                setTimeout(() => {
-                    showGameOverOverlay('GAME OVER', '💀 Has perdido todos tus corazones');
-                }, 600);
+                shakeScreen();
+                if (isLaughMode) {
+                    setTimeout(() => { playWinMusic(); }, 300);
+                    setTimeout(() => {
+                        showGameOverOverlay('GANASTE XDD', '🤣 TE REÍSTE MUCHAS VECE- AY... AJAJAJAJAJAJAJAJ IJIJIJI');
+                        goSubText.classList.add('clickable');
+                    }, 600);
+                } else {
+                    setTimeout(() => { playGameOverMusic(); }, 300);
+                    setTimeout(() => {
+                        showGameOverOverlay('GAME OVER', '💀PERDISTE TODOS TUS CORAZONES');
+                    }, 600);
+                }
+                return;
+            }
+
+            if (p2Alive === 3 && p1Alive === 0 && !isGameOver) {
+                isGameOver = true;
+                players[2].won = true;
+                stopLogoPress();
+                logoContainer.classList.remove('shaking-loop');
+                shakeScreen();
+                if (isLaughMode) {
+                    setTimeout(() => { playWinMusic(); }, 300);
+                    setTimeout(() => {
+                        showGameOverOverlay('GANASTE XDD', '🤣 TE REÍSTE MUCHAS VECE- AY... AJAJAJAJAJAJAJAJ IJIJIJI');
+                        goSubText.classList.add('clickable');
+                    }, 600);
+                } else {
+                    setTimeout(() => { playGameOverMusic(); }, 300);
+                    setTimeout(() => {
+                        showGameOverOverlay('GAME OVER', '💀PERDISTE TODOS TUS CORAZONES');
+                    }, 600);
+                }
+                return;
+            }
+
+            // Si alguien perdió pero el otro no ha ganado aún
+            if (p1Alive === 0 && p2Alive > 0 && !isGameOver) {
+                // Jugador 1 perdió, Jugador 2 sigue
+                resetBtn1.classList.add('visible');
+                if (isLaughMode) {
+                    status1.textContent = '😂¡PERDISTE! AJAJAJA';
+                    status1.className = 'player-status win';
+                } else {
+                    status1.textContent = '💀 ¡Has perdido!';
+                    status1.className = 'player-status';
+                }
+            }
+
+            if (p2Alive === 0 && p1Alive > 0 && !isGameOver) {
+                resetBtn2.classList.add('visible');
+                if (isLaughMode) {
+                    status2.textContent = '😂¡PERDISTE! AJAJAJA';
+                    status2.className = 'player-status win';
+                } else {
+                    status2.textContent = '💀 ¡Has perdido!';
+                    status2.className = 'player-status';
+                }
             }
         }
 
+        // ============================================================
+        // GAME OVER OVERLAY
+        // ============================================================
         function showGameOverOverlay(title, sub) {
             goText.textContent = title;
             goSubText.textContent = sub;
-            if (isWin) {
+            if (logoState === 1) {
                 goSubText.classList.add('shaking-text');
+                goSubText.classList.add('clickable');
             } else {
                 goSubText.classList.remove('shaking-text');
+                goSubText.classList.remove('clickable');
             }
             gameOverOverlay.classList.add('show');
             document.body.classList.add('game-over-active');
-            youtubeSearch.classList.add('hidden');
-            youtubeResults.classList.remove('active');
-            youtubeResults.classList.add('hidden');
-            videoContainer.innerHTML = '';
-            videoInfo.style.display = 'none';
             mainContainer.classList.add('game-over-mode');
         }
 
@@ -1100,25 +1006,24 @@
             gameOverOverlay.classList.remove('show');
             document.body.classList.remove('game-over-active');
             mainContainer.classList.remove('game-over-mode');
-            youtubeSearch.classList.remove('hidden');
-            youtubeResults.classList.remove('hidden');
             stopGameOverMusic();
             isMusicPlaying = false;
             goSubText.classList.remove('shaking-text');
+            goSubText.classList.remove('clickable');
         }
 
-        function resetHearts() {
+        function resetGame() {
             stopGameOverMusic();
             isMusicPlaying = false;
             isGameOver = false;
-            isWin = false;
-            hearts = [true, true, true];
-            updateHeartsUI();
-            resetBtn.classList.remove('visible');
+            players[1].hearts = [true, true, true];
+            players[2].hearts = [true, true, true];
+            players[1].won = false;
+            players[2].won = false;
+            resetBtn1.classList.remove('visible');
+            resetBtn2.classList.remove('visible');
             document.body.classList.remove('shaking');
             hideGameOverOverlay();
-            youtubeSearch.classList.remove('hidden');
-            youtubeResults.classList.remove('hidden');
             mainContainer.classList.remove('game-over-mode');
             stopLogoPress();
             logoContainer.classList.remove('shaking-loop');
@@ -1128,204 +1033,162 @@
                 logoSub.textContent = '★ play & enjoy ★';
                 logoSub.classList.remove('switched');
                 logoState = 0;
-                areHeartsLaughing = false;
-                updateHeartsUI();
+                // Restaurar textos
+                updateAllTexts();
             }
+            updateAllPlayers();
             goText.textContent = 'GAME OVER';
-            goSubText.textContent = '❤️ Haz perdido todos tus corazones';
+            goSubText.textContent = '💀 Has perdido todos tus corazones';
             goSubText.classList.remove('shaking-text');
+            goSubText.classList.remove('clickable');
         }
 
-        // ============================================================
-        // CLICK EN CORAZÓN
-        // ============================================================
-        function handleHeartClick(e) {
-            if (isGameOver) return;
-            const heartEl = e.currentTarget;
-            const index = parseInt(heartEl.dataset.index, 10);
-            if (!hearts[index]) return;
+        goResetBtn.addEventListener('click', resetGame);
 
-            hearts[index] = false;
-            updateHeartsUI();
-            shakeScreen();
-            playUnder();
-
-            const remaining = hearts.filter(h => h === true).length;
-            if (remaining === 1) {
-                playRandomExclamation();
-            }
+        // ============================================================
+        // LOGO - CAMBIO DE TEXTO
+        // ============================================================
+        function updateAllTexts() {
+            const isLaugh = logoState === 1;
             
-            checkLoseCondition();
+            // Botón "Cómo jugar"
+            if (isLaugh) {
+                howToPlayBtn.textContent = '📼 Como reírse AJAJAJAJA';
+                howToPlayBtn.classList.add('switched');
+            } else {
+                howToPlayBtn.textContent = '📼 Cómo jugar';
+                howToPlayBtn.classList.remove('switched');
+            }
+
+            // Reproductor
+            if (isLaugh) {
+                playerPlaceholderMsg.textContent = 'PON EL LINK DEL YUTU POJKE SI AJAJAJAJA';
+                playerInput.placeholder = 'PON EL LINK DEL YUTU POJKE SI AJAJAJAJA';
+                playerLoadBtn.textContent = 'JAJAJA';
+                playerLoadBtn.classList.add('switched');
+            } else {
+                playerPlaceholderMsg.textContent = 'Pega la URL de YouTube';
+                playerInput.placeholder = 'Pega la URL de YouTube...';
+                playerLoadBtn.textContent = '▶ Cargar';
+                playerLoadBtn.classList.remove('switched');
+            }
+
+            // Créditos
+            if (isLaugh) {
+                creditsText.innerHTML = '<span>CC0</span> Raphapro900XDDDAJAJA <span>- BERSION UNO PUNTO CERO AJAJAJA</span>';
+                creditsText.classList.add('switched');
+            } else {
+                creditsText.innerHTML = '<span>CC0</span> Raphapro900 <span>- V1.0</span>';
+                creditsText.classList.remove('switched');
+            }
+
+            // Subtítulo del logo
+            if (isLaugh) {
+                logoSub.textContent = '★ laugh & enjoy ★';
+                logoSub.classList.add('switched');
+            } else {
+                logoSub.textContent = '★ play & enjoy ★';
+                logoSub.classList.remove('switched');
+            }
+
+            updateAllPlayers();
         }
 
-        // ============================================================
-        // LOGO - EVENTO
-        // ============================================================
+        function toggleLogo() {
+            if (isGameOver) return;
+
+            logoContainer.classList.remove('shaking-logo', 'shaking-loop');
+            void logoContainer.offsetWidth;
+
+            if (logoState === 0) {
+                // Cambiar a "Ríe"
+                logoText.textContent = 'Ríe';
+                logoText.classList.add('switched');
+                logoState = 1;
+                playLogoPress();
+                logoContainer.classList.add('shaking-loop');
+                updateAllTexts();
+            } else {
+                // Volver a "NoTeRias"
+                logoText.textContent = 'NoTeRias';
+                logoText.classList.remove('switched');
+                logoState = 0;
+                stopLogoPress();
+                playShh();
+                logoContainer.classList.remove('shaking-loop');
+                logoContainer.classList.add('shaking-logo');
+                updateAllTexts();
+                setTimeout(() => {
+                    logoContainer.classList.remove('shaking-logo');
+                }, 1200);
+            }
+        }
+
         logoContainer.addEventListener('click', toggleLogo);
 
         // ============================================================
-        // TUTORIAL VHS - DRAG & DROP + BOTÓN
+        // CLICK EN DESCRIPCIÓN DEL GAME OVER (solo modo Ríe)
         // ============================================================
-        function openTutorial() {
-            tutorialOverlay.classList.add('active');
-            tutorialVideo.pause();
-            tutorialVideo.currentTime = 0;
-            tutorialVideo.style.display = 'none';
-            tvPlaceholder.style.display = 'flex';
-            vhsTapeDrag.classList.remove('dragging');
-        }
-
-        function closeTutorial() {
-            tutorialVideo.pause();
-            tutorialVideo.currentTime = 0;
-            tutorialVideo.style.display = 'none';
-            tvPlaceholder.style.display = 'flex';
-            vhsTapeDrag.classList.remove('dragging');
-            tvContainer.classList.remove('drag-over');
-            tutorialOverlay.classList.remove('active');
-        }
-
-        function playVideo() {
-            tvPlaceholder.style.display = 'none';
-            tutorialVideo.style.display = 'block';
-            tutorialVideo.currentTime = 0;
-            tutorialVideo.play().catch((err) => {
-                console.log('Error reproduciendo video:', err);
-                // Si falla, mostrar mensaje
-                tvPlaceholder.style.display = 'flex';
-                tutorialVideo.style.display = 'none';
-                const msg = tvPlaceholder.querySelector('.msg');
-                msg.textContent = '⚠️ No se pudo reproducir el video. Asegúrate de que Tutoriall.mp4 esté en la carpeta.';
-            });
-        }
-
-        // DRAG EVENTS
-        vhsTapeDrag.addEventListener('dragstart', function(e) {
-            e.dataTransfer.setData('text/plain', 'vhs');
-            this.classList.add('dragging');
-        });
-
-        vhsTapeDrag.addEventListener('dragend', function(e) {
-            this.classList.remove('dragging');
-            tvContainer.classList.remove('drag-over');
-        });
-
-        tvContainer.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            this.classList.add('drag-over');
-        });
-
-        tvContainer.addEventListener('dragleave', function(e) {
-            this.classList.remove('drag-over');
-        });
-
-        tvContainer.addEventListener('drop', function(e) {
-            e.preventDefault();
-            this.classList.remove('drag-over');
-            const data = e.dataTransfer.getData('text/plain');
-            if (data === 'vhs') {
-                playVideo();
-            }
-        });
-
-        // Botón de reproducción
-        playVideoBtn.addEventListener('click', playVideo);
-
-        // Evento cuando el video termina
-        tutorialVideo.addEventListener('ended', function onEnd() {
-            tutorialVideo.removeEventListener('ended', onEnd);
-            closeTutorial();
-        });
-
-        howToPlayBtn.addEventListener('click', openTutorial);
-        tutorialCloseBtn.addEventListener('click', closeTutorial);
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && tutorialOverlay.classList.contains('active')) {
-                closeTutorial();
+        goSubText.addEventListener('click', function() {
+            if (logoState === 1 && isGameOver) {
+                playXDD();
             }
         });
 
         // ============================================================
-        // YOUTUBE
+        // REPRODUCTOR PERSONALIZADO
         // ============================================================
-        function loadYouTubeVideo() {
-            let url = searchInput.value.trim();
+        function loadVideo() {
+            let url = playerInput.value.trim();
             if (!url) {
-                videoContainer.innerHTML = `<div style="color:#ff6b7c;text-align:center;padding:2rem;font-size:1.1rem;font-family:'Segoe UI',Arial,sans-serif;">⚠️ Por favor, ingresa una URL de YouTube</div>`;
-                videoInfo.style.display = 'none';
-                youtubeResults.classList.add('active');
-                youtubeResults.classList.remove('hidden');
+                playerPlaceholder.style.display = 'flex';
+                playerIframe.style.display = 'none';
                 return;
             }
-            
+
             let videoId = null;
             let match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&?]+)/);
             if (match) videoId = match[1];
             match = url.match(/youtube\.com\/embed\/([^&?]+)/);
             if (match) videoId = match[1];
-            
+
             if (!videoId) {
-                videoContainer.innerHTML = `<div style="color:#ff6b7c;text-align:center;padding:2rem;font-size:1.1rem;font-family:'Segoe UI',Arial,sans-serif;">⚠️ URL no válida. Usa formato: https://youtu.be/ID o https://youtube.com/watch?v=ID</div>`;
-                videoInfo.style.display = 'none';
-                youtubeResults.classList.add('active');
-                youtubeResults.classList.remove('hidden');
+                playerPlaceholder.style.display = 'flex';
+                playerIframe.style.display = 'none';
+                playerPlaceholderMsg.textContent = '⚠️ URL no válida. Usa youtube.com/watch?v=ID';
                 return;
             }
-            
-            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
-            const oembedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
-            
-            fetch(oembedUrl)
-                .then(response => response.json())
-                .then(data => {
-                    videoContainer.innerHTML = `
-                        <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    `;
-                    videoTitle.textContent = data.title || 'Título no disponible';
-                    creatorName.textContent = data.author_name || 'Creador desconocido';
-                    videoInfo.style.display = 'block';
-                    youtubeResults.classList.add('active');
-                    youtubeResults.classList.remove('hidden');
-                })
-                .catch(() => {
-                    videoContainer.innerHTML = `
-                        <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                    `;
-                    videoTitle.textContent = 'Video de YouTube';
-                    creatorName.textContent = 'Creador';
-                    videoInfo.style.display = 'block';
-                    youtubeResults.classList.add('active');
-                    youtubeResults.classList.remove('hidden');
-                });
+
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            playerIframe.src = embedUrl;
+            playerIframe.style.display = 'block';
+            playerPlaceholder.style.display = 'none';
         }
 
-        function closeResults() {
-            youtubeResults.classList.remove('active');
-            videoContainer.innerHTML = '';
-            videoInfo.style.display = 'none';
-        }
+        playerLoadBtn.addEventListener('click', loadVideo);
+        playerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loadVideo();
+        });
 
         // ============================================================
         // INICIALIZAR
         // ============================================================
         function init() {
-            resetHearts();
-
-            heartElements.forEach(el => {
+            // Eventos de corazones
+            hearts1.forEach(el => {
+                el.removeEventListener('click', handleHeartClick);
+                el.addEventListener('click', handleHeartClick);
+            });
+            hearts2.forEach(el => {
                 el.removeEventListener('click', handleHeartClick);
                 el.addEventListener('click', handleHeartClick);
             });
 
-            resetBtn.addEventListener('click', resetHearts);
-            goResetBtn.addEventListener('click', resetHearts);
+            updateAllPlayers();
+            updateAllTexts();
 
-            searchBtn.addEventListener('click', loadYouTubeVideo);
-            searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') loadYouTubeVideo(); });
-            closeResultsBtn.addEventListener('click', closeResults);
-
-            console.log('❤️ NoTeRias · VHS 4:3 con video Tutoriall.mp4');
-            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, Log0.png, VHS.png, Tutoriall.mp4');
+            console.log('❤️ NoTeRias · Modo 2 jugadores con colores');
+            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, XDD.mp3, Log0.png');
         }
 
         if (document.readyState === 'loading') {
@@ -1334,7 +1197,7 @@
             init();
         }
 
-        window.resetHearts = resetHearts;
+        window.resetGame = resetGame;
     })();
 </script>
 </body>
