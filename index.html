@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NoTeRias · Corazones</title>
     <link rel="icon" type="image/png" href="Log0.png">
-    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
         * {
             margin: 0;
@@ -110,65 +109,6 @@
         }
         .credits span { color: #ff6b7c66; }
 
-        .multiplayer-buttons {
-            display: flex;
-            gap: 0.8rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            width: 100%;
-        }
-        .multiplayer-buttons button {
-            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
-            padding: 0.7rem 1.8rem;
-            border-radius: 60px;
-            border: none;
-            background: linear-gradient(135deg, #ff3b5c, #dd0028);
-            color: #1a1a2e;
-            font-size: 1.1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.25);
-            flex: 1;
-            min-width: 140px;
-        }
-        .multiplayer-buttons button:hover {
-            background: linear-gradient(135deg, #ff4f6e, #ee0038);
-            transform: scale(1.02);
-        }
-        .multiplayer-buttons button:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #881a2a;
-        }
-        .multiplayer-buttons button.secondary {
-            background: linear-gradient(135deg, #6b7cff, #2838dd);
-            box-shadow: 0 4px 0 #1a2a88, 0 8px 25px rgba(43,79,255,0.25);
-        }
-        .multiplayer-buttons button.secondary:hover {
-            background: linear-gradient(135deg, #7c8cff, #3848ee);
-        }
-        .multiplayer-buttons button.green {
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
-            box-shadow: 0 4px 0 #1b5e20, 0 8px 25px rgba(76,175,80,0.25);
-        }
-        .multiplayer-buttons button.green:hover {
-            background: linear-gradient(135deg, #66bb6a, #388e3c);
-        }
-        .multiplayer-buttons button.danger {
-            background: linear-gradient(135deg, #f44336, #b71c1c);
-            box-shadow: 0 4px 0 #7f0000, 0 8px 25px rgba(244,67,54,0.25);
-        }
-        .multiplayer-buttons button.danger:hover {
-            background: linear-gradient(135deg, #ef5350, #c62828);
-        }
-        .multiplayer-buttons button:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
         .heart-counter {
             background: rgba(26,26,46,0.85);
             backdrop-filter: blur(6px);
@@ -263,47 +203,6 @@
         .reset-btn:active {
             transform: translateY(4px);
             box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
-        }
-
-        .rival-hearts {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: rgba(26,26,46,0.85);
-            backdrop-filter: blur(6px);
-            border-radius: 2rem;
-            padding: 0.8rem 1.5rem;
-            border: 2px solid #ff6b7c44;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            display: none;
-            z-index: 5000;
-            text-align: center;
-            min-width: 100px;
-        }
-        .rival-hearts.active { display: block; }
-        .rival-hearts .rival-label {
-            font-size: 0.7rem;
-            color: #ff6b7c88;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-        .rival-hearts .rival-container {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-top: 0.2rem;
-        }
-        .rival-hearts .rival-heart {
-            font-size: 2rem;
-            line-height: 1;
-            color: #ff2b4f;
-            filter: drop-shadow(0 4px 10px #00000055);
-            transition: all 0.2s;
-        }
-        .rival-hearts .rival-heart.lost {
-            color: #ff2b4f55;
-            filter: drop-shadow(0 4px 10px #00000033);
-            opacity: 0.4;
         }
 
         .youtube-search {
@@ -533,213 +432,6 @@
         body.game-over-active { overflow: hidden; }
         .youtube-search.hidden, .youtube-results.hidden { display: none !important; }
 
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            backdrop-filter: blur(10px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 20000;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal {
-            background: #1a1a2e;
-            border-radius: 3rem;
-            padding: 2.5rem 3rem;
-            max-width: 480px;
-            width: 90%;
-            border: 2px solid #ff6b7c66;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
-            text-align: center;
-        }
-        .modal h2 {
-            color: #ff6b7c;
-            font-size: 2rem;
-            margin-bottom: 1rem;
-            letter-spacing: 2px;
-        }
-        .modal p {
-            color: #ffb3b3cc;
-            font-size: 1.1rem;
-            margin-bottom: 1.2rem;
-            line-height: 1.5;
-        }
-        .modal .code-display {
-            font-family: 'Courier New', monospace;
-            font-size: 3rem;
-            color: #ff6b7c;
-            background: rgba(255,255,255,0.05);
-            padding: 0.5rem 1.5rem;
-            border-radius: 1rem;
-            letter-spacing: 8px;
-            margin: 1rem 0;
-            border: 2px solid #ff6b7c33;
-        }
-        .modal input {
-            width: 100%;
-            padding: 0.8rem 1.2rem;
-            border-radius: 60px;
-            border: 2px solid #ff6b7c33;
-            background: rgba(255,255,255,0.06);
-            color: #fff;
-            font-size: 1.2rem;
-            font-family: 'Courier New', monospace;
-            text-align: center;
-            outline: none;
-            transition: all 0.3s ease;
-            letter-spacing: 4px;
-        }
-        .modal input:focus {
-            border-color: #ff3b5c;
-            background: rgba(255,255,255,0.10);
-            box-shadow: 0 0 30px #ff3b5c22;
-        }
-        .modal .modal-buttons {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1.5rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .modal .modal-buttons button {
-            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
-            padding: 0.7rem 2rem;
-            border-radius: 60px;
-            border: none;
-            background: linear-gradient(135deg, #ff3b5c, #dd0028);
-            color: #1a1a2e;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.25);
-            flex: 1;
-            min-width: 100px;
-        }
-        .modal .modal-buttons button:hover {
-            background: linear-gradient(135deg, #ff4f6e, #ee0038);
-            transform: scale(1.02);
-        }
-        .modal .modal-buttons button:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #881a2a;
-        }
-        .modal .modal-buttons button.secondary {
-            background: linear-gradient(135deg, #6b7cff, #2838dd);
-            box-shadow: 0 4px 0 #1a2a88, 0 8px 25px rgba(43,79,255,0.25);
-        }
-        .modal .modal-buttons button.secondary:hover {
-            background: linear-gradient(135deg, #7c8cff, #3848ee);
-        }
-        .modal .modal-buttons button.green {
-            background: linear-gradient(135deg, #4caf50, #2e7d32);
-            box-shadow: 0 4px 0 #1b5e20, 0 8px 25px rgba(76,175,80,0.25);
-        }
-        .modal .modal-buttons button.green:hover {
-            background: linear-gradient(135deg, #66bb6a, #388e3c);
-        }
-        .modal .modal-buttons button.danger {
-            background: linear-gradient(135deg, #f44336, #b71c1c);
-            box-shadow: 0 4px 0 #7f0000, 0 8px 25px rgba(244,67,54,0.25);
-        }
-        .modal .modal-buttons button.danger:hover {
-            background: linear-gradient(135deg, #ef5350, #c62828);
-        }
-
-        .chat-container {
-            width: 100%;
-            background: rgba(26,26,46,0.7);
-            backdrop-filter: blur(6px);
-            border-radius: 1.5rem;
-            padding: 1rem;
-            border: 2px solid #ff6b7c33;
-            display: none;
-            flex-direction: column;
-            gap: 0.5rem;
-            max-height: 200px;
-        }
-        .chat-container.active { display: flex; }
-        .chat-messages {
-            flex: 1;
-            overflow-y: auto;
-            max-height: 120px;
-            padding: 0.3rem 0.5rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.2rem;
-        }
-        .chat-messages .msg {
-            color: #ffb3b3cc;
-            font-size: 0.9rem;
-            padding: 0.2rem 0.5rem;
-            border-radius: 0.5rem;
-            background: rgba(255,255,255,0.03);
-            word-break: break-word;
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-        .chat-messages .msg .sender {
-            color: #ff6b7c;
-            font-weight: bold;
-        }
-        .chat-messages .msg.system {
-            color: #ff6b7c88;
-            font-style: italic;
-            text-align: center;
-        }
-        .chat-input-row {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .chat-input-row input {
-            flex: 1;
-            padding: 0.5rem 1rem;
-            border-radius: 60px;
-            border: 2px solid #ff6b7c33;
-            background: rgba(255,255,255,0.06);
-            color: #fff;
-            font-size: 0.9rem;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            outline: none;
-            transition: all 0.3s ease;
-        }
-        .chat-input-row input:focus {
-            border-color: #ff3b5c;
-            background: rgba(255,255,255,0.10);
-        }
-        .chat-input-row button {
-            padding: 0.5rem 1.2rem;
-            border-radius: 60px;
-            border: none;
-            background: linear-gradient(135deg, #ff3b5c, #dd0028);
-            color: #1a1a2e;
-            font-size: 0.9rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 3px 0 #881a2a;
-        }
-        .chat-input-row button:hover {
-            background: linear-gradient(135deg, #ff4f6e, #ee0038);
-            transform: scale(1.02);
-        }
-        .chat-input-row button:active {
-            transform: translateY(3px);
-            box-shadow: 0 0px 0 #881a2a;
-        }
-        .chat-messages::-webkit-scrollbar { width: 4px; }
-        .chat-messages::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 10px; }
-        .chat-messages::-webkit-scrollbar-thumb { background: #ff3b5c66; border-radius: 10px; }
-
         @media (max-width: 600px) {
             .logo-text { font-size: 3.5rem; letter-spacing: 4px; }
             .logo-sub { font-size: 0.8rem; letter-spacing: 6px; }
@@ -753,15 +445,7 @@
             .game-over-overlay .go-text { font-size: 3.5rem; letter-spacing: 6px; }
             .game-over-overlay .go-sub { font-size: 1.2rem; }
             .game-over-overlay .go-reset-btn { font-size: 1.3rem; padding: 0.6rem 1.8rem; }
-            .multiplayer-buttons button { font-size: 0.9rem; padding: 0.6rem 1.2rem; min-width: 100px; }
-            .modal { padding: 1.8rem 1.5rem; }
-            .modal h2 { font-size: 1.6rem; }
-            .modal .code-display { font-size: 2.2rem; }
-            .rival-hearts { top: 10px; right: 10px; padding: 0.5rem 1rem; min-width: 70px; }
-            .rival-hearts .rival-heart { font-size: 1.5rem; }
-            .rival-hearts .rival-container { gap: 0.3rem; }
             .credits { font-size: 0.7rem; }
-            .chat-container { max-height: 160px; }
         }
         @media (max-width: 400px) {
             .heart { font-size: 3rem; }
@@ -780,44 +464,10 @@
     <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
-<!-- MODAL MULTIJUGADOR -->
-<div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-        <h2 id="modalTitle">🎮 Multijugador</h2>
-        <p id="modalDesc">Ingresa el código de la sala o crea una nueva</p>
-        <div id="codeDisplay" class="code-display" style="display:none;"></div>
-        <input type="text" id="modalInput" placeholder="Código de 5 dígitos" maxlength="5" style="display:none;">
-        <div class="modal-buttons" id="modalButtons">
-            <button class="secondary" id="modalJoinBtn">🔑 Unirse</button>
-            <button class="green" id="modalCreateBtn">✨ Crear Sala</button>
-            <button class="danger" id="modalCancelBtn">✕ Cancelar</button>
-        </div>
-        <div class="modal-buttons" id="modalAdminButtons" style="display:none;">
-            <button class="danger" id="modalKickBtn">👢 Expulsar Jugador</button>
-            <button class="secondary" id="modalCloseBtn">✕ Cerrar Sala</button>
-        </div>
-    </div>
-</div>
-
-<!-- CORAZONES DEL RIVAL -->
-<div class="rival-hearts" id="rivalHearts">
-    <div class="rival-label" id="rivalLabel">👤 RIVAL</div>
-    <div class="rival-container" id="rivalContainer">
-        <span class="rival-heart">❤️</span>
-        <span class="rival-heart">❤️</span>
-        <span class="rival-heart">❤️</span>
-    </div>
-</div>
-
 <div class="main-container" id="mainContainer">
     <div class="logo-container">
         <div class="logo-text">NoTeRias</div>
         <div class="logo-sub">★ play & enjoy ★</div>
-    </div>
-
-    <div class="multiplayer-buttons" id="multiplayerButtons">
-        <button id="multiplayerBtn">🎮 Multijugador</button>
-        <button id="exitRoomBtn" class="danger" style="display:none;">🚪 Salir Sala</button>
     </div>
 
     <div class="heart-counter" id="heartCounter">
@@ -828,14 +478,6 @@
             <span class="heart" data-index="2">❤️</span>
         </div>
         <button id="resetBtn" class="reset-btn">⟳ Volver a intentar</button>
-    </div>
-
-    <div class="chat-container" id="chatContainer">
-        <div class="chat-messages" id="chatMessages"></div>
-        <div class="chat-input-row">
-            <input type="text" id="chatInput" placeholder="Escribe un mensaje..." maxlength="100">
-            <button id="chatSendBtn">📨 Enviar</button>
-        </div>
     </div>
 
     <div class="youtube-search" id="youtubeSearch">
@@ -855,35 +497,21 @@
 
 <!-- AUDIOS -->
 <audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3" type="audio/mpeg"></audio>
+<audio id="underAudio" preload="auto"><source src="under.mp3" type="audio/mpeg"></audio>
 <audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3" type="audio/mpeg"></audio>
 <audio id="ayAudio" preload="auto"><source src="Ay.mp3" type="audio/mpeg"></audio>
 <audio id="nooAudio" preload="auto"><source src="Noo.mp3" type="audio/mpeg"></audio>
 <audio id="wthbAudio" preload="auto"><source src="WTHB.mp3" type="audio/mpeg"></audio>
 <audio id="vineBoomAudio" preload="auto"><source src="VineBoom.mp3" type="audio/mpeg"></audio>
-<audio id="oofAudio" preload="auto"><source src="oof.mp3" type="audio/mpeg"></audio>
 
 <script>
     (function() {
-        // ============================================================
-        // CONEXIÓN SOCKET.IO
-        // ============================================================
-        const socket = io();
-
         // ============================================================
         // ESTADO DEL JUGADOR
         // ============================================================
         let hearts = [true, true, true];
         let isGameOver = false;
         let isMusicPlaying = false;
-        let isMultiplayer = false;
-        let roomCode = '';
-        let isAdmin = false;
-        let playerName = 'TÚ';
-        let playerEmoji = '👤';
-        let rivalHearts = [true, true, true];
-        let rivalName = 'RIVAL';
-        let rivalEmoji = '👤';
-        let rivalConnected = false;
 
         // ============================================================
         // DOM ELEMENTS
@@ -902,44 +530,27 @@
         const goResetBtn = document.getElementById('goResetBtn');
         const goSubText = document.getElementById('goSubText');
 
-        const multiplayerBtn = document.getElementById('multiplayerBtn');
-        const exitRoomBtn = document.getElementById('exitRoomBtn');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalDesc = document.getElementById('modalDesc');
-        const modalInput = document.getElementById('modalInput');
-        const codeDisplay = document.getElementById('codeDisplay');
-        const modalButtons = document.getElementById('modalButtons');
-        const modalAdminButtons = document.getElementById('modalAdminButtons');
-        const modalJoinBtn = document.getElementById('modalJoinBtn');
-        const modalCreateBtn = document.getElementById('modalCreateBtn');
-        const modalCancelBtn = document.getElementById('modalCancelBtn');
-        const modalKickBtn = document.getElementById('modalKickBtn');
-        const modalCloseBtn = document.getElementById('modalCloseBtn');
-
-        const chatContainer = document.getElementById('chatContainer');
-        const chatMessages = document.getElementById('chatMessages');
-        const chatInput = document.getElementById('chatInput');
-        const chatSendBtn = document.getElementById('chatSendBtn');
-
-        const rivalHeartsEl = document.getElementById('rivalHearts');
-        const rivalContainer = document.getElementById('rivalContainer');
-        const rivalLabel = document.getElementById('rivalLabel');
-        const playerLabel = document.getElementById('playerLabel');
-
         // ============================================================
         // AUDIOS
         // ============================================================
+        const underAudio = document.getElementById('underAudio');
         const ayNoAudio = document.getElementById('ayNoAudio');
         const ayAudio = document.getElementById('ayAudio');
         const nooAudio = document.getElementById('nooAudio');
         const wthbAudio = document.getElementById('wthbAudio');
         const vineBoomAudio = document.getElementById('vineBoomAudio');
-        const oofAudio = document.getElementById('oofAudio');
 
         // ============================================================
         // FUNCIONES DE AUDIO
         // ============================================================
+        function playUnder() {
+            try {
+                underAudio.currentTime = 0;
+                underAudio.volume = 0.8;
+                underAudio.play().catch(() => {});
+            } catch(e) {}
+        }
+
         function playRandomExclamation() {
             const audios = [ayNoAudio, ayAudio, nooAudio, wthbAudio];
             const audio = audios[Math.floor(Math.random() * audios.length)];
@@ -955,14 +566,6 @@
                 vineBoomAudio.currentTime = 0;
                 vineBoomAudio.volume = 1.0;
                 vineBoomAudio.play().catch(() => {});
-            } catch(e) {}
-        }
-
-        function playOof() {
-            try {
-                oofAudio.currentTime = 0;
-                oofAudio.volume = 0.8;
-                oofAudio.play().catch(() => {});
             } catch(e) {}
         }
 
@@ -1008,29 +611,6 @@
                     el.textContent = '💔';
                 }
             });
-        }
-
-        function updateRivalUI() {
-            const heartsEl = rivalContainer.querySelectorAll('.rival-heart');
-            rivalHearts.forEach((alive, index) => {
-                if (heartsEl[index]) {
-                    if (alive) {
-                        heartsEl[index].classList.remove('lost');
-                        heartsEl[index].textContent = '❤️';
-                    } else {
-                        heartsEl[index].classList.add('lost');
-                        heartsEl[index].textContent = '💔';
-                    }
-                }
-            });
-        }
-
-        function addSystemMessage(text) {
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'msg system';
-            msgDiv.textContent = text;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         // ============================================================
@@ -1105,266 +685,27 @@
             updateHeartsUI();
             shakeScreen();
 
+            // 🔥 under.mp3 siempre al perder cualquier corazón
+            playUnder();
+
             const remaining = hearts.filter(h => h === true).length;
+            
+            // Si queda 1 vida: sonido aleatorio + Vine Boom al mismo tiempo
             if (remaining === 1) {
                 playRandomExclamation();
-                setTimeout(() => { playVineBoom(); }, 200);
-            } else if (remaining === 0) {
-                playVineBoom();
+                setTimeout(() => { playVineBoom(); }, 50);
+            }
+            // Si queda 0 vidas: Vine Boom (ya se maneja en checkLoseCondition con retraso)
+            else if (remaining === 0) {
+                // No reproducimos Vine Boom aquí porque checkLoseCondition ya lo hace
+                // Pero under.mp3 ya sonó
             }
 
             heartEl.style.transform = 'scale(0.7) rotate(-8deg)';
             setTimeout(() => { heartEl.style.transform = ''; }, 150);
+            
+            // Verificar si perdió todos
             checkLoseCondition();
-
-            // Notificar al servidor si estamos en multijugador
-            if (isMultiplayer && roomCode) {
-                socket.emit('loseHeart', { code: roomCode, index });
-            }
-        }
-
-        // ============================================================
-        // CHAT
-        // ============================================================
-        function sendMessage() {
-            const text = chatInput.value.trim();
-            if (!text) return;
-            if (isMultiplayer && roomCode) {
-                socket.emit('chatMessage', { code: roomCode, message: text });
-            }
-            // Mostrar mensaje localmente
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'msg';
-            msgDiv.innerHTML = `<span class="sender">${playerEmoji} ${playerName}:</span> ${text}`;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-            chatInput.value = '';
-        }
-
-        // ============================================================
-        // MULTIJUGADOR - SOCKET EVENTS
-        // ============================================================
-        socket.on('connect', () => {
-            console.log('✅ Conectado al servidor');
-        });
-
-        socket.on('disconnect', () => {
-            console.log('❌ Desconectado del servidor');
-            if (isMultiplayer) {
-                addSystemMessage('⚠️ Desconectado del servidor');
-                exitRoom();
-            }
-        });
-
-        // Crear sala
-        function createRoom() {
-            socket.emit('createRoom');
-        }
-
-        // Unirse a sala
-        function joinRoom() {
-            const code = modalInput.value.trim();
-            if (code.length !== 5 || !/^\d{5}$/.test(code)) {
-                modalDesc.textContent = '❌ Código inválido. Debe ser de 5 dígitos.';
-                modalDesc.style.color = '#ff6b7c';
-                return;
-            }
-            socket.emit('joinRoom', { code });
-        }
-
-        // EVENTOS SOCKET
-        socket.on('roomCreated', ({ code, isAdmin: admin }) => {
-            roomCode = code;
-            isAdmin = admin;
-            isMultiplayer = true;
-            rivalConnected = false;
-            playerName = 'ADMIN';
-            playerEmoji = '👑';
-            playerLabel.textContent = '👑 ADMIN';
-            rivalName = 'JUGADOR 2';
-            rivalEmoji = '👤';
-            rivalLabel.textContent = '👤 JUGADOR 2';
-
-            rivalHeartsEl.classList.add('active');
-            chatContainer.classList.add('active');
-            exitRoomBtn.style.display = 'block';
-            multiplayerBtn.textContent = '👥 Sala: ' + code;
-            multiplayerBtn.disabled = true;
-            modalOverlay.classList.remove('active');
-
-            rivalHearts = [true, true, true];
-            updateRivalUI();
-
-            addSystemMessage('🎮 Sala creada. Código: ' + code);
-            addSystemMessage('👑 Eres el administrador de la sala');
-            modalOverlay.classList.remove('active');
-        });
-
-        socket.on('joined', ({ code, isAdmin: admin }) => {
-            roomCode = code;
-            isAdmin = admin;
-            isMultiplayer = true;
-            rivalConnected = true;
-            playerName = 'JUGADOR';
-            playerEmoji = '👤';
-            playerLabel.textContent = '👤 JUGADOR';
-            rivalName = 'ADMIN';
-            rivalEmoji = '👑';
-            rivalLabel.textContent = '👑 ADMIN';
-
-            rivalHeartsEl.classList.add('active');
-            chatContainer.classList.add('active');
-            exitRoomBtn.style.display = 'block';
-            multiplayerBtn.textContent = '👥 Sala: ' + code;
-            multiplayerBtn.disabled = true;
-            modalOverlay.classList.remove('active');
-
-            rivalHearts = [true, true, true];
-            updateRivalUI();
-
-            addSystemMessage('🎮 Te has unido a la sala ' + code);
-        });
-
-        socket.on('syncState', ({ rivalId, rivalHearts: hearts, rivalName: name }) => {
-            rivalConnected = true;
-            rivalHearts = hearts;
-            rivalName = name || 'RIVAL';
-            rivalLabel.textContent = rivalEmoji + ' ' + rivalName;
-            updateRivalUI();
-        });
-
-        socket.on('playerJoined', ({ playerId, hearts, name }) => {
-            rivalConnected = true;
-            rivalHearts = hearts;
-            rivalName = name || 'JUGADOR';
-            rivalLabel.textContent = '👤 ' + rivalName;
-            updateRivalUI();
-            addSystemMessage('👤 ' + rivalName + ' se ha unido a la sala');
-        });
-
-        socket.on('heartLost', ({ playerId, hearts, remaining }) => {
-            if (playerId === socket.id) return;
-            rivalHearts = hearts;
-            updateRivalUI();
-            if (remaining === 1) {
-                playOof();
-            }
-            if (remaining === 0) {
-                addSystemMessage('💀 ' + rivalName + ' ha perdido todos sus corazones');
-                playVineBoom();
-                setTimeout(() => { playGameOverMusic(); }, 300);
-            }
-        });
-
-        socket.on('playerLost', ({ playerId }) => {
-            if (playerId === socket.id) return;
-            addSystemMessage('💀 ' + rivalName + ' ha perdido');
-        });
-
-        socket.on('chatMessage', ({ message, name, id }) => {
-            if (id === socket.id) return;
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'msg';
-            msgDiv.innerHTML = `<span class="sender">${name}:</span> ${message}`;
-            chatMessages.appendChild(msgDiv);
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        });
-
-        socket.on('kicked', () => {
-            alert('👢 Has sido expulsado de la sala');
-            exitRoom();
-        });
-
-        socket.on('playerKicked', ({ playerId }) => {
-            addSystemMessage('👢 Un jugador ha sido expulsado');
-            if (isAdmin) {
-                rivalConnected = false;
-                rivalHearts = [true, true, true];
-                updateRivalUI();
-                rivalHeartsEl.classList.remove('active');
-            }
-        });
-
-        socket.on('roomClosed', () => {
-            alert('🔒 La sala ha sido cerrada por el administrador');
-            exitRoom();
-        });
-
-        socket.on('playerLeft', ({ playerId }) => {
-            rivalConnected = false;
-            rivalHearts = [true, true, true];
-            updateRivalUI();
-            addSystemMessage('👤 Un jugador ha abandonado la sala');
-            if (isAdmin) {
-                rivalHeartsEl.classList.remove('active');
-            }
-        });
-
-        socket.on('error', (msg) => {
-            modalDesc.textContent = msg;
-            modalDesc.style.color = '#ff6b7c';
-        });
-
-        // ============================================================
-        // MULTIJUGADOR - FUNCIONES UI
-        // ============================================================
-        function exitRoom() {
-            if (!isMultiplayer) return;
-            if (confirm('¿Estás seguro de que quieras salir de la sala?')) {
-                isMultiplayer = false;
-                isAdmin = false;
-                rivalConnected = false;
-                roomCode = '';
-                playerName = 'TÚ';
-                playerEmoji = '👤';
-                playerLabel.textContent = '👤 TÚ';
-                rivalName = 'RIVAL';
-                rivalEmoji = '👤';
-                rivalLabel.textContent = '👤 RIVAL';
-                rivalHeartsEl.classList.remove('active');
-                chatContainer.classList.remove('active');
-                exitRoomBtn.style.display = 'none';
-                multiplayerBtn.textContent = '🎮 Multijugador';
-                multiplayerBtn.disabled = false;
-                chatMessages.innerHTML = '';
-                rivalHearts = [true, true, true];
-                updateRivalUI();
-                rivalContainer.querySelectorAll('.rival-heart').forEach(el => {
-                    el.classList.remove('lost');
-                    el.textContent = '❤️';
-                });
-            }
-        }
-
-        function kickPlayer() {
-            if (!isAdmin || !roomCode) return;
-            if (!rivalConnected) {
-                alert('No hay jugadores para expulsar');
-                return;
-            }
-            if (confirm('¿Expulsar al jugador de la sala?')) {
-                // Encontrar el ID del rival
-                // Como no tenemos el ID, usamos un enfoque simple: el servidor maneja la expulsión
-                // Enviamos un evento de expulsión
-                socket.emit('kickPlayer', { code: roomCode, playerId: 'rival' });
-                // El servidor debería manejar esto, pero como simplificación:
-                rivalConnected = false;
-                rivalHearts = [true, true, true];
-                updateRivalUI();
-                rivalHeartsEl.classList.remove('active');
-                addSystemMessage('👢 Jugador expulsado');
-            }
-        }
-
-        function closeRoom() {
-            if (!isAdmin || !roomCode) return;
-            if (confirm('¿Cerrar la sala? Todos los jugadores serán desconectados.')) {
-                socket.emit('closeRoom', { code: roomCode });
-                // El servidor cerrará la sala y notificará a todos
-                // Limpieza local
-                exitRoom();
-                modalOverlay.classList.remove('active');
-            }
         }
 
         // ============================================================
@@ -1421,39 +762,8 @@
             searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') loadYouTubeVideo(); });
             closeResultsBtn.addEventListener('click', closeResults);
 
-            // MULTIJUGADOR
-            multiplayerBtn.addEventListener('click', () => {
-                if (isMultiplayer) return;
-                modalOverlay.classList.add('active');
-                modalTitle.textContent = '🎮 Multijugador';
-                modalDesc.textContent = 'Crea una sala o únete con un código';
-                modalDesc.style.color = '#ffb3b3cc';
-                modalInput.style.display = 'block';
-                modalInput.value = '';
-                modalInput.placeholder = 'Código de 5 dígitos';
-                codeDisplay.style.display = 'none';
-                modalButtons.style.display = 'flex';
-                modalAdminButtons.style.display = 'none';
-            });
-
-            modalJoinBtn.addEventListener('click', joinRoom);
-            modalCreateBtn.addEventListener('click', createRoom);
-            modalCancelBtn.addEventListener('click', () => { modalOverlay.classList.remove('active'); });
-            modalKickBtn.addEventListener('click', kickPlayer);
-            modalCloseBtn.addEventListener('click', closeRoom);
-
-            exitRoomBtn.addEventListener('click', exitRoom);
-
-            // CHAT
-            chatSendBtn.addEventListener('click', sendMessage);
-            chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
-
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') modalOverlay.classList.remove('active');
-            });
-
-            console.log('❤️ NoTeRias · Multijugador con Socket.io');
-            console.log('📁 Archivos necesarios: GameOver.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, VineBoom.mp3, oof.mp3, Log0.png');
+            console.log('❤️ NoTeRias · Corazones con sonidos mejorados');
+            console.log('📁 Archivos necesarios: GameOver.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, VineBoom.mp3, Log0.png');
         }
 
         if (document.readyState === 'loading') {
