@@ -56,7 +56,7 @@
             pointer-events: none;
         }
 
-        /* === LOGO CON ANIMACIÓN === */
+        /* === LOGO CON ANIMACIÓN RÁPIDA Y FUERTE === */
         .logo-container {
             width: 100%;
             text-align: center;
@@ -66,19 +66,19 @@
             position: relative;
         }
         .logo-container.shaking-logo {
-            animation: logoShakeWithBlur 0.6s ease-in-out;
+            animation: logoShakeStrong 0.4s ease-in-out 3;
         }
-        @keyframes logoShakeWithBlur {
+        @keyframes logoShakeStrong {
             0%, 100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
-            10% { transform: translate(-8px,6px) rotate(-2deg); filter: blur(2px); }
-            20% { transform: translate(8px,-6px) rotate(2deg); filter: blur(3px); }
-            30% { transform: translate(-6px,8px) rotate(-1.5deg); filter: blur(2px); }
-            40% { transform: translate(6px,-8px) rotate(1.5deg); filter: blur(3px); }
-            50% { transform: translate(-8px,4px) rotate(-2deg); filter: blur(4px); }
-            60% { transform: translate(8px,-4px) rotate(2deg); filter: blur(3px); }
-            70% { transform: translate(-4px,6px) rotate(-1deg); filter: blur(2px); }
-            80% { transform: translate(4px,-6px) rotate(1deg); filter: blur(2px); }
-            90% { transform: translate(-6px,3px) rotate(-0.5deg); filter: blur(1px); }
+            10% { transform: translate(-14px,10px) rotate(-3deg); filter: blur(4px); }
+            20% { transform: translate(14px,-10px) rotate(3deg); filter: blur(5px); }
+            30% { transform: translate(-10px,14px) rotate(-2.5deg); filter: blur(4px); }
+            40% { transform: translate(10px,-14px) rotate(2.5deg); filter: blur(5px); }
+            50% { transform: translate(-14px,8px) rotate(-3deg); filter: blur(6px); }
+            60% { transform: translate(14px,-8px) rotate(3deg); filter: blur(5px); }
+            70% { transform: translate(-8px,12px) rotate(-2deg); filter: blur(4px); }
+            80% { transform: translate(8px,-12px) rotate(2deg); filter: blur(4px); }
+            90% { transform: translate(-10px,6px) rotate(-1.5deg); filter: blur(3px); }
             100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
         }
 
@@ -536,13 +536,13 @@
 
 <!-- GAME OVER OVERLAY -->
 <div class="game-over-overlay" id="gameOverOverlay">
-    <div class="go-text">GAME OVER</div>
+    <div class="go-text" id="goText">GAME OVER</div>
     <div class="go-sub" id="goSubText">❤️ Haz perdido todos tus corazones</div>
     <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
 <div class="main-container" id="mainContainer">
-    <!-- LOGO CON ANIMACIÓN Y CAMBIO DE TEXTO -->
+    <!-- LOGO CON ANIMACIÓN RÁPIDA Y FUERTE -->
     <div class="logo-container" id="logoContainer">
         <div class="logo-text" id="logoText">NoTeRias</div>
         <div class="logo-sub" id="logoSub">★ play & enjoy ★</div>
@@ -579,6 +579,7 @@
 
 <!-- AUDIOS -->
 <audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3" type="audio/mpeg"></audio>
+<audio id="winAudio" preload="auto"><source src="Win.mp3" type="audio/mpeg"></audio>
 <audio id="underAudio" preload="auto"><source src="under.mp3" type="audio/mpeg"></audio>
 <audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3" type="audio/mpeg"></audio>
 <audio id="ayAudio" preload="auto"><source src="Ay.mp3" type="audio/mpeg"></audio>
@@ -596,6 +597,7 @@
         let isGameOver = false;
         let isMusicPlaying = false;
         let logoState = 0; // 0 = "NoTeRias", 1 = "Ríe"
+        let isWin = false;
 
         // ============================================================
         // DOM ELEMENTS
@@ -610,8 +612,10 @@
         const youtubeSearch = document.getElementById('youtubeSearch');
         const mainContainer = document.getElementById('mainContainer');
         const audioElement = document.getElementById('gameOverAudio');
+        const winAudio = document.getElementById('winAudio');
         const gameOverOverlay = document.getElementById('gameOverOverlay');
         const goResetBtn = document.getElementById('goResetBtn');
+        const goText = document.getElementById('goText');
         const goSubText = document.getElementById('goSubText');
         const logoContainer = document.getElementById('logoContainer');
         const logoText = document.getElementById('logoText');
@@ -689,11 +693,27 @@
             } catch(e) {}
         }
 
+        function playWinMusic() {
+            try {
+                if (isMusicPlaying) return;
+                winAudio.currentTime = 0;
+                winAudio.volume = 1.0;
+                const playPromise = winAudio.play();
+                if (playPromise !== undefined) {
+                    playPromise.then(() => { isMusicPlaying = true; }).catch(() => {});
+                }
+            } catch(e) {}
+        }
+
         function stopGameOverMusic() {
             try {
                 if (!audioElement.paused) {
                     audioElement.pause();
                     audioElement.currentTime = 0;
+                }
+                if (!winAudio.paused) {
+                    winAudio.pause();
+                    winAudio.currentTime = 0;
                 }
                 isMusicPlaying = false;
             } catch(e) {}
@@ -713,7 +733,7 @@
             heartElements.forEach((el, index) => {
                 if (hearts[index]) {
                     el.classList.remove('lost', 'breaking');
-                    el.textContent = '❤️';
+                    el.textContent = '🤣';
                 } else {
                     el.classList.add('lost');
                     el.textContent = '💔';
@@ -722,7 +742,7 @@
         }
 
         // ============================================================
-        // LOGO - CAMBIO DE TEXTO CON ANIMACIÓN Y LOOP DE LOGOPRESS
+        // LOGO - CAMBIO DE TEXTO CON ANIMACIÓN RÁPIDA Y FUERTE
         // ============================================================
         function toggleLogo() {
             if (isGameOver) return;
@@ -753,11 +773,11 @@
                 playShh();
             }
 
-            // Aplicar animación de temblor con motion blur
+            // Aplicar animación de temblor rápido y fuerte
             logoContainer.classList.add('shaking-logo');
             setTimeout(() => {
                 logoContainer.classList.remove('shaking-logo');
-            }, 650);
+            }, 1200);
         }
 
         // ============================================================
@@ -765,14 +785,34 @@
         // ============================================================
         function checkLoseCondition() {
             const allLost = hearts.every(h => h === false);
+            const allWin = hearts.every(h => h === true);
+            
+            if (allWin && !isGameOver && hearts.length === 3) {
+                // GANASTE XDD - todos los corazones están en 🤣
+                isGameOver = true;
+                isWin = true;
+                resetBtn.classList.add('visible');
+                
+                // Animación de celebración
+                shakeScreen();
+                // Detener LogoPress si está sonando
+                stopLogoPress();
+                setTimeout(() => { playWinMusic(); }, 300);
+                setTimeout(() => {
+                    showGameOverOverlay('GANASTE XDD', '🤣TE REÍSTE DEMASIA- AY- AJAJAJAJAJ XDDDD');
+                }, 600);
+                return;
+            }
+            
             if (allLost && !isGameOver) {
                 isGameOver = true;
+                isWin = false;
                 resetBtn.classList.add('visible');
                 heartElements.forEach(el => {
                     if (el.classList.contains('lost')) {
                         el.classList.remove('lost');
                         el.classList.add('breaking');
-                        el.textContent = '❤️';
+                        el.textContent = '🤣';
                     }
                 });
                 shakeScreen();
@@ -780,13 +820,14 @@
                 stopLogoPress();
                 setTimeout(() => { playGameOverMusic(); }, 300);
                 setTimeout(() => {
-                    showGameOverOverlay('💀 ¡Has perdido todos tus corazones!');
+                    showGameOverOverlay('GAME OVER', '💀 Has perdido todos tus corazones');
                 }, 600);
             }
         }
 
-        function showGameOverOverlay(subText) {
-            if (subText) goSubText.textContent = subText;
+        function showGameOverOverlay(title, sub) {
+            goText.textContent = title;
+            goSubText.textContent = sub;
             gameOverOverlay.classList.add('show');
             document.body.classList.add('game-over-active');
             youtubeSearch.classList.add('hidden');
@@ -811,6 +852,7 @@
             stopGameOverMusic();
             isMusicPlaying = false;
             isGameOver = false;
+            isWin = false;
             hearts = [true, true, true];
             updateHeartsUI();
             resetBtn.classList.remove('visible');
@@ -829,6 +871,9 @@
                 logoSub.classList.remove('switched');
                 logoState = 0;
             }
+            // Restaurar texto del overlay
+            goText.textContent = 'GAME OVER';
+            goSubText.textContent = '❤️ Haz perdido todos tus corazones';
         }
 
         // ============================================================
@@ -853,10 +898,10 @@
             if (remaining === 1) {
                 playRandomExclamation();
             }
-
-            heartEl.style.transform = 'scale(0.7) rotate(-8deg)';
-            setTimeout(() => { heartEl.style.transform = ''; }, 150);
             
+            // Verificar si todos los corazones están perdidos o todos están en 🤣
+            // Pero como ahora los corazones vivos son 🤣, la condición de victoria es que todos sean 🤣
+            // y la condición de derrota es que todos sean 💔
             checkLoseCondition();
         }
 
@@ -946,8 +991,8 @@
             searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') loadYouTubeVideo(); });
             closeResultsBtn.addEventListener('click', closeResults);
 
-            console.log('❤️ NoTeRias · Corazones con sonidos mejorados');
-            console.log('📁 Archivos necesarios: GameOver.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, Log0.png');
+            console.log('❤️ NoTeRias · Corazones con risa y victoria XDD');
+            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, Log0.png');
         }
 
         if (document.readyState === 'loading') {
