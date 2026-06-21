@@ -56,12 +56,32 @@
             pointer-events: none;
         }
 
+        /* === LOGO CON ANIMACIÓN === */
         .logo-container {
             width: 100%;
             text-align: center;
             padding: 0.3rem 0;
             margin-bottom: -0.3rem;
+            cursor: pointer;
+            position: relative;
         }
+        .logo-container.shaking-logo {
+            animation: logoShakeWithBlur 0.6s ease-in-out;
+        }
+        @keyframes logoShakeWithBlur {
+            0%, 100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
+            10% { transform: translate(-8px,6px) rotate(-2deg); filter: blur(2px); }
+            20% { transform: translate(8px,-6px) rotate(2deg); filter: blur(3px); }
+            30% { transform: translate(-6px,8px) rotate(-1.5deg); filter: blur(2px); }
+            40% { transform: translate(6px,-8px) rotate(1.5deg); filter: blur(3px); }
+            50% { transform: translate(-8px,4px) rotate(-2deg); filter: blur(4px); }
+            60% { transform: translate(8px,-4px) rotate(2deg); filter: blur(3px); }
+            70% { transform: translate(-4px,6px) rotate(-1deg); filter: blur(2px); }
+            80% { transform: translate(4px,-6px) rotate(1deg); filter: blur(2px); }
+            90% { transform: translate(-6px,3px) rotate(-0.5deg); filter: blur(1px); }
+            100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
+        }
+
         .logo-text {
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
             font-size: 5rem;
@@ -74,6 +94,13 @@
             filter: drop-shadow(0 8px 25px rgba(255,43,79,0.4));
             position: relative;
             display: inline-block;
+            transition: transform 0.15s ease, filter 0.3s ease;
+        }
+        .logo-text:hover {
+            transform: scale(1.02);
+        }
+        .logo-text:active {
+            transform: scale(0.95);
         }
         .logo-text::after {
             content: '';
@@ -85,7 +112,13 @@
             background: linear-gradient(90deg, transparent, #ff2b4f, #ff6b7c, #ff2b4f, transparent);
             border-radius: 2px;
             filter: blur(1px);
+            transition: all 0.3s ease;
         }
+        .logo-text.switched::after {
+            background: linear-gradient(90deg, transparent, #ff6b7c, #ff2b4f, #ff6b7c, transparent);
+            width: 60%;
+        }
+
         .logo-sub {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             font-size: 1rem;
@@ -93,6 +126,11 @@
             letter-spacing: 10px;
             margin-top: 0.2rem;
             text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .logo-sub.switched {
+            color: #ff6b7c44;
+            letter-spacing: 4px;
         }
 
         .credits {
@@ -280,61 +318,95 @@
             width: 100%;
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease, opacity 0.3s ease, padding 0.3s ease;
+            transition: max-height 0.6s cubic-bezier(0.22, 0.61, 0.36, 1), 
+                        opacity 0.4s ease, 
+                        padding 0.4s ease;
             opacity: 0;
-            background: rgba(26,26,46,0.6);
-            backdrop-filter: blur(8px);
-            border-radius: 1.5rem;
+            background: rgba(26,26,46,0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 2rem;
             padding: 0 1.5rem;
             border: 2px solid transparent;
             position: relative;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.5);
         }
         .youtube-results.active {
-            max-height: 600px;
+            max-height: 750px;
             opacity: 1;
-            padding: 1.5rem;
+            padding: 1.8rem 1.8rem 1.5rem;
             border-color: #ff6b7c55;
             overflow-y: auto;
         }
         .youtube-results iframe {
             width: 100%;
-            height: 315px;
+            height: 350px;
+            border-radius: 1.2rem;
+            border: 2px solid #ff6b7c33;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+            transition: border-color 0.3s ease;
+            background: #0a0a1a;
+        }
+        .youtube-results iframe:hover {
+            border-color: #ff6b7c77;
+        }
+        .youtube-results .video-info {
+            margin-top: 0.8rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.04);
             border-radius: 1rem;
-            border: none;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+            border: 1px solid #ff6b7c22;
+            text-align: center;
         }
         .youtube-results .video-title {
             color: #ffb3b3;
-            font-size: 1rem;
-            margin-top: 0.6rem;
-            text-align: center;
-            word-break: break-all;
+            font-size: 1.05rem;
+            font-weight: bold;
+            word-break: break-word;
             font-family: 'Segoe UI', Arial, sans-serif;
+            letter-spacing: 0.3px;
+            text-shadow: 0 0 20px rgba(255,50,80,0.1);
+        }
+        .youtube-results .video-creator {
+            color: #ff6b7c88;
+            font-size: 0.9rem;
+            margin-top: 0.2rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .youtube-results .video-creator span {
+            color: #ff6b7cbb;
         }
         .youtube-results .close-btn {
             position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
+            top: 0.6rem;
+            right: 0.6rem;
             background: #ff3b5c;
             border: none;
             color: #1a1a2e;
             font-size: 1.2rem;
             border-radius: 50%;
-            width: 2.2rem;
-            height: 2.2rem;
+            width: 2.4rem;
+            height: 2.4rem;
             cursor: pointer;
             font-weight: bold;
             transition: all 0.2s;
             z-index: 10;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            box-shadow: 0 2px 15px rgba(255,43,79,0.3);
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
         .youtube-results .close-btn:hover {
-            transform: scale(1.1);
+            transform: scale(1.1) rotate(90deg);
             background: #ff4f6e;
+            box-shadow: 0 2px 25px rgba(255,43,79,0.5);
         }
+        .youtube-results .close-btn:active {
+            transform: scale(0.9);
+        }
+
         .youtube-results::-webkit-scrollbar { width: 6px; }
-        .youtube-results::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
-        .youtube-results::-webkit-scrollbar-thumb { background: #ff3b5c88; border-radius: 10px; }
+        .youtube-results::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 10px; }
+        .youtube-results::-webkit-scrollbar-thumb { background: #ff3b5c66; border-radius: 10px; }
+        .youtube-results::-webkit-scrollbar-thumb:hover { background: #ff3b5c99; }
 
         .game-over-overlay {
             position: fixed;
@@ -442,6 +514,10 @@
             .youtube-search { padding: 0.8rem 1rem; }
             .youtube-search input { min-width: 120px; font-size: 0.85rem; padding: 0.6rem 1rem; }
             .youtube-search button { font-size: 0.8rem; padding: 0.6rem 1.2rem; }
+            .youtube-results iframe { height: 220px; }
+            .youtube-results.active { padding: 1rem; }
+            .youtube-results .video-title { font-size: 0.9rem; }
+            .youtube-results .video-creator { font-size: 0.8rem; }
             .game-over-overlay .go-text { font-size: 3.5rem; letter-spacing: 6px; }
             .game-over-overlay .go-sub { font-size: 1.2rem; }
             .game-over-overlay .go-reset-btn { font-size: 1.3rem; padding: 0.6rem 1.8rem; }
@@ -451,6 +527,7 @@
             .heart { font-size: 3rem; }
             .hearts-container { gap: 0.6rem; }
             .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
+            .youtube-results iframe { height: 170px; }
             .game-over-overlay .go-text { font-size: 2.8rem; letter-spacing: 4px; }
         }
     </style>
@@ -465,9 +542,10 @@
 </div>
 
 <div class="main-container" id="mainContainer">
-    <div class="logo-container">
-        <div class="logo-text">NoTeRias</div>
-        <div class="logo-sub">★ play & enjoy ★</div>
+    <!-- LOGO CON ANIMACIÓN Y CAMBIO DE TEXTO -->
+    <div class="logo-container" id="logoContainer">
+        <div class="logo-text" id="logoText">NoTeRias</div>
+        <div class="logo-sub" id="logoSub">★ play & enjoy ★</div>
     </div>
 
     <div class="heart-counter" id="heartCounter">
@@ -488,6 +566,10 @@
     <div class="youtube-results" id="youtubeResults">
         <button class="close-btn" id="closeResults">✕</button>
         <div id="videoContainer"></div>
+        <div class="video-info" id="videoInfo" style="display:none;">
+            <div class="video-title" id="videoTitle">Título del video</div>
+            <div class="video-creator" id="videoCreator">👤 <span id="creatorName">Creador</span></div>
+        </div>
     </div>
 
     <div class="credits">
@@ -502,7 +584,8 @@
 <audio id="ayAudio" preload="auto"><source src="Ay.mp3" type="audio/mpeg"></audio>
 <audio id="nooAudio" preload="auto"><source src="Noo.mp3" type="audio/mpeg"></audio>
 <audio id="wthbAudio" preload="auto"><source src="WTHB.mp3" type="audio/mpeg"></audio>
-<audio id="vineBoomAudio" preload="auto"><source src="VineBoom.mp3" type="audio/mpeg"></audio>
+<audio id="logoPressAudio" preload="auto" loop><source src="LogoPress.mp3" type="audio/mpeg"></audio>
+<audio id="shhAudio" preload="auto"><source src="Shh.mp3" type="audio/mpeg"></audio>
 
 <script>
     (function() {
@@ -512,6 +595,7 @@
         let hearts = [true, true, true];
         let isGameOver = false;
         let isMusicPlaying = false;
+        let logoState = 0; // 0 = "NoTeRias", 1 = "Ríe"
 
         // ============================================================
         // DOM ELEMENTS
@@ -529,6 +613,12 @@
         const gameOverOverlay = document.getElementById('gameOverOverlay');
         const goResetBtn = document.getElementById('goResetBtn');
         const goSubText = document.getElementById('goSubText');
+        const logoContainer = document.getElementById('logoContainer');
+        const logoText = document.getElementById('logoText');
+        const logoSub = document.getElementById('logoSub');
+        const videoInfo = document.getElementById('videoInfo');
+        const videoTitle = document.getElementById('videoTitle');
+        const creatorName = document.getElementById('creatorName');
 
         // ============================================================
         // AUDIOS
@@ -538,11 +628,37 @@
         const ayAudio = document.getElementById('ayAudio');
         const nooAudio = document.getElementById('nooAudio');
         const wthbAudio = document.getElementById('wthbAudio');
-        const vineBoomAudio = document.getElementById('vineBoomAudio');
+        const logoPressAudio = document.getElementById('logoPressAudio');
+        const shhAudio = document.getElementById('shhAudio');
 
         // ============================================================
         // FUNCIONES DE AUDIO
         // ============================================================
+        function playLogoPress() {
+            try {
+                logoPressAudio.currentTime = 0;
+                logoPressAudio.volume = 0.8;
+                logoPressAudio.loop = true;
+                logoPressAudio.play().catch(() => {});
+            } catch(e) {}
+        }
+
+        function stopLogoPress() {
+            try {
+                logoPressAudio.pause();
+                logoPressAudio.currentTime = 0;
+                logoPressAudio.loop = false;
+            } catch(e) {}
+        }
+
+        function playShh() {
+            try {
+                shhAudio.currentTime = 0;
+                shhAudio.volume = 0.8;
+                shhAudio.play().catch(() => {});
+            } catch(e) {}
+        }
+
         function playUnder() {
             try {
                 underAudio.currentTime = 0;
@@ -558,14 +674,6 @@
                 audio.currentTime = 0;
                 audio.volume = 0.8;
                 audio.play().catch(() => {});
-            } catch(e) {}
-        }
-
-        function playVineBoom() {
-            try {
-                vineBoomAudio.currentTime = 0;
-                vineBoomAudio.volume = 1.0;
-                vineBoomAudio.play().catch(() => {});
             } catch(e) {}
         }
 
@@ -614,6 +722,45 @@
         }
 
         // ============================================================
+        // LOGO - CAMBIO DE TEXTO CON ANIMACIÓN Y LOOP DE LOGOPRESS
+        // ============================================================
+        function toggleLogo() {
+            if (isGameOver) return;
+
+            // Quitar animación previa
+            logoContainer.classList.remove('shaking-logo');
+            void logoContainer.offsetWidth;
+
+            if (logoState === 0) {
+                // Cambiar a "Ríe"
+                logoText.textContent = 'Ríe';
+                logoText.classList.add('switched');
+                logoSub.textContent = '★ laugh & enjoy ★';
+                logoSub.classList.add('switched');
+                logoState = 1;
+                // Iniciar loop de LogoPress
+                playLogoPress();
+            } else {
+                // Volver a "NoTeRias"
+                logoText.textContent = 'NoTeRias';
+                logoText.classList.remove('switched');
+                logoSub.textContent = '★ play & enjoy ★';
+                logoSub.classList.remove('switched');
+                logoState = 0;
+                // Detener loop de LogoPress
+                stopLogoPress();
+                // Reproducir Shh
+                playShh();
+            }
+
+            // Aplicar animación de temblor con motion blur
+            logoContainer.classList.add('shaking-logo');
+            setTimeout(() => {
+                logoContainer.classList.remove('shaking-logo');
+            }, 650);
+        }
+
+        // ============================================================
         // JUEGO
         // ============================================================
         function checkLoseCondition() {
@@ -629,7 +776,8 @@
                     }
                 });
                 shakeScreen();
-                playVineBoom();
+                // Detener LogoPress si está sonando
+                stopLogoPress();
                 setTimeout(() => { playGameOverMusic(); }, 300);
                 setTimeout(() => {
                     showGameOverOverlay('💀 ¡Has perdido todos tus corazones!');
@@ -645,6 +793,7 @@
             youtubeResults.classList.remove('active');
             youtubeResults.classList.add('hidden');
             videoContainer.innerHTML = '';
+            videoInfo.style.display = 'none';
             mainContainer.classList.add('game-over-mode');
         }
 
@@ -670,6 +819,16 @@
             youtubeSearch.classList.remove('hidden');
             youtubeResults.classList.remove('hidden');
             mainContainer.classList.remove('game-over-mode');
+            // Si LogoPress estaba sonando, detenerlo
+            stopLogoPress();
+            // Si el logo estaba en "Ríe", volver a "NoTeRias"
+            if (logoState === 1) {
+                logoText.textContent = 'NoTeRias';
+                logoText.classList.remove('switched');
+                logoSub.textContent = '★ play & enjoy ★';
+                logoSub.classList.remove('switched');
+                logoState = 0;
+            }
         }
 
         // ============================================================
@@ -685,63 +844,88 @@
             updateHeartsUI();
             shakeScreen();
 
-            // 🔥 under.mp3 siempre al perder cualquier corazón
+            // under.mp3 siempre al perder cualquier corazón
             playUnder();
 
             const remaining = hearts.filter(h => h === true).length;
             
-            // Si queda 1 vida: sonido aleatorio + Vine Boom al mismo tiempo
+            // Si queda 1 vida: sonido aleatorio
             if (remaining === 1) {
                 playRandomExclamation();
-                setTimeout(() => { playVineBoom(); }, 50);
-            }
-            // Si queda 0 vidas: Vine Boom (ya se maneja en checkLoseCondition con retraso)
-            else if (remaining === 0) {
-                // No reproducimos Vine Boom aquí porque checkLoseCondition ya lo hace
-                // Pero under.mp3 ya sonó
             }
 
             heartEl.style.transform = 'scale(0.7) rotate(-8deg)';
             setTimeout(() => { heartEl.style.transform = ''; }, 150);
             
-            // Verificar si perdió todos
             checkLoseCondition();
         }
 
         // ============================================================
-        // YOUTUBE
+        // LOGO - EVENTO CLICK
+        // ============================================================
+        logoContainer.addEventListener('click', toggleLogo);
+
+        // ============================================================
+        // YOUTUBE - CON INFORMACIÓN DEL VIDEO
         // ============================================================
         function loadYouTubeVideo() {
             let url = searchInput.value.trim();
             if (!url) {
                 videoContainer.innerHTML = `<div style="color:#ff6b7c;text-align:center;padding:2rem;font-size:1.1rem;font-family:'Segoe UI',Arial,sans-serif;">⚠️ Por favor, ingresa una URL de YouTube</div>`;
+                videoInfo.style.display = 'none';
                 youtubeResults.classList.add('active');
                 youtubeResults.classList.remove('hidden');
                 return;
             }
+            
             let videoId = null;
             let match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&?]+)/);
             if (match) videoId = match[1];
             match = url.match(/youtube\.com\/embed\/([^&?]+)/);
             if (match) videoId = match[1];
+            
             if (!videoId) {
                 videoContainer.innerHTML = `<div style="color:#ff6b7c;text-align:center;padding:2rem;font-size:1.1rem;font-family:'Segoe UI',Arial,sans-serif;">⚠️ URL no válida. Usa formato: https://youtu.be/ID o https://youtube.com/watch?v=ID</div>`;
+                videoInfo.style.display = 'none';
                 youtubeResults.classList.add('active');
                 youtubeResults.classList.remove('hidden');
                 return;
             }
+            
             const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
-            videoContainer.innerHTML = `
-                <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-                <div class="video-title">▶ ${videoId}</div>
-            `;
-            youtubeResults.classList.add('active');
-            youtubeResults.classList.remove('hidden');
+            
+            // Obtener información del video usando la API de oEmbed
+            const oembedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
+            
+            fetch(oembedUrl)
+                .then(response => response.json())
+                .then(data => {
+                    videoContainer.innerHTML = `
+                        <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    `;
+                    videoTitle.textContent = data.title || 'Título no disponible';
+                    creatorName.textContent = data.author_name || 'Creador desconocido';
+                    videoInfo.style.display = 'block';
+                    youtubeResults.classList.add('active');
+                    youtubeResults.classList.remove('hidden');
+                })
+                .catch(() => {
+                    // Fallback: mostrar solo el video sin información
+                    videoContainer.innerHTML = `
+                        <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    `;
+                    videoTitle.textContent = 'Video de YouTube';
+                    creatorName.textContent = 'Creador';
+                    videoInfo.style.display = 'block';
+                    youtubeResults.classList.add('active');
+                    youtubeResults.classList.remove('hidden');
+                });
         }
 
         function closeResults() {
             youtubeResults.classList.remove('active');
             videoContainer.innerHTML = '';
+            videoInfo.style.display = 'none';
         }
 
         // ============================================================
@@ -763,7 +947,7 @@
             closeResultsBtn.addEventListener('click', closeResults);
 
             console.log('❤️ NoTeRias · Corazones con sonidos mejorados');
-            console.log('📁 Archivos necesarios: GameOver.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, VineBoom.mp3, Log0.png');
+            console.log('📁 Archivos necesarios: GameOver.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, Log0.png');
         }
 
         if (document.readyState === 'loading') {
