@@ -187,6 +187,70 @@
             100% { box-shadow: 0 0 50px rgba(255,43,79,0.3); }
         }
 
+        .multiplayer-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: linear-gradient(135deg, #6b7cff, #2838dd);
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.7rem 2.5rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 0 #1a2a88, 0 8px 25px rgba(43,79,255,0.25);
+            margin: 0.2rem 0;
+        }
+        .multiplayer-btn:hover {
+            background: linear-gradient(135deg, #7c8cff, #3848ee);
+            transform: scale(1.02);
+        }
+        .multiplayer-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #1a2a88;
+        }
+        .multiplayer-btn.active {
+            background: linear-gradient(135deg, #ff3b5c, #dd0028);
+            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.25);
+        }
+        .multiplayer-btn.active:hover {
+            background: linear-gradient(135deg, #ff4f6e, #ee0038);
+        }
+
+        .exit-mp-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: transparent;
+            border: 2px solid #ff6b7c44;
+            color: #ff6b7c66;
+            font-size: 0.9rem;
+            padding: 0.4rem 1.5rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: none;
+        }
+        .exit-mp-btn:hover {
+            border-color: #ff6b7c88;
+            color: #ff6b7caa;
+            background: #ff6b7c11;
+        }
+        .exit-mp-btn.visible {
+            display: inline-block;
+        }
+
+        .top-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
         /* === TUTORIAL POPUP === */
         .tutorial-popup {
             position: fixed;
@@ -194,7 +258,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.9);
+            background: rgba(0,0,0,0.92);
             backdrop-filter: blur(10px);
             display: none;
             justify-content: center;
@@ -260,12 +324,16 @@
 
         /* === MODO 2 JUGADORES === */
         .players-container {
-            display: flex;
+            display: none;
             gap: 2rem;
             width: 100%;
             flex-wrap: wrap;
             justify-content: center;
         }
+        .players-container.active {
+            display: flex;
+        }
+
         .player-card {
             flex: 1;
             min-width: 280px;
@@ -283,6 +351,7 @@
             text-align: center;
             text-transform: uppercase;
             margin-bottom: 0.3rem;
+            transition: all 0.3s ease;
         }
         .player-card .hearts-container {
             display: flex;
@@ -362,11 +431,20 @@
             margin-top: 0.2rem;
             letter-spacing: 2px;
             font-family: 'Segoe UI', Arial, sans-serif;
+            transition: all 0.3s ease;
+            min-height: 1.8rem;
         }
         .player-card .player-status.win {
             color: #ff6b7c;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             animation: statusPulse 0.8s ease-in-out infinite alternate;
+        }
+        .player-card .player-status.big-win {
+            color: #ff6b7c;
+            font-size: 1.8rem;
+            font-weight: bold;
+            animation: statusPulse 0.5s ease-in-out infinite alternate;
+            text-shadow: 0 0 30px #ff2b4f;
         }
         @keyframes statusPulse {
             0% { opacity: 0.6; transform: scale(1); }
@@ -499,7 +577,6 @@
             animation: btnPulse 1s ease-in-out infinite alternate;
         }
 
-        /* === GAME OVER OVERLAY (SOLO PARA UN JUGADOR) === */
         .game-over-overlay {
             position: fixed;
             top: 0;
@@ -562,13 +639,9 @@
             text-align: center;
             line-height: 1.4;
             padding: 0 1rem;
-            cursor: pointer;
         }
         .game-over-overlay .go-sub.shaking-text {
             animation: textShake 0.15s ease-in-out infinite;
-        }
-        .game-over-overlay .go-sub.clickable {
-            cursor: pointer;
         }
         @keyframes textShake {
             0%, 100% { transform: translate(0,0) rotate(0deg); }
@@ -632,6 +705,8 @@
             .tutorial-popup .tutorial-content { padding: 1.8rem; }
             .tutorial-popup .tutorial-content h2 { font-size: 1.6rem; }
             .tutorial-popup .tutorial-content p { font-size: 1rem; }
+            .multiplayer-btn { font-size: 1rem; padding: 0.5rem 1.8rem; }
+            .top-buttons { gap: 0.5rem; }
         }
         @media (max-width: 400px) {
             .player-card .heart { font-size: 2.8rem; }
@@ -642,7 +717,7 @@
 </head>
 <body>
 
-<!-- GAME OVER OVERLAY (SOLO PARA UN JUGADOR) -->
+<!-- GAME OVER OVERLAY -->
 <div class="game-over-overlay" id="gameOverOverlay">
     <div class="go-text" id="goText">GAME OVER</div>
     <div class="go-sub" id="goSubText">💀 Has perdido todos tus corazones</div>
@@ -672,7 +747,11 @@
         <div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div>
     </div>
 
-    <button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
+    <div class="top-buttons">
+        <button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
+        <button class="multiplayer-btn" id="multiplayerBtn">🎮 2 Jugadores</button>
+        <button class="exit-mp-btn" id="exitMpBtn">🚪 Salir 2P</button>
+    </div>
 
     <!-- MODO 2 JUGADORES -->
     <div class="players-container" id="playersContainer">
@@ -752,12 +831,11 @@
         // ============================================================
         // ESTADO
         // ============================================================
-        let logoState = 0; // 0 = "NoTeRias", 1 = "Ríe"
+        let logoState = 0;
         let isGameOver = false;
         let isMusicPlaying = false;
-        let isMultiplayer = true;
+        let isMultiplayer = false;
 
-        // Jugadores
         const players = {
             1: { hearts: [true, true, true], color: '#ff2b4f', won: false },
             2: { hearts: [true, true, true], color: '#ff2b4f', won: false }
@@ -776,14 +854,10 @@
         const goResetBtn = document.getElementById('goResetBtn');
         const gameOverOverlay = document.getElementById('gameOverOverlay');
         const mainContainer = document.getElementById('mainContainer');
+        const playersContainer = document.getElementById('playersContainer');
+        const multiplayerBtn = document.getElementById('multiplayerBtn');
+        const exitMpBtn = document.getElementById('exitMpBtn');
 
-        // TUTORIAL
-        const tutorialPopup = document.getElementById('tutorialPopup');
-        const closeTutorialBtn = document.getElementById('closeTutorialBtn');
-        const tutorialTitle = document.getElementById('tutorialTitle');
-        const tutorialText = document.getElementById('tutorialText');
-
-        // Jugadores DOM
         const hearts1 = document.querySelectorAll('#hearts1 .heart');
         const hearts2 = document.querySelectorAll('#hearts2 .heart');
         const resetBtn1 = document.getElementById('resetBtn1');
@@ -793,12 +867,17 @@
         const player1Label = document.getElementById('player1Label');
         const player2Label = document.getElementById('player2Label');
 
-        // Reproductor
         const playerInput = document.getElementById('playerInput');
         const playerLoadBtn = document.getElementById('playerLoadBtn');
         const playerIframe = document.getElementById('playerIframe');
         const playerPlaceholder = document.getElementById('playerPlaceholder');
         const playerPlaceholderMsg = document.getElementById('playerPlaceholderMsg');
+
+        // TUTORIAL
+        const tutorialPopup = document.getElementById('tutorialPopup');
+        const closeTutorialBtn = document.getElementById('closeTutorialBtn');
+        const tutorialTitle = document.getElementById('tutorialTitle');
+        const tutorialText = document.getElementById('tutorialText');
 
         // AUDIOS
         const oofAudio = document.getElementById('oofAudio');
@@ -974,8 +1053,6 @@
             player.hearts[index] = false;
             updatePlayerUI(playerId);
             shakeScreen();
-
-            // Sonido oof.mp3 al perder un corazón
             playOof();
 
             const aliveCount = player.hearts.filter(h => h).length;
@@ -1014,6 +1091,23 @@
             updatePlayerUI(playerId);
             const resetBtn = playerId === 1 ? resetBtn1 : resetBtn2;
             resetBtn.classList.remove('visible');
+            
+            // Verificar si el otro jugador ya perdió para reactivar el juego
+            const otherId = playerId === 1 ? 2 : 1;
+            const otherPlayer = players[otherId];
+            if (otherPlayer.hearts.filter(h => h).length > 0) {
+                isGameOver = false;
+            }
+            
+            // Si ambos están vivos, reactivar el juego
+            if (players[1].hearts.filter(h => h).length > 0 && players[2].hearts.filter(h => h).length > 0) {
+                isGameOver = false;
+                // Restaurar estados
+                status1.className = 'player-status';
+                status2.className = 'player-status';
+                updateAllPlayers();
+            }
+            
             checkLoseCondition();
         }
 
@@ -1021,15 +1115,12 @@
         resetBtn2.addEventListener('click', () => resetPlayer(2));
 
         // ============================================================
-        // CONDICIÓN DE DERROTA / VICTORIA (SIN GAME OVER PARA 2 JUGADORES)
+        // CONDICIÓN DE DERROTA / VICTORIA
         // ============================================================
         function checkLoseCondition() {
             const p1Alive = players[1].hearts.filter(h => h).length;
             const p2Alive = players[2].hearts.filter(h => h).length;
             const isLaughMode = logoState === 1;
-
-            // En modo 2 jugadores, NO se muestra la pantalla de Game Over
-            // Solo se actualizan los estados y se muestran los botones de reinicio
 
             // Actualizar estados de los jugadores
             if (p1Alive === 0 && p2Alive > 0) {
@@ -1041,9 +1132,25 @@
                     status1.textContent = '💀 ¡Has perdido!';
                     status1.className = 'player-status';
                 }
-            } else if (p1Alive > 0) {
-                resetBtn1.classList.remove('visible');
-                status1.className = 'player-status';
+                // El otro jugador gana si tiene todos los corazones
+                if (p2Alive === 3) {
+                    if (isLaughMode) {
+                        status2.textContent = '🤣¡GANASTE! AJAJAJA';
+                        status2.className = 'player-status win';
+                    } else {
+                        status2.textContent = '🏆 ¡Has ganado!';
+                        status2.className = 'player-status win';
+                    }
+                    isGameOver = true;
+                    stopLogoPress();
+                    logoContainer.classList.remove('shaking-loop');
+                    shakeScreen();
+                    if (isLaughMode) {
+                        playWinMusic();
+                    } else {
+                        playGameOverMusic();
+                    }
+                }
             }
 
             if (p2Alive === 0 && p1Alive > 0) {
@@ -1055,19 +1162,32 @@
                     status2.textContent = '💀 ¡Has perdido!';
                     status2.className = 'player-status';
                 }
-            } else if (p2Alive > 0) {
-                resetBtn2.classList.remove('visible');
-                status2.className = 'player-status';
+                if (p1Alive === 3) {
+                    if (isLaughMode) {
+                        status1.textContent = '🤣¡GANASTE! AJAJAJA';
+                        status1.className = 'player-status win';
+                    } else {
+                        status1.textContent = '🏆 ¡Has ganado!';
+                        status1.className = 'player-status win';
+                    }
+                    isGameOver = true;
+                    stopLogoPress();
+                    logoContainer.classList.remove('shaking-loop');
+                    shakeScreen();
+                    if (isLaughMode) {
+                        playWinMusic();
+                    } else {
+                        playGameOverMusic();
+                    }
+                }
             }
 
-            // Si ambos perdieron, mostrar mensaje pero sin Game Over overlay
+            // Si ambos perdieron
             if (p1Alive === 0 && p2Alive === 0 && !isGameOver) {
                 isGameOver = true;
                 stopLogoPress();
                 logoContainer.classList.remove('shaking-loop');
                 shakeScreen();
-                // No mostrar overlay de Game Over
-                // Solo actualizar estados
                 if (isLaughMode) {
                     status1.textContent = '😂¡PERDISTE! AJAJAJA';
                     status1.className = 'player-status win';
@@ -1081,59 +1201,84 @@
                 }
                 resetBtn1.classList.add('visible');
                 resetBtn2.classList.add('visible');
+                if (isLaughMode) {
+                    playWinMusic();
+                } else {
+                    playGameOverMusic();
+                }
             }
 
-            // Si un jugador ganó (el otro perdió y el ganador tiene todos vivos)
-            if (p1Alive === 3 && p2Alive === 0 && !isGameOver) {
-                isGameOver = true;
-                players[1].won = true;
-                stopLogoPress();
-                logoContainer.classList.remove('shaking-loop');
-                shakeScreen();
-                if (isLaughMode) {
-                    status1.textContent = '🤣¡GANASTE! AJAJAJA';
-                    status1.className = 'player-status win';
-                    status2.textContent = '😂¡PERDISTE! AJAJAJA';
-                    status2.className = 'player-status win';
-                } else {
-                    status1.textContent = '🏆 ¡Has ganado!';
-                    status1.className = 'player-status win';
-                    status2.textContent = '💀 ¡Has perdido!';
-                    status2.className = 'player-status';
-                }
-                resetBtn2.classList.add('visible');
-                // No mostrar overlay de Game Over
-            }
-
-            if (p2Alive === 3 && p1Alive === 0 && !isGameOver) {
-                isGameOver = true;
-                players[2].won = true;
-                stopLogoPress();
-                logoContainer.classList.remove('shaking-loop');
-                shakeScreen();
-                if (isLaughMode) {
-                    status2.textContent = '🤣¡GANASTE! AJAJAJA';
-                    status2.className = 'player-status win';
-                    status1.textContent = '😂¡PERDISTE! AJAJAJA';
-                    status1.className = 'player-status win';
-                } else {
-                    status2.textContent = '🏆 ¡Has ganado!';
-                    status2.className = 'player-status win';
-                    status1.textContent = '💀 ¡Has perdido!';
-                    status1.className = 'player-status';
-                }
-                resetBtn1.classList.add('visible');
-                // No mostrar overlay de Game Over
+            // Si el juego terminó, no permitir más clicks hasta reiniciar
+            if (isGameOver) {
+                // Deshabilitar clicks en corazones
+                document.querySelectorAll('.heart').forEach(el => {
+                    el.style.cursor = 'default';
+                });
+            } else {
+                document.querySelectorAll('.heart').forEach(el => {
+                    el.style.cursor = 'pointer';
+                });
             }
         }
 
         // ============================================================
-        // GAME OVER OVERLAY (SOLO PARA UN JUGADOR - DESACTIVADO)
+        // MULTIJUGADOR - ACTIVAR/DESACTIVAR
         // ============================================================
-        // NOTA: El overlay de Game Over no se usa en modo 2 jugadores
-        // Se mantiene por si se quiere usar en el futuro, pero no se activa.
+        function activateMultiplayer() {
+            if (isMultiplayer) return;
+            isMultiplayer = true;
+            playersContainer.classList.add('active');
+            multiplayerBtn.textContent = '🎮 2 Jugadores (ACTIVO)';
+            multiplayerBtn.classList.add('active');
+            exitMpBtn.classList.add('visible');
+            
+            // Resetear corazones
+            players[1].hearts = [true, true, true];
+            players[2].hearts = [true, true, true];
+            players[1].won = false;
+            players[2].won = false;
+            isGameOver = false;
+            resetBtn1.classList.remove('visible');
+            resetBtn2.classList.remove('visible');
+            updateAllPlayers();
+            
+            // Reactivar clicks
+            document.querySelectorAll('.heart').forEach(el => {
+                el.style.cursor = 'pointer';
+            });
+            
+            // Si el logo estaba en modo "Ríe", actualizar textos
+            if (logoState === 1) {
+                updateAllTexts();
+            }
+        }
 
-        function resetGame() {
+        function deactivateMultiplayer() {
+            if (!isMultiplayer) return;
+            if (confirm('¿Estás seguro de que quieres salir del modo 2 jugadores?')) {
+                isMultiplayer = false;
+                playersContainer.classList.remove('active');
+                multiplayerBtn.textContent = '🎮 2 Jugadores';
+                multiplayerBtn.classList.remove('active');
+                exitMpBtn.classList.remove('visible');
+                stopGameOverMusic();
+                isMusicPlaying = false;
+                isGameOver = false;
+                // Resetear estados visuales
+                status1.className = 'player-status';
+                status2.className = 'player-status';
+                // Restaurar texto de los status
+                updateAllPlayers();
+            }
+        }
+
+        multiplayerBtn.addEventListener('click', activateMultiplayer);
+        exitMpBtn.addEventListener('click', deactivateMultiplayer);
+
+        // ============================================================
+        // GAME OVER OVERLAY (DESACTIVADO EN 2P)
+        // ============================================================
+        goResetBtn.addEventListener('click', function() {
             stopGameOverMusic();
             isMusicPlaying = false;
             isGameOver = false;
@@ -1145,6 +1290,7 @@
             resetBtn2.classList.remove('visible');
             document.body.classList.remove('shaking');
             document.body.classList.remove('game-over-active');
+            gameOverOverlay.classList.remove('show');
             mainContainer.classList.remove('game-over-mode');
             stopLogoPress();
             logoContainer.classList.remove('shaking-loop');
@@ -1161,7 +1307,10 @@
             goSubText.textContent = '💀 Has perdido todos tus corazones';
             goSubText.classList.remove('shaking-text');
             goSubText.classList.remove('clickable');
-        }
+            document.querySelectorAll('.heart').forEach(el => {
+                el.style.cursor = 'pointer';
+            });
+        });
 
         // ============================================================
         // LOGO - CAMBIO DE TEXTO
@@ -1239,7 +1388,7 @@
         logoContainer.addEventListener('click', toggleLogo);
 
         // ============================================================
-        // CLICK EN DESCRIPCIÓN DEL GAME OVER (solo modo Ríe)
+        // CLICK EN DESCRIPCIÓN DEL GAME OVER
         // ============================================================
         goSubText.addEventListener('click', function() {
             if (logoState === 1 && isGameOver) {
@@ -1286,7 +1435,6 @@
         // INICIALIZAR
         // ============================================================
         function init() {
-            // Eventos de corazones
             hearts1.forEach(el => {
                 el.removeEventListener('click', handleHeartClick);
                 el.addEventListener('click', handleHeartClick);
@@ -1309,7 +1457,10 @@
             init();
         }
 
-        window.resetGame = resetGame;
+        window.resetGame = function() {
+            // Función global para resetear desde consola si es necesario
+            goResetBtn.click();
+        };
     })();
 </script>
 </body>
