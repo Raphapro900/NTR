@@ -56,7 +56,6 @@
             pointer-events: none;
         }
 
-        /* === LOGO CON ANIMACIÓN EN LOOP === */
         .logo-container {
             width: 100%;
             text-align: center;
@@ -495,7 +494,6 @@
             line-height: 1.4;
             padding: 0 1rem;
         }
-        /* Temblor del texto de victoria */
         .game-over-overlay .go-sub.shaking-text {
             animation: textShake 0.15s ease-in-out infinite;
         }
@@ -545,7 +543,7 @@
         body.game-over-active { overflow: hidden; }
         .youtube-search.hidden, .youtube-results.hidden { display: none !important; }
 
-        /* TUTORIAL OVERLAY (VHS) */
+        /* === TUTORIAL VHS 4:3 CON DRAG (SOLO IMAGEN) === */
         .tutorial-overlay {
             position: fixed;
             top: 0;
@@ -566,7 +564,7 @@
         .tv-container {
             position: relative;
             width: 100%;
-            max-width: 650px;
+            max-width: 560px;
             background: #1a1a2e;
             border-radius: 2rem;
             padding: 2rem 2rem 3rem;
@@ -580,17 +578,16 @@
             border: 2px solid #ff6b7c33;
             position: relative;
             overflow: hidden;
-            min-height: 300px;
+            aspect-ratio: 4 / 3;
             display: flex;
             justify-content: center;
             align-items: center;
         }
-        .tv-container .tv-screen video {
+        .tv-container .tv-screen img {
             width: 100%;
             height: 100%;
-            max-height: 400px;
             border-radius: 0.8rem;
-            display: block;
+            display: none;
             background: #000;
             object-fit: contain;
         }
@@ -640,7 +637,7 @@
             text-transform: uppercase;
         }
 
-        .vhs-tape {
+        .vhs-tape-drag {
             width: 100%;
             max-width: 400px;
             margin: 1.5rem auto 0;
@@ -648,47 +645,55 @@
             border-radius: 1rem;
             padding: 0.8rem 1.5rem;
             border: 2px solid #ff6b7c33;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+            cursor: grab;
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             gap: 1rem;
             box-shadow: 0 8px 30px rgba(0,0,0,0.5);
             position: relative;
+            user-select: none;
         }
-        .vhs-tape:hover {
+        .vhs-tape-drag:hover {
             border-color: #ff6b7c77;
             transform: scale(1.02);
             box-shadow: 0 8px 40px rgba(255,43,79,0.15);
         }
-        .vhs-tape .tape-icon {
+        .vhs-tape-drag:active {
+            cursor: grabbing;
+        }
+        .vhs-tape-drag .tape-icon {
             font-size: 2.5rem;
             filter: drop-shadow(0 4px 15px rgba(255,43,79,0.2));
         }
-        .vhs-tape .tape-label {
+        .vhs-tape-drag .tape-label {
             flex: 1;
             color: #ffb3b3aa;
             font-size: 0.9rem;
             letter-spacing: 2px;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
-        .vhs-tape .tape-label span {
+        .vhs-tape-drag .tape-label span {
             color: #ff6b7c;
             font-weight: bold;
         }
-        .vhs-tape .tape-arrow {
+        .vhs-tape-drag .tape-arrow {
             color: #ff6b7c55;
             font-size: 1.5rem;
             transition: all 0.3s ease;
         }
-        .vhs-tape:hover .tape-arrow {
+        .vhs-tape-drag:hover .tape-arrow {
             color: #ff6b7c;
             transform: translateX(8px);
         }
-        .vhs-tape.slid {
-            transform: translateY(-20px) scale(0.95);
+        .vhs-tape-drag.dragging {
             opacity: 0.5;
-            pointer-events: none;
+            transform: scale(0.95);
+        }
+
+        .tv-container.drag-over .tv-screen {
+            border-color: #ff6b7c;
+            box-shadow: 0 0 40px rgba(255,43,79,0.3);
         }
 
         .tutorial-close-btn {
@@ -733,10 +738,9 @@
             .game-over-overlay .go-reset-btn { font-size: 1.3rem; padding: 0.6rem 1.8rem; }
             .credits { font-size: 0.7rem; }
             .tv-container { padding: 1rem; }
-            .tv-container .tv-screen { min-height: 200px; }
-            .tv-container .tv-screen video { max-height: 250px; }
-            .vhs-tape { padding: 0.6rem 1rem; }
-            .vhs-tape .tape-icon { font-size: 2rem; }
+            .tv-container .tv-screen { aspect-ratio: 4/3; }
+            .vhs-tape-drag { padding: 0.6rem 1rem; }
+            .vhs-tape-drag .tape-icon { font-size: 2rem; }
             .how-to-play-btn { font-size: 0.9rem; padding: 0.5rem 1.5rem; }
         }
         @media (max-width: 400px) {
@@ -745,8 +749,6 @@
             .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
             .youtube-results iframe { height: 170px; }
             .game-over-overlay .go-text { font-size: 2.8rem; letter-spacing: 4px; }
-            .tv-container .tv-screen { min-height: 150px; }
-            .tv-container .tv-screen video { max-height: 180px; }
         }
     </style>
 </head>
@@ -759,25 +761,24 @@
     <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
-<!-- TUTORIAL OVERLAY -->
+<!-- TUTORIAL VHS CON DRAG (SOLO IMAGEN) -->
 <div class="tutorial-overlay" id="tutorialOverlay">
-    <div class="tv-container">
+    <div class="tv-container" id="tvContainer">
         <button class="tutorial-close-btn" id="tutorialCloseBtn">✕</button>
         <div class="tv-screen" id="tvScreen">
             <div class="vignette"></div>
             <div class="scanlines"></div>
-            <div id="tvPlaceholder" class="placeholder-text">📼 <br>Inserta la cinta</div>
-            <video id="tutorialVideo" style="display:none;" controls>
-                <source src="Tutoriall.mp4" type="video/mp4">
-                Tu navegador no soporta el video.
-            </video>
+            <div id="tvPlaceholder" class="placeholder-text">📼 <br>Arrastra VHS.png aquí</div>
+            <img id="tutorialImage" src="VHS.png" alt="VHS Tutorial" style="display:none;">
         </div>
-        <div class="tv-brand">✦ VHS ✦</div>
+        <div class="tv-brand">✦ VHS 4:3 ✦</div>
     </div>
-    <div class="vhs-tape" id="vhsTape">
+
+    <!-- Cinta VHS arrastrable -->
+    <div class="vhs-tape-drag" id="vhsTapeDrag" draggable="true">
         <span class="tape-icon">📼</span>
         <div class="tape-label">
-            <span>▶</span> Tutorial <span>·</span> Cómo jugar
+            <span>▶</span> VHS.png <span>·</span> Arrástrame a la TV
         </div>
         <span class="tape-arrow">➜</span>
     </div>
@@ -865,13 +866,14 @@
         const logoText = document.getElementById('logoText');
         const logoSub = document.getElementById('logoSub');
 
-        // TUTORIAL
+        // TUTORIAL VHS DRAG (SOLO IMAGEN)
         const howToPlayBtn = document.getElementById('howToPlayBtn');
         const tutorialOverlay = document.getElementById('tutorialOverlay');
         const tutorialCloseBtn = document.getElementById('tutorialCloseBtn');
-        const vhsTape = document.getElementById('vhsTape');
-        const tutorialVideo = document.getElementById('tutorialVideo');
+        const vhsTapeDrag = document.getElementById('vhsTapeDrag');
         const tvPlaceholder = document.getElementById('tvPlaceholder');
+        const tvContainer = document.getElementById('tvContainer');
+        const tutorialImage = document.getElementById('tutorialImage');
 
         // AUDIOS
         const underAudio = document.getElementById('underAudio');
@@ -1060,7 +1062,6 @@
         function showGameOverOverlay(title, sub) {
             goText.textContent = title;
             goSubText.textContent = sub;
-            // Si es victoria, agregar clase de temblor
             if (isWin) {
                 goSubText.classList.add('shaking-text');
             } else {
@@ -1144,44 +1145,71 @@
         logoContainer.addEventListener('click', toggleLogo);
 
         // ============================================================
-        // TUTORIAL
+        // TUTORIAL VHS CON DRAG & DROP (SOLO IMAGEN)
         // ============================================================
         function openTutorial() {
             tutorialOverlay.classList.add('active');
-            tutorialVideo.pause();
-            tutorialVideo.currentTime = 0;
-            tutorialVideo.style.display = 'none';
+            tutorialImage.style.display = 'none';
             tvPlaceholder.style.display = 'block';
-            vhsTape.classList.remove('slid');
+            vhsTapeDrag.classList.remove('dragging');
         }
 
         function closeTutorial() {
-            tutorialVideo.pause();
-            tutorialVideo.currentTime = 0;
-            tutorialVideo.style.display = 'none';
+            tutorialImage.style.display = 'none';
             tvPlaceholder.style.display = 'block';
-            vhsTape.classList.remove('slid');
+            vhsTapeDrag.classList.remove('dragging');
+            tvContainer.classList.remove('drag-over');
             tutorialOverlay.classList.remove('active');
         }
 
-        function insertTape() {
-            if (vhsTape.classList.contains('slid')) return;
-            vhsTape.classList.add('slid');
+        // DRAG EVENTS en la cinta
+        vhsTapeDrag.addEventListener('dragstart', function(e) {
+            e.dataTransfer.setData('text/plain', 'vhs');
+            this.classList.add('dragging');
+        });
+
+        vhsTapeDrag.addEventListener('dragend', function(e) {
+            this.classList.remove('dragging');
+            tvContainer.classList.remove('drag-over');
+        });
+
+        // DRAG OVER en la TV
+        tvContainer.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('drag-over');
+        });
+
+        tvContainer.addEventListener('dragleave', function(e) {
+            this.classList.remove('drag-over');
+        });
+
+        // DROP en la TV
+        tvContainer.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('drag-over');
+            const data = e.dataTransfer.getData('text/plain');
+            if (data === 'vhs') {
+                insertVHSTape();
+            }
+        });
+
+        function insertVHSTape() {
+            if (vhsTapeDrag.classList.contains('dragging')) return;
+            vhsTapeDrag.classList.add('dragging');
+            
             setTimeout(() => {
                 tvPlaceholder.style.display = 'none';
-                tutorialVideo.style.display = 'block';
-                tutorialVideo.currentTime = 0;
-                tutorialVideo.play().catch(() => {});
-            }, 500);
-            tutorialVideo.addEventListener('ended', function onEnd() {
-                tutorialVideo.removeEventListener('ended', onEnd);
-                closeTutorial();
-            });
+                tutorialImage.style.display = 'block';
+            }, 400);
+
+            // Cuando la imagen termine de cargar, añadir efecto
+            tutorialImage.onload = function() {
+                console.log('📼 VHS.png cargado en la TV');
+            };
         }
 
         howToPlayBtn.addEventListener('click', openTutorial);
         tutorialCloseBtn.addEventListener('click', closeTutorial);
-        vhsTape.addEventListener('click', insertTape);
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && tutorialOverlay.classList.contains('active')) {
@@ -1267,8 +1295,8 @@
             searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') loadYouTubeVideo(); });
             closeResultsBtn.addEventListener('click', closeResults);
 
-            console.log('❤️ NoTeRias · Corazones con risa y victoria XDDD');
-            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, Tutoriall.mp4, Log0.png');
+            console.log('❤️ NoTeRias · VHS 4:3 con Drag & Drop (solo imagen)');
+            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, Log0.png, VHS.png');
         }
 
         if (document.readyState === 'loading') {
