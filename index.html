@@ -28,57 +28,24 @@
             animation: shakeWithBlur 0.5s ease-in-out;
         }
         @keyframes shakeWithBlur {
-            0%, 100% {
-                transform: translate(0, 0) rotate(0deg);
-                filter: blur(0px);
-            }
-            10% {
-                transform: translate(-12px, 8px) rotate(-2deg);
-                filter: blur(3px);
-            }
-            20% {
-                transform: translate(12px, -8px) rotate(2deg);
-                filter: blur(4px);
-            }
-            30% {
-                transform: translate(-8px, 12px) rotate(-1.5deg);
-                filter: blur(3px);
-            }
-            40% {
-                transform: translate(8px, -12px) rotate(1.5deg);
-                filter: blur(4px);
-            }
-            50% {
-                transform: translate(-12px, 6px) rotate(-2deg);
-                filter: blur(5px);
-            }
-            60% {
-                transform: translate(12px, -6px) rotate(2deg);
-                filter: blur(4px);
-            }
-            70% {
-                transform: translate(-6px, 10px) rotate(-1deg);
-                filter: blur(3px);
-            }
-            80% {
-                transform: translate(6px, -10px) rotate(1deg);
-                filter: blur(3px);
-            }
-            90% {
-                transform: translate(-8px, 4px) rotate(-0.5deg);
-                filter: blur(2px);
-            }
-            100% {
-                transform: translate(0, 0) rotate(0deg);
-                filter: blur(0px);
-            }
+            0%, 100% { transform: translate(0, 0) rotate(0deg); filter: blur(0px); }
+            10% { transform: translate(-12px, 8px) rotate(-2deg); filter: blur(3px); }
+            20% { transform: translate(12px, -8px) rotate(2deg); filter: blur(4px); }
+            30% { transform: translate(-8px, 12px) rotate(-1.5deg); filter: blur(3px); }
+            40% { transform: translate(8px, -12px) rotate(1.5deg); filter: blur(4px); }
+            50% { transform: translate(-12px, 6px) rotate(-2deg); filter: blur(5px); }
+            60% { transform: translate(12px, -6px) rotate(2deg); filter: blur(4px); }
+            70% { transform: translate(-6px, 10px) rotate(-1deg); filter: blur(3px); }
+            80% { transform: translate(6px, -10px) rotate(1deg); filter: blur(3px); }
+            90% { transform: translate(-8px, 4px) rotate(-0.5deg); filter: blur(2px); }
+            100% { transform: translate(0, 0) rotate(0deg); filter: blur(0px); }
         }
 
         .main-container {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 1.5rem;
+            gap: 1.2rem;
             width: 100%;
             max-width: 750px;
             transition: opacity 0.5s ease, filter 0.5s ease;
@@ -93,27 +60,21 @@
         .logo-container {
             width: 100%;
             text-align: center;
-            padding: 0.5rem 0;
-            margin-bottom: -0.5rem;
+            padding: 0.3rem 0;
+            margin-bottom: -0.3rem;
         }
         .logo-text {
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
-            font-size: 5.5rem;
+            font-size: 5rem;
             font-weight: bold;
             letter-spacing: 8px;
             background: linear-gradient(180deg, #ff6b7c 0%, #ff2b4f 40%, #cc0018 70%, #880010 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            text-shadow: none;
             filter: drop-shadow(0 8px 25px rgba(255, 43, 79, 0.4));
             position: relative;
             display: inline-block;
-            transform: scale(1);
-            transition: transform 0.3s ease;
-        }
-        .logo-text:hover {
-            transform: scale(1.02);
         }
         .logo-text::after {
             content: '';
@@ -128,55 +89,109 @@
         }
         .logo-sub {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
-            font-size: 1.2rem;
+            font-size: 1rem;
             color: #ff6b7c88;
-            letter-spacing: 12px;
+            letter-spacing: 10px;
             margin-top: 0.2rem;
             text-transform: uppercase;
-            font-weight: normal;
         }
 
         /* === CRÉDITOS === */
         .credits {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
-            font-size: 0.9rem;
-            color: #ff6b7c55;
+            font-size: 0.8rem;
+            color: #ff6b7c44;
             letter-spacing: 2px;
             text-align: center;
-            margin-top: -0.5rem;
-            padding: 0.3rem 0;
+            margin-top: -0.3rem;
+            padding: 0.2rem 0;
             border-top: 1px solid #ff6b7c22;
             width: 100%;
             max-width: 400px;
         }
-        .credits span {
-            color: #ff6b7c77;
+        .credits span { color: #ff6b7c66; }
+
+        /* === BOTONES MULTIJUGADOR === */
+        .multiplayer-buttons {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            width: 100%;
+        }
+        .multiplayer-buttons button {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            padding: 0.7rem 1.8rem;
+            border-radius: 60px;
+            border: none;
+            background: linear-gradient(135deg, #ff3b5c, #dd0028);
+            color: #1a1a2e;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255, 43, 79, 0.25);
+            flex: 1;
+            min-width: 140px;
+        }
+        .multiplayer-buttons button:hover {
+            background: linear-gradient(135deg, #ff4f6e, #ee0038);
+            transform: scale(1.02);
+        }
+        .multiplayer-buttons button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #881a2a;
+        }
+        .multiplayer-buttons button.secondary {
+            background: linear-gradient(135deg, #6b7cff, #2838dd);
+            box-shadow: 0 4px 0 #1a2a88, 0 8px 25px rgba(43, 79, 255, 0.25);
+        }
+        .multiplayer-buttons button.secondary:hover {
+            background: linear-gradient(135deg, #7c8cff, #3848ee);
+        }
+        .multiplayer-buttons button.green {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            box-shadow: 0 4px 0 #1b5e20, 0 8px 25px rgba(76, 175, 80, 0.25);
+        }
+        .multiplayer-buttons button.green:hover {
+            background: linear-gradient(135deg, #66bb6a, #388e3c);
+        }
+        .multiplayer-buttons button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
+        /* === CORAZONES DEL JUGADOR === */
         .heart-counter {
             background: rgba(26, 26, 46, 0.85);
             backdrop-filter: blur(6px);
-            border-radius: 4rem;
-            padding: 2rem 3rem 1.8rem;
+            border-radius: 3rem;
+            padding: 1.5rem 2.5rem 1.2rem;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 3px #ff3b5c55 inset;
             text-align: center;
-            min-width: 340px;
             width: 100%;
             border: 2px solid #ff6b7c66;
-            transition: all 0.2s;
             position: relative;
         }
-
+        .heart-counter .player-label {
+            font-size: 1rem;
+            color: #ff6b7caa;
+            letter-spacing: 4px;
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+        }
         .hearts-container {
             display: flex;
             justify-content: center;
-            gap: 1.8rem;
-            margin: 0.2rem 0 0.5rem 0;
+            gap: 1.5rem;
+            margin: 0.2rem 0 0.3rem 0;
             flex-wrap: wrap;
         }
-
         .heart {
-            font-size: 5.8rem;
+            font-size: 5rem;
             line-height: 1;
             cursor: pointer;
             transition: transform 0.15s ease, filter 0.2s, opacity 0.2s;
@@ -187,7 +202,7 @@
             position: relative;
         }
         .heart:hover {
-            transform: scale(1.15);
+            transform: scale(1.12);
             filter: drop-shadow(0 0 22px #ff3b5c);
         }
         .heart:active {
@@ -200,42 +215,18 @@
             cursor: default;
             transform: scale(0.92);
             pointer-events: none;
-            opacity: 0.8;
+            opacity: 0.5;
         }
-
         .heart.breaking {
             animation: breakHeart 1.2s ease-out forwards;
             pointer-events: none !important;
         }
         @keyframes breakHeart {
-            0% {
-                transform: scale(1) rotate(0deg);
-                opacity: 1;
-                color: #ff2b4f;
-                text-shadow: 0 0 30px #ff2b4f;
-            }
-            25% {
-                transform: scale(1.4) rotate(-15deg);
-                color: #ff4455;
-                text-shadow: 0 0 60px #ff2b4f;
-            }
-            50% {
-                transform: scale(1.6) rotate(10deg) translateY(-20px);
-                color: #ff0020;
-                text-shadow: 0 0 80px #ff0020;
-            }
-            75% {
-                transform: scale(1.8) rotate(-5deg) translateY(-40px);
-                color: #cc0018;
-                text-shadow: 0 0 100px #cc0018;
-                opacity: 0.8;
-            }
-            100% {
-                transform: scale(2.5) rotate(20deg) translateY(-80px);
-                color: #880010;
-                text-shadow: 0 0 120px #880010;
-                opacity: 0;
-            }
+            0% { transform: scale(1) rotate(0deg); opacity: 1; color: #ff2b4f; text-shadow: 0 0 30px #ff2b4f; }
+            25% { transform: scale(1.4) rotate(-15deg); color: #ff4455; text-shadow: 0 0 60px #ff2b4f; }
+            50% { transform: scale(1.6) rotate(10deg) translateY(-20px); color: #ff0020; text-shadow: 0 0 80px #ff0020; }
+            75% { transform: scale(1.8) rotate(-5deg) translateY(-40px); color: #cc0018; text-shadow: 0 0 100px #cc0018; opacity: 0.8; }
+            100% { transform: scale(2.5) rotate(20deg) translateY(-80px); color: #880010; text-shadow: 0 0 120px #880010; opacity: 0; }
         }
 
         .reset-btn {
@@ -243,10 +234,10 @@
             background: #ff3b5c;
             border: none;
             color: #1a1a2e;
-            font-size: 1.6rem;
+            font-size: 1.4rem;
             font-weight: bold;
-            padding: 0.7rem 2rem;
-            margin-top: 0.5rem;
+            padding: 0.6rem 1.8rem;
+            margin-top: 0.3rem;
             border-radius: 60px;
             cursor: pointer;
             box-shadow: 0 6px 0 #881a2a, 0 12px 30px #000000aa;
@@ -259,9 +250,7 @@
             margin-right: auto;
             display: none;
         }
-        .reset-btn.visible {
-            display: block;
-        }
+        .reset-btn.visible { display: block; }
         .reset-btn:hover {
             background: #ff4f6e;
             transform: scale(1.03);
@@ -272,25 +261,63 @@
             box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
         }
 
-        /* === BUSCADOR DE YOUTUBE CON DISEÑO === */
+        /* === CORAZONES DEL RIVAL (ESQUINA) === */
+        .rival-hearts {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(26, 26, 46, 0.85);
+            backdrop-filter: blur(6px);
+            border-radius: 2rem;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #ff6b7c44;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+            display: none;
+            z-index: 5000;
+            text-align: center;
+            min-width: 100px;
+        }
+        .rival-hearts.active { display: block; }
+        .rival-hearts .rival-label {
+            font-size: 0.7rem;
+            color: #ff6b7c88;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        .rival-hearts .rival-container {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            margin-top: 0.2rem;
+        }
+        .rival-hearts .rival-heart {
+            font-size: 2rem;
+            line-height: 1;
+            color: #ff2b4f;
+            filter: drop-shadow(0 4px 10px #00000055);
+            transition: all 0.2s;
+        }
+        .rival-hearts .rival-heart.lost {
+            color: #ff2b4f55;
+            filter: drop-shadow(0 4px 10px #00000033);
+            opacity: 0.4;
+        }
+
+        /* === BUSCADOR YOUTUBE === */
         .youtube-search {
             width: 100%;
             background: rgba(26, 26, 46, 0.8);
             backdrop-filter: blur(8px);
             border-radius: 2rem;
-            padding: 1.2rem 1.8rem;
+            padding: 1rem 1.5rem;
             border: 2px solid #ff6b7c44;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 107, 124, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             display: flex;
             gap: 0.8rem;
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
-            transition: opacity 0.5s ease, border-color 0.3s ease;
-        }
-        .youtube-search:focus-within {
-            border-color: #ff3b5c88;
-            box-shadow: 0 10px 40px rgba(255, 43, 79, 0.15), inset 0 1px 0 rgba(255, 107, 124, 0.2);
+            transition: opacity 0.5s ease;
         }
         .youtube-search.hidden {
             opacity: 0;
@@ -301,47 +328,33 @@
             overflow: hidden;
             border: none;
         }
-
-        .youtube-search .search-icon {
-            font-size: 1.6rem;
-            color: #ff6b7c88;
-            flex-shrink: 0;
-        }
-
+        .youtube-search .search-icon { font-size: 1.4rem; color: #ff6b7c88; flex-shrink: 0; }
         .youtube-search input {
             flex: 1;
-            min-width: 200px;
-            padding: 0.9rem 1.5rem;
+            min-width: 180px;
+            padding: 0.8rem 1.2rem;
             border-radius: 60px;
             border: 2px solid #ff6b7c33;
             background: rgba(255, 255, 255, 0.06);
             color: #fff;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-family: 'Segoe UI', Arial, sans-serif;
             outline: none;
             transition: all 0.3s ease;
-            letter-spacing: 0.3px;
         }
-        .youtube-search input::placeholder {
-            color: #8888aa;
-            font-weight: 300;
-        }
+        .youtube-search input::placeholder { color: #8888aa; }
         .youtube-search input:focus {
             border-color: #ff3b5c;
             background: rgba(255, 255, 255, 0.10);
-            box-shadow: 0 0 30px #ff3b5c22, inset 0 0 20px #ff3b5c08;
+            box-shadow: 0 0 30px #ff3b5c22;
         }
-        .youtube-search input:hover {
-            border-color: #ff6b7c66;
-        }
-
         .youtube-search button {
-            padding: 0.9rem 2rem;
+            padding: 0.8rem 1.8rem;
             border-radius: 60px;
             border: none;
             background: linear-gradient(135deg, #ff3b5c, #dd0028);
             color: #1a1a2e;
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: bold;
             cursor: pointer;
             transition: all 0.25s ease;
@@ -356,14 +369,10 @@
         .youtube-search button:hover {
             background: linear-gradient(135deg, #ff4f6e, #ee0038);
             transform: scale(1.02);
-            box-shadow: 0 4px 0 #881a2a, 0 12px 35px rgba(255, 43, 79, 0.35);
         }
         .youtube-search button:active {
             transform: translateY(4px);
-            box-shadow: 0 0px 0 #881a2a, 0 8px 25px rgba(255, 43, 79, 0.2);
-        }
-        .youtube-search button .btn-icon {
-            font-size: 1.2rem;
+            box-shadow: 0 0px 0 #881a2a;
         }
 
         .youtube-results {
@@ -395,10 +404,9 @@
         }
         .youtube-results .video-title {
             color: #ffb3b3;
-            font-size: 1.1rem;
-            margin-top: 0.8rem;
+            font-size: 1rem;
+            margin-top: 0.6rem;
             text-align: center;
-            text-shadow: 0 0 20px rgba(255, 50, 80, 0.3);
             word-break: break-all;
             font-family: 'Segoe UI', Arial, sans-serif;
         }
@@ -423,41 +431,9 @@
             transform: scale(1.1);
             background: #ff4f6e;
         }
-
-        .youtube-results::-webkit-scrollbar {
-            width: 6px;
-        }
-        .youtube-results::-webkit-scrollbar-track {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-        }
-        .youtube-results::-webkit-scrollbar-thumb {
-            background: #ff3b5c88;
-            border-radius: 10px;
-        }
-
-        /* === PARTÍCULAS DE SANGRE (🩸) === */
-        .blood-particle {
-            position: fixed;
-            pointer-events: none;
-            font-size: 2.2rem;
-            animation: bloodSplat 0.9s ease-out forwards;
-            z-index: 9999;
-            will-change: transform, opacity;
-            line-height: 1;
-            color: #cc0020;
-            text-shadow: 0 0 15px #ff0040, 0 0 35px #aa0020, 0 0 60px #880018;
-        }
-        @keyframes bloodSplat {
-            0% {
-                opacity: 1;
-                transform: translate(0, 0) scale(0.3) rotate(0deg);
-            }
-            100% {
-                opacity: 0;
-                transform: translate(var(--tx), var(--ty)) scale(2.2) rotate(60deg);
-            }
-        }
+        .youtube-results::-webkit-scrollbar { width: 6px; }
+        .youtube-results::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
+        .youtube-results::-webkit-scrollbar-thumb { background: #ff3b5c88; border-radius: 10px; }
 
         /* === GAME OVER OVERLAY === */
         .game-over-overlay {
@@ -475,18 +451,15 @@
             animation: undertaleFadeIn 1.2s ease-out forwards;
             overflow: hidden;
         }
-        .game-over-overlay.show {
-            display: flex;
-        }
+        .game-over-overlay.show { display: flex; }
         @keyframes undertaleFadeIn {
             0% { opacity: 0; background: #000000; }
             60% { opacity: 1; background: #0a0005; }
             100% { opacity: 1; background: #0a0005; }
         }
-
         .game-over-overlay .go-text {
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
-            font-size: 7rem;
+            font-size: 6rem;
             font-weight: bold;
             color: #ffffff;
             text-shadow: 0 0 40px #ff2b4f, 0 0 80px #ff2b4f, 0 0 120px #ff2b4f;
@@ -499,7 +472,6 @@
             0% { transform: translateY(-200px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
         }
-
         .game-over-overlay .go-text::after {
             content: '';
             display: block;
@@ -513,34 +485,26 @@
             0% { opacity: 0.3; width: 100px; }
             100% { opacity: 1; width: 300px; }
         }
-
         .game-over-overlay .go-sub {
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             color: #ff8888;
-            margin-top: 1.5rem;
+            margin-top: 1.2rem;
             text-shadow: 0 0 30px #ff2b4f55;
             opacity: 0;
             animation: goSubFade 0.8s ease-out 0.6s forwards, goSubPulse 2s ease-in-out infinite alternate 0.5s;
         }
-        @keyframes goSubFade {
-            0% { opacity: 0; }
-            100% { opacity: 1; }
-        }
-        @keyframes goSubPulse {
-            0% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
-
+        @keyframes goSubFade { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes goSubPulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
         .game-over-overlay .go-reset-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             background: #ff3b5c;
             border: none;
             color: #1a1a2e;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            padding: 1rem 3rem;
-            margin-top: 2.5rem;
+            padding: 0.9rem 2.8rem;
+            margin-top: 2rem;
             border-radius: 60px;
             cursor: pointer;
             box-shadow: 0 8px 0 #881a2a, 0 12px 30px #000000aa;
@@ -565,41 +529,241 @@
             transform: translateY(6px);
             box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
         }
+        body.game-over-active { overflow: hidden; }
+        .youtube-search.hidden, .youtube-results.hidden { display: none !important; }
 
-        body.game-over-active {
-            overflow: hidden;
+        /* === MODAL === */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 20000;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal {
+            background: #1a1a2e;
+            border-radius: 3rem;
+            padding: 2.5rem 3rem;
+            max-width: 480px;
+            width: 90%;
+            border: 2px solid #ff6b7c66;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.9);
+            text-align: center;
+        }
+        .modal h2 {
+            color: #ff6b7c;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+        .modal p {
+            color: #ffb3b3cc;
+            font-size: 1.1rem;
+            margin-bottom: 1.2rem;
+            line-height: 1.5;
+        }
+        .modal .code-display {
+            font-family: 'Courier New', monospace;
+            font-size: 3rem;
+            color: #ff6b7c;
+            background: rgba(255,255,255,0.05);
+            padding: 0.5rem 1.5rem;
+            border-radius: 1rem;
+            letter-spacing: 8px;
+            margin: 1rem 0;
+            border: 2px solid #ff6b7c33;
+        }
+        .modal input {
+            width: 100%;
+            padding: 0.8rem 1.2rem;
+            border-radius: 60px;
+            border: 2px solid #ff6b7c33;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+            letter-spacing: 4px;
+        }
+        .modal input:focus {
+            border-color: #ff3b5c;
+            background: rgba(255, 255, 255, 0.10);
+            box-shadow: 0 0 30px #ff3b5c22;
+        }
+        .modal .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .modal .modal-buttons button {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            padding: 0.7rem 2rem;
+            border-radius: 60px;
+            border: none;
+            background: linear-gradient(135deg, #ff3b5c, #dd0028);
+            color: #1a1a2e;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255, 43, 79, 0.25);
+            flex: 1;
+            min-width: 100px;
+        }
+        .modal .modal-buttons button:hover {
+            background: linear-gradient(135deg, #ff4f6e, #ee0038);
+            transform: scale(1.02);
+        }
+        .modal .modal-buttons button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #881a2a;
+        }
+        .modal .modal-buttons button.secondary {
+            background: linear-gradient(135deg, #6b7cff, #2838dd);
+            box-shadow: 0 4px 0 #1a2a88, 0 8px 25px rgba(43, 79, 255, 0.25);
+        }
+        .modal .modal-buttons button.secondary:hover {
+            background: linear-gradient(135deg, #7c8cff, #3848ee);
+        }
+        .modal .modal-buttons button.green {
+            background: linear-gradient(135deg, #4caf50, #2e7d32);
+            box-shadow: 0 4px 0 #1b5e20, 0 8px 25px rgba(76, 175, 80, 0.25);
+        }
+        .modal .modal-buttons button.green:hover {
+            background: linear-gradient(135deg, #66bb6a, #388e3c);
+        }
+        .modal .modal-buttons button.danger {
+            background: linear-gradient(135deg, #f44336, #b71c1c);
+            box-shadow: 0 4px 0 #7f0000, 0 8px 25px rgba(244, 67, 54, 0.25);
+        }
+        .modal .modal-buttons button.danger:hover {
+            background: linear-gradient(135deg, #ef5350, #c62828);
         }
 
-        .youtube-search.hidden,
-        .youtube-results.hidden {
-            display: none !important;
+        /* === CHAT === */
+        .chat-container {
+            width: 100%;
+            background: rgba(26, 26, 46, 0.7);
+            backdrop-filter: blur(6px);
+            border-radius: 1.5rem;
+            padding: 1rem;
+            border: 2px solid #ff6b7c33;
+            display: none;
+            flex-direction: column;
+            gap: 0.5rem;
+            max-height: 200px;
         }
+        .chat-container.active { display: flex; }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            max-height: 120px;
+            padding: 0.3rem 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+        .chat-messages .msg {
+            color: #ffb3b3cc;
+            font-size: 0.9rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 0.5rem;
+            background: rgba(255,255,255,0.03);
+            word-break: break-word;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .chat-messages .msg .sender {
+            color: #ff6b7c;
+            font-weight: bold;
+        }
+        .chat-input-row {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chat-input-row input {
+            flex: 1;
+            padding: 0.5rem 1rem;
+            border-radius: 60px;
+            border: 2px solid #ff6b7c33;
+            background: rgba(255, 255, 255, 0.06);
+            color: #fff;
+            font-size: 0.9rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .chat-input-row input:focus {
+            border-color: #ff3b5c;
+            background: rgba(255, 255, 255, 0.10);
+        }
+        .chat-input-row button {
+            padding: 0.5rem 1.2rem;
+            border-radius: 60px;
+            border: none;
+            background: linear-gradient(135deg, #ff3b5c, #dd0028);
+            color: #1a1a2e;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 3px 0 #881a2a;
+        }
+        .chat-input-row button:hover {
+            background: linear-gradient(135deg, #ff4f6e, #ee0038);
+            transform: scale(1.02);
+        }
+        .chat-input-row button:active {
+            transform: translateY(3px);
+            box-shadow: 0 0px 0 #881a2a;
+        }
+        .chat-messages::-webkit-scrollbar { width: 4px; }
+        .chat-messages::-webkit-scrollbar-track { background: rgba(255,255,255,0.03); border-radius: 10px; }
+        .chat-messages::-webkit-scrollbar-thumb { background: #ff3b5c66; border-radius: 10px; }
 
         @media (max-width: 600px) {
-            .heart-counter { padding: 1.5rem 1.8rem; min-width: unset; width: 100%; }
-            .heart { font-size: 4.2rem; gap: 1.2rem; }
-            .hearts-container { gap: 1.2rem; }
-            .reset-btn { font-size: 1.3rem; padding: 0.6rem 1.8rem; }
-            .youtube-search { padding: 1rem 1.2rem; }
-            .youtube-search input { min-width: 140px; font-size: 0.9rem; padding: 0.7rem 1.2rem; }
-            .youtube-search button { font-size: 0.85rem; padding: 0.7rem 1.4rem; }
-            .youtube-results iframe { height: 200px; }
-            .game-over-overlay .go-text { font-size: 3.8rem; letter-spacing: 6px; }
-            .game-over-overlay .go-sub { font-size: 1.2rem; }
-            .game-over-overlay .go-reset-btn { font-size: 1.4rem; padding: 0.7rem 1.8rem; }
-            .blood-particle { font-size: 1.6rem; }
-            .youtube-search .search-icon { font-size: 1.2rem; }
             .logo-text { font-size: 3.5rem; letter-spacing: 4px; }
-            .logo-sub { font-size: 0.9rem; letter-spacing: 6px; }
+            .logo-sub { font-size: 0.8rem; letter-spacing: 6px; }
+            .heart { font-size: 3.8rem; }
+            .hearts-container { gap: 1rem; }
+            .heart-counter { padding: 1.2rem 1.5rem 1rem; }
+            .reset-btn { font-size: 1.1rem; padding: 0.5rem 1.4rem; }
+            .youtube-search { padding: 0.8rem 1rem; }
+            .youtube-search input { min-width: 120px; font-size: 0.85rem; padding: 0.6rem 1rem; }
+            .youtube-search button { font-size: 0.8rem; padding: 0.6rem 1.2rem; }
+            .game-over-overlay .go-text { font-size: 3.5rem; letter-spacing: 6px; }
+            .game-over-overlay .go-sub { font-size: 1.2rem; }
+            .game-over-overlay .go-reset-btn { font-size: 1.3rem; padding: 0.6rem 1.8rem; }
+            .multiplayer-buttons button { font-size: 0.9rem; padding: 0.6rem 1.2rem; min-width: 100px; }
+            .modal { padding: 1.8rem 1.5rem; }
+            .modal h2 { font-size: 1.6rem; }
+            .modal .code-display { font-size: 2.2rem; }
+            .rival-hearts { top: 10px; right: 10px; padding: 0.5rem 1rem; min-width: 70px; }
+            .rival-hearts .rival-heart { font-size: 1.5rem; }
+            .rival-hearts .rival-container { gap: 0.3rem; }
             .credits { font-size: 0.7rem; }
+            .chat-container { max-height: 160px; }
         }
         @media (max-width: 400px) {
-            .heart { font-size: 3.4rem; }
-            .hearts-container { gap: 0.8rem; }
-            .youtube-search input { min-width: 100px; font-size: 0.8rem; }
-            .youtube-search button { font-size: 0.75rem; padding: 0.5rem 1rem; }
+            .heart { font-size: 3rem; }
+            .hearts-container { gap: 0.6rem; }
             .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
-            .logo-sub { font-size: 0.7rem; letter-spacing: 4px; }
+            .game-over-overlay .go-text { font-size: 2.8rem; letter-spacing: 4px; }
         }
     </style>
 </head>
@@ -608,18 +772,55 @@
 <!-- GAME OVER OVERLAY -->
 <div class="game-over-overlay" id="gameOverOverlay">
     <div class="go-text">GAME OVER</div>
-    <div class="go-sub">❤️ Haz perdido todos tus corazones</div>
+    <div class="go-sub" id="goSubText">❤️ Haz perdido todos tus corazones</div>
     <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
+<!-- MODAL MULTIJUGADOR -->
+<div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+        <h2 id="modalTitle">🎮 Multijugador</h2>
+        <p id="modalDesc">Ingresa el código de la sala o crea una nueva</p>
+        <div id="codeDisplay" class="code-display" style="display:none;"></div>
+        <input type="text" id="modalInput" placeholder="Código de 5 dígitos" maxlength="5" style="display:none;">
+        <div class="modal-buttons" id="modalButtons">
+            <button class="secondary" id="modalJoinBtn">🔑 Unirse</button>
+            <button class="green" id="modalCreateBtn">✨ Crear Sala</button>
+            <button class="danger" id="modalCancelBtn">✕ Cancelar</button>
+        </div>
+        <div class="modal-buttons" id="modalAdminButtons" style="display:none;">
+            <button class="danger" id="modalKickBtn">👢 Expulsar Jugador</button>
+            <button class="secondary" id="modalCloseBtn">✕ Cerrar Sala</button>
+        </div>
+    </div>
+</div>
+
+<!-- CORAZONES DEL RIVAL -->
+<div class="rival-hearts" id="rivalHearts">
+    <div class="rival-label">👤 RIVAL</div>
+    <div class="rival-container" id="rivalContainer">
+        <span class="rival-heart">❤️</span>
+        <span class="rival-heart">❤️</span>
+        <span class="rival-heart">❤️</span>
+    </div>
+</div>
+
 <div class="main-container" id="mainContainer">
-    <!-- LOGO NoTeRias -->
+    <!-- LOGO -->
     <div class="logo-container">
         <div class="logo-text">NoTeRias</div>
         <div class="logo-sub">★ play & enjoy ★</div>
     </div>
 
+    <!-- BOTONES MULTIJUGADOR -->
+    <div class="multiplayer-buttons" id="multiplayerButtons">
+        <button id="multiplayerBtn">🎮 Multijugador</button>
+        <button id="exitRoomBtn" class="danger" style="display:none;">🚪 Salir Sala</button>
+    </div>
+
+    <!-- CORAZONES DEL JUGADOR -->
     <div class="heart-counter" id="heartCounter">
+        <div class="player-label" id="playerLabel">👤 TÚ</div>
         <div class="hearts-container" id="heartsContainer">
             <span class="heart" data-index="0">❤️</span>
             <span class="heart" data-index="1">❤️</span>
@@ -628,10 +829,19 @@
         <button id="resetBtn" class="reset-btn">⟳ Volver a intentar</button>
     </div>
 
-    <!-- BUSCADOR DE YOUTUBE CON DISEÑO -->
+    <!-- CHAT -->
+    <div class="chat-container" id="chatContainer">
+        <div class="chat-messages" id="chatMessages"></div>
+        <div class="chat-input-row">
+            <input type="text" id="chatInput" placeholder="Escribe un mensaje..." maxlength="100">
+            <button id="chatSendBtn">📨 Enviar</button>
+        </div>
+    </div>
+
+    <!-- BUSCADOR YOUTUBE -->
     <div class="youtube-search" id="youtubeSearch">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Pega la URL de YouTube (ej: https://youtu.be/...)" value="">
+        <input type="text" id="searchInput" placeholder="Pega la URL de YouTube..." value="">
         <button id="searchBtn"><span class="btn-icon">▶</span> Cargar</button>
     </div>
     <div class="youtube-results" id="youtubeResults">
@@ -645,18 +855,28 @@
     </div>
 </div>
 
-<!-- Reproductor de audio oculto -->
-<audio id="gameOverAudio" preload="auto">
-    <source src="GameOver.mp3" type="audio/mpeg">
-</audio>
+<!-- AUDIOS -->
+<audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3" type="audio/mpeg"></audio>
+<audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3" type="audio/mpeg"></audio>
+<audio id="vineBoomAudio" preload="auto"><source src="VineBoom.mp3" type="audio/mpeg"></audio>
+<audio id="oofAudio" preload="auto"><source src="oof.mp3" type="audio/mpeg"></audio>
 
 <script>
     (function() {
-        // --- ESTADO ---
+        // --- ESTADO DEL JUGADOR ---
         let hearts = [true, true, true];
         let isGameOver = false;
         let isMusicPlaying = false;
+        let isMultiplayer = false;
+        let roomCode = '';
+        let isAdmin = false;
+        let playerName = 'TÚ';
 
+        // --- ESTADO DEL RIVAL ---
+        let rivalHearts = [true, true, true];
+        let rivalName = 'RIVAL';
+
+        // --- ELEMENTOS DOM ---
         const heartElements = document.querySelectorAll('.heart');
         const resetBtn = document.getElementById('resetBtn');
         const searchInput = document.getElementById('searchInput');
@@ -669,169 +889,78 @@
         const audioElement = document.getElementById('gameOverAudio');
         const gameOverOverlay = document.getElementById('gameOverOverlay');
         const goResetBtn = document.getElementById('goResetBtn');
+        const goSubText = document.getElementById('goSubText');
 
-        // --- SONIDO DE CLICK (GLOBAL) ---
-        let clickAudioCtx = null;
-        function playClickSound() {
+        // MULTIJUGADOR
+        const multiplayerBtn = document.getElementById('multiplayerBtn');
+        const exitRoomBtn = document.getElementById('exitRoomBtn');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDesc = document.getElementById('modalDesc');
+        const modalInput = document.getElementById('modalInput');
+        const codeDisplay = document.getElementById('codeDisplay');
+        const modalButtons = document.getElementById('modalButtons');
+        const modalAdminButtons = document.getElementById('modalAdminButtons');
+        const modalJoinBtn = document.getElementById('modalJoinBtn');
+        const modalCreateBtn = document.getElementById('modalCreateBtn');
+        const modalCancelBtn = document.getElementById('modalCancelBtn');
+        const modalKickBtn = document.getElementById('modalKickBtn');
+        const modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        // CHAT
+        const chatContainer = document.getElementById('chatContainer');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const chatSendBtn = document.getElementById('chatSendBtn');
+
+        // RIVAL
+        const rivalHeartsEl = document.getElementById('rivalHearts');
+        const rivalContainer = document.getElementById('rivalContainer');
+        const playerLabel = document.getElementById('playerLabel');
+
+        // --- AUDIOS ---
+        const ayNoAudio = document.getElementById('ayNoAudio');
+        const vineBoomAudio = document.getElementById('vineBoomAudio');
+        const oofAudio = document.getElementById('oofAudio');
+
+        // --- FUNCIONES DE AUDIO ---
+        function playAyNo() {
             try {
-                if (!clickAudioCtx) {
-                    clickAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                }
-                if (clickAudioCtx.state === 'suspended') {
-                    clickAudioCtx.resume();
-                }
-                const now = clickAudioCtx.currentTime;
-
-                // Click corto y agudo
-                const osc = clickAudioCtx.createOscillator();
-                const gain = clickAudioCtx.createGain();
-                osc.type = 'square';
-                osc.frequency.setValueAtTime(800, now);
-                osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
-                gain.gain.setValueAtTime(0.12, now);
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
-                osc.connect(gain);
-                gain.connect(clickAudioCtx.destination);
-                osc.start(now);
-                osc.stop(now + 0.06);
-
-                // Pequeño ruido de click
-                const bufferSize = clickAudioCtx.sampleRate * 0.02;
-                const buffer = clickAudioCtx.createBuffer(1, bufferSize, clickAudioCtx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = (Math.random() * 2 - 1) * 0.15 * Math.exp(-i / (bufferSize * 0.2));
-                }
-                const noise = clickAudioCtx.createBufferSource();
-                noise.buffer = buffer;
-                const gainNoise = clickAudioCtx.createGain();
-                gainNoise.gain.setValueAtTime(0.25, now);
-                gainNoise.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
-                noise.connect(gainNoise);
-                gainNoise.connect(clickAudioCtx.destination);
-                noise.start(now);
-                noise.stop(now + 0.03);
-
-            } catch (e) {
-                // Silencio si falla
-            }
+                ayNoAudio.currentTime = 0;
+                ayNoAudio.volume = 0.8;
+                ayNoAudio.play().catch(() => {});
+            } catch(e) {}
         }
 
-        // --- CLICK GLOBAL EN TODA LA PÁGINA ---
-        document.addEventListener('click', function(e) {
-            // Evitar que el sonido se reproduzca en el game over overlay cuando está oculto
-            // o en el audio (no tiene sentido)
-            if (e.target.closest('#gameOverAudio')) return;
-            // Si el juego está en game over, igual suena click en el overlay
-            playClickSound();
-        });
-
-        // --- SONIDO DE DAÑO ---
-        function playHurtSound() {
+        function playVineBoom() {
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const now = ctx.currentTime;
-
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.type = 'sawtooth';
-                osc.frequency.setValueAtTime(200, now);
-                osc.frequency.exponentialRampToValueAtTime(80, now + 0.15);
-                gain.gain.setValueAtTime(0.25, now);
-                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start(now);
-                osc.stop(now + 0.25);
-
-                const osc2 = ctx.createOscillator();
-                const gain2 = ctx.createGain();
-                osc2.type = 'square';
-                osc2.frequency.setValueAtTime(400, now);
-                osc2.frequency.exponentialRampToValueAtTime(150, now + 0.1);
-                gain2.gain.setValueAtTime(0.15, now);
-                gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
-                osc2.connect(gain2);
-                gain2.connect(ctx.destination);
-                osc2.start(now);
-                osc2.stop(now + 0.15);
-
-                const bufferSize = ctx.sampleRate * 0.05;
-                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-                const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = (Math.random() * 2 - 1) * 0.3 * Math.exp(-i / (bufferSize * 0.3));
-                }
-                const noise = ctx.createBufferSource();
-                noise.buffer = buffer;
-                const gainNoise = ctx.createGain();
-                gainNoise.gain.setValueAtTime(0.2, now);
-                gainNoise.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
-                noise.connect(gainNoise);
-                gainNoise.connect(ctx.destination);
-                noise.start(now);
-                noise.stop(now + 0.06);
-            } catch (e) {}
+                vineBoomAudio.currentTime = 0;
+                vineBoomAudio.volume = 1.0;
+                vineBoomAudio.play().catch(() => {});
+            } catch(e) {}
         }
 
-        // --- PARTÍCULAS DE SANGRE (🩸) ---
-        function spawnBloodParticles(x, y, count = 14) {
-            const container = document.body;
-            for (let i = 0; i < count; i++) {
-                const el = document.createElement('div');
-                el.className = 'blood-particle';
-                el.textContent = '🩸';
-                
-                const size = 1.4 + Math.random() * 2.8;
-                el.style.fontSize = size + 'rem';
-                
-                const rojos = ['#cc0020', '#dd0020', '#bb0018', '#ee0030', '#cc0030', '#aa0020'];
-                el.style.color = rojos[Math.floor(Math.random() * rojos.length)];
-                el.style.textShadow = `0 0 15px ${el.style.color}aa, 0 0 35px ${el.style.color}88, 0 0 60px ${el.style.color}66`;
-                
-                const offsetX = (Math.random() - 0.5) * 40;
-                const offsetY = (Math.random() - 0.5) * 40;
-                el.style.left = (x + offsetX) + 'px';
-                el.style.top = (y + offsetY) + 'px';
-                
-                const angle = Math.random() * 2 * Math.PI;
-                const distance = 60 + Math.random() * 200;
-                const tx = Math.cos(angle) * distance;
-                const ty = Math.sin(angle) * distance - 50;
-                el.style.setProperty('--tx', tx + 'px');
-                el.style.setProperty('--ty', ty + 'px');
-                
-                const duration = 0.7 + Math.random() * 0.8;
-                const delay = Math.random() * 0.15;
-                el.style.animationDuration = duration + 's';
-                el.style.animationDelay = delay + 's';
-                
-                container.appendChild(el);
-                setTimeout(() => { if (el.parentNode) el.remove(); }, (duration + delay) * 1000 + 50);
-            }
+        function playOof() {
+            try {
+                oofAudio.currentTime = 0;
+                oofAudio.volume = 0.8;
+                oofAudio.play().catch(() => {});
+            } catch(e) {}
         }
 
-        // --- REPRODUCIR GAMEOVER.MP3 (MUY FUERTE) ---
+        // --- REPRODUCIR GAMEOVER.MP3 ---
         function playGameOverMusic() {
             try {
                 if (isMusicPlaying) return;
-                
                 audioElement.currentTime = 0;
                 audioElement.volume = 1.0;
-                
                 const playPromise = audioElement.play();
-                
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
                         isMusicPlaying = true;
-                        console.log('🎵 GameOver.mp3 reproduciendo a volumen máximo');
-                    }).catch(error => {
-                        console.log('Error reproduciendo GameOver.mp3:', error);
-                    });
+                    }).catch(() => {});
                 }
-            } catch (e) {
-                console.log('Error:', e);
-            }
+            } catch(e) {}
         }
 
         function stopGameOverMusic() {
@@ -841,10 +970,10 @@
                     audioElement.currentTime = 0;
                 }
                 isMusicPlaying = false;
-            } catch (e) {}
+            } catch(e) {}
         }
 
-        // --- TEMBLOR DE PANTALLA CON MOTION BLUR ---
+        // --- TEMBLOR ---
         function shakeScreen() {
             document.body.classList.remove('shaking');
             void document.body.offsetWidth;
@@ -854,7 +983,7 @@
             }, 500);
         }
 
-        // --- FUNCIONES UI ---
+        // --- ACTUALIZAR UI CORAZONES ---
         function updateHeartsUI() {
             heartElements.forEach((el, index) => {
                 if (hearts[index]) {
@@ -867,30 +996,23 @@
             });
         }
 
-        function showGameOverOverlay() {
-            gameOverOverlay.classList.add('show');
-            document.body.classList.add('game-over-active');
-            
-            youtubeSearch.classList.add('hidden');
-            youtubeResults.classList.remove('active');
-            youtubeResults.classList.add('hidden');
-            videoContainer.innerHTML = '';
-            
-            mainContainer.classList.add('game-over-mode');
-            
-            playGameOverMusic();
+        // --- ACTUALIZAR CORAZONES RIVAL ---
+        function updateRivalUI() {
+            const hearts = rivalContainer.querySelectorAll('.rival-heart');
+            rivalHearts.forEach((alive, index) => {
+                if (hearts[index]) {
+                    if (alive) {
+                        hearts[index].classList.remove('lost');
+                        hearts[index].textContent = '❤️';
+                    } else {
+                        hearts[index].classList.add('lost');
+                        hearts[index].textContent = '💔';
+                    }
+                }
+            });
         }
 
-        function hideGameOverOverlay() {
-            gameOverOverlay.classList.remove('show');
-            document.body.classList.remove('game-over-active');
-            mainContainer.classList.remove('game-over-mode');
-            youtubeSearch.classList.remove('hidden');
-            youtubeResults.classList.remove('hidden');
-            stopGameOverMusic();
-            isMusicPlaying = false;
-        }
-
+        // --- FUNCIONES DE JUEGO ---
         function checkLoseCondition() {
             const allLost = hearts.every(h => h === false);
             if (allLost && !isGameOver) {
@@ -907,12 +1029,41 @@
                 
                 shakeScreen();
                 
+                // Sonidos: VineBoom + GameOver
+                playVineBoom();
                 setTimeout(() => {
-                    showGameOverOverlay();
+                    playGameOverMusic();
+                }, 300);
+                
+                setTimeout(() => {
+                    showGameOverOverlay('💀 ¡Has perdido todos tus corazones!');
                 }, 600);
             }
         }
 
+        // --- GAME OVER ---
+        function showGameOverOverlay(subText) {
+            if (subText) goSubText.textContent = subText;
+            gameOverOverlay.classList.add('show');
+            document.body.classList.add('game-over-active');
+            youtubeSearch.classList.add('hidden');
+            youtubeResults.classList.remove('active');
+            youtubeResults.classList.add('hidden');
+            videoContainer.innerHTML = '';
+            mainContainer.classList.add('game-over-mode');
+        }
+
+        function hideGameOverOverlay() {
+            gameOverOverlay.classList.remove('show');
+            document.body.classList.remove('game-over-active');
+            mainContainer.classList.remove('game-over-mode');
+            youtubeSearch.classList.remove('hidden');
+            youtubeResults.classList.remove('hidden');
+            stopGameOverMusic();
+            isMusicPlaying = false;
+        }
+
+        // --- REINICIAR ---
         function resetHearts() {
             stopGameOverMusic();
             isMusicPlaying = false;
@@ -921,19 +1072,15 @@
             updateHeartsUI();
             resetBtn.classList.remove('visible');
             document.body.classList.remove('shaking');
-            document.querySelectorAll('.blood-particle').forEach(el => el.remove());
-            
             hideGameOverOverlay();
-            
             youtubeSearch.classList.remove('hidden');
             youtubeResults.classList.remove('hidden');
             mainContainer.classList.remove('game-over-mode');
         }
 
-        // --- MANEJADOR CLICK CORAZÓN ---
+        // --- CLICK EN CORAZÓN ---
         function handleHeartClick(e) {
             if (isGameOver) return;
-            
             const heartEl = e.currentTarget;
             const index = parseInt(heartEl.dataset.index, 10);
             if (!hearts[index]) return;
@@ -945,14 +1092,176 @@
             const cx = rect.left + rect.width / 2;
             const cy = rect.top + rect.height / 2;
 
-            playHurtSound();
-            spawnBloodParticles(cx, cy);
             shakeScreen();
+
+            // Sonidos según vidas restantes
+            const remaining = hearts.filter(h => h === true).length;
+            if (remaining === 1) {
+                // 1 vida: AyNo + VineBoom
+                playAyNo();
+                setTimeout(() => {
+                    playVineBoom();
+                }, 200);
+            } else if (remaining === 0) {
+                // 0 vidas: VineBoom (se maneja en checkLoseCondition)
+                playVineBoom();
+            }
 
             heartEl.style.transform = 'scale(0.7) rotate(-8deg)';
             setTimeout(() => { heartEl.style.transform = ''; }, 150);
 
             checkLoseCondition();
+
+            // Si es multijugador, notificar al rival
+            if (isMultiplayer) {
+                // Simulación: el rival también pierde un corazón si el admin lo decide
+                // En una implementación real, esto sería por WebSocket
+            }
+        }
+
+        // --- FUNCIONES DE CHAT ---
+        function sendMessage() {
+            const text = chatInput.value.trim();
+            if (!text) return;
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg';
+            msgDiv.innerHTML = `<span class="sender">${playerName}:</span> ${text}`;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            chatInput.value = '';
+            
+            // Simular respuesta del rival en multijugador
+            if (isMultiplayer && Math.random() > 0.6) {
+                setTimeout(() => {
+                    const respuestas = ['👍', '😄', 'ok', 'jaja', 'buena', 'si', 'no', '🤔'];
+                    const reply = respuestas[Math.floor(Math.random() * respuestas.length)];
+                    const replyDiv = document.createElement('div');
+                    replyDiv.className = 'msg';
+                    replyDiv.innerHTML = `<span class="sender">${rivalName}:</span> ${reply}`;
+                    chatMessages.appendChild(replyDiv);
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 800 + Math.random() * 1200);
+            }
+        }
+
+        // --- MULTIJUGADOR: CREAR SALA ---
+        function createRoom() {
+            const code = String(Math.floor(10000 + Math.random() * 90000));
+            roomCode = code;
+            isAdmin = true;
+            isMultiplayer = true;
+            playerName = 'ADMIN';
+            playerLabel.textContent = '👑 ADMIN';
+            rivalName = 'JUGADOR 2';
+            
+            // Mostrar código
+            codeDisplay.textContent = code;
+            codeDisplay.style.display = 'block';
+            modalInput.style.display = 'none';
+            modalTitle.textContent = '🎮 Sala Creada';
+            modalDesc.textContent = 'Comparte este código con tu rival';
+            modalButtons.style.display = 'none';
+            modalAdminButtons.style.display = 'flex';
+            
+            // Activar UI multijugador
+            rivalHeartsEl.classList.add('active');
+            chatContainer.classList.add('active');
+            exitRoomBtn.style.display = 'block';
+            multiplayerBtn.textContent = '👥 Sala: ' + code;
+            multiplayerBtn.disabled = true;
+            
+            // Inicializar rival
+            rivalHearts = [true, true, true];
+            updateRivalUI();
+            
+            // Mensaje de bienvenida
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg';
+            msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> Sala creada. Código: ${code}`;
+            chatMessages.appendChild(msgDiv);
+        }
+
+        // --- MULTIJUGADOR: UNIRSE A SALA ---
+        function joinRoom() {
+            const code = modalInput.value.trim();
+            if (code.length !== 5 || !/^\d{5}$/.test(code)) {
+                modalDesc.textContent = '⚠️ Código inválido. Debe ser de 5 dígitos.';
+                return;
+            }
+            roomCode = code;
+            isAdmin = false;
+            isMultiplayer = true;
+            playerName = 'JUGADOR';
+            playerLabel.textContent = '👤 JUGADOR';
+            rivalName = 'ADMIN';
+            
+            // Ocultar modal
+            modalOverlay.classList.remove('active');
+            
+            // Activar UI multijugador
+            rivalHeartsEl.classList.add('active');
+            chatContainer.classList.add('active');
+            exitRoomBtn.style.display = 'block';
+            multiplayerBtn.textContent = '👥 Sala: ' + code;
+            multiplayerBtn.disabled = true;
+            
+            // Inicializar rival
+            rivalHearts = [true, true, true];
+            updateRivalUI();
+            
+            // Mensaje de bienvenida
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg';
+            msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> Te has unido a la sala ${code}`;
+            chatMessages.appendChild(msgDiv);
+        }
+
+        // --- MULTIJUGADOR: SALIR DE SALA ---
+        function exitRoom() {
+            if (confirm('¿Estás seguro de que quieras salir de la sala?')) {
+                isMultiplayer = false;
+                isAdmin = false;
+                roomCode = '';
+                playerName = 'TÚ';
+                playerLabel.textContent = '👤 TÚ';
+                rivalName = 'RIVAL';
+                rivalHeartsEl.classList.remove('active');
+                chatContainer.classList.remove('active');
+                exitRoomBtn.style.display = 'none';
+                multiplayerBtn.textContent = '🎮 Multijugador';
+                multiplayerBtn.disabled = false;
+                chatMessages.innerHTML = '';
+                rivalHearts = [true, true, true];
+                updateRivalUI();
+                
+                // Resetear corazones del rival visualmente
+                rivalContainer.querySelectorAll('.rival-heart').forEach(el => {
+                    el.classList.remove('lost');
+                    el.textContent = '❤️';
+                });
+            }
+        }
+
+        // --- MULTIJUGADOR: EXPULSAR JUGADOR (ADMIN) ---
+        function kickPlayer() {
+            if (!isAdmin) return;
+            if (confirm('¿Expulsar al jugador de la sala?')) {
+                // Simular expulsión
+                const msgDiv = document.createElement('div');
+                msgDiv.className = 'msg';
+                msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> El jugador ha sido expulsado.`;
+                chatMessages.appendChild(msgDiv);
+                // En una implementación real, se desconectaría al otro jugador
+            }
+        }
+
+        // --- MULTIJUGADOR: CERRAR SALA (ADMIN) ---
+        function closeRoom() {
+            if (!isAdmin) return;
+            if (confirm('¿Cerrar la sala? Todos los jugadores serán desconectados.')) {
+                exitRoom();
+                modalOverlay.classList.remove('active');
+            }
         }
 
         // --- BUSCADOR YOUTUBE ---
@@ -960,7 +1269,7 @@
             let url = searchInput.value.trim();
             if (!url) {
                 videoContainer.innerHTML = `
-                    <div style="color: #ff6b7c; text-align: center; padding: 2rem; font-size: 1.2rem; font-family: 'Segoe UI', Arial, sans-serif;">
+                    <div style="color: #ff6b7c; text-align: center; padding: 2rem; font-size: 1.1rem; font-family: 'Segoe UI', Arial, sans-serif;">
                         ⚠️ Por favor, ingresa una URL de YouTube
                     </div>
                 `;
@@ -968,20 +1277,14 @@
                 youtubeResults.classList.remove('hidden');
                 return;
             }
-            
             let videoId = null;
             let match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&?]+)/);
-            if (match) {
-                videoId = match[1];
-            }
+            if (match) videoId = match[1];
             match = url.match(/youtube\.com\/embed\/([^&?]+)/);
-            if (match) {
-                videoId = match[1];
-            }
-            
+            if (match) videoId = match[1];
             if (!videoId) {
                 videoContainer.innerHTML = `
-                    <div style="color: #ff6b7c; text-align: center; padding: 2rem; font-size: 1.2rem; font-family: 'Segoe UI', Arial, sans-serif;">
+                    <div style="color: #ff6b7c; text-align: center; padding: 2rem; font-size: 1.1rem; font-family: 'Segoe UI', Arial, sans-serif;">
                         ⚠️ URL no válida. Usa formato: https://youtu.be/ID o https://youtube.com/watch?v=ID
                     </div>
                 `;
@@ -989,14 +1292,9 @@
                 youtubeResults.classList.remove('hidden');
                 return;
             }
-            
             const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
-            
             videoContainer.innerHTML = `
-                <iframe src="${embedUrl}" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen>
-                </iframe>
+                <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 <div class="video-title">▶ ${videoId}</div>
             `;
             youtubeResults.classList.add('active');
@@ -1017,21 +1315,56 @@
                 el.addEventListener('click', handleHeartClick);
             });
 
-            resetBtn.removeEventListener('click', resetHearts);
             resetBtn.addEventListener('click', resetHearts);
-
-            goResetBtn.removeEventListener('click', resetHearts);
             goResetBtn.addEventListener('click', resetHearts);
 
-            searchBtn.removeEventListener('click', loadYouTubeVideo);
             searchBtn.addEventListener('click', loadYouTubeVideo);
             searchInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') loadYouTubeVideo();
             });
             closeResultsBtn.addEventListener('click', closeResults);
 
-            console.log('❤️ NoTeRias · Corazones con Game Over mejorado');
-            console.log('📁 Asegúrate de tener GameOver.mp3 y Log0.png en la misma carpeta');
+            // MULTIJUGADOR
+            multiplayerBtn.addEventListener('click', () => {
+                if (isMultiplayer) return;
+                modalOverlay.classList.add('active');
+                modalTitle.textContent = '🎮 Multijugador';
+                modalDesc.textContent = 'Crea una sala o únete con un código';
+                modalInput.style.display = 'block';
+                modalInput.value = '';
+                modalInput.placeholder = 'Código de 5 dígitos';
+                codeDisplay.style.display = 'none';
+                modalButtons.style.display = 'flex';
+                modalAdminButtons.style.display = 'none';
+                modalJoinBtn.textContent = '🔑 Unirse';
+                modalCreateBtn.textContent = '✨ Crear Sala';
+            });
+
+            modalJoinBtn.addEventListener('click', joinRoom);
+            modalCreateBtn.addEventListener('click', createRoom);
+            modalCancelBtn.addEventListener('click', () => {
+                modalOverlay.classList.remove('active');
+            });
+            modalKickBtn.addEventListener('click', kickPlayer);
+            modalCloseBtn.addEventListener('click', closeRoom);
+
+            exitRoomBtn.addEventListener('click', exitRoom);
+
+            // CHAT
+            chatSendBtn.addEventListener('click', sendMessage);
+            chatInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') sendMessage();
+            });
+
+            // Cerrar modal con ESC
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    modalOverlay.classList.remove('active');
+                }
+            });
+
+            console.log('❤️ NoTeRias · Multijugador + Sonidos');
+            console.log('📁 Asegúrate de tener: GameOver.mp3, AyNo.mp3, VineBoom.mp3, oof.mp3, Log0.png');
         }
 
         if (document.readyState === 'loading') {
