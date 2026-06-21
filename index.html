@@ -56,7 +56,6 @@
             pointer-events: none;
         }
 
-        /* === LOGO NoTeRias === */
         .logo-container {
             width: 100%;
             text-align: center;
@@ -96,7 +95,6 @@
             text-transform: uppercase;
         }
 
-        /* === CRÉDITOS === */
         .credits {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             font-size: 0.8rem;
@@ -111,7 +109,6 @@
         }
         .credits span { color: #ff6b7c66; }
 
-        /* === BOTONES MULTIJUGADOR === */
         .multiplayer-buttons {
             display: flex;
             gap: 0.8rem;
@@ -158,13 +155,19 @@
         .multiplayer-buttons button.green:hover {
             background: linear-gradient(135deg, #66bb6a, #388e3c);
         }
+        .multiplayer-buttons button.danger {
+            background: linear-gradient(135deg, #f44336, #b71c1c);
+            box-shadow: 0 4px 0 #7f0000, 0 8px 25px rgba(244, 67, 54, 0.25);
+        }
+        .multiplayer-buttons button.danger:hover {
+            background: linear-gradient(135deg, #ef5350, #c62828);
+        }
         .multiplayer-buttons button:disabled {
             opacity: 0.5;
             cursor: not-allowed;
             transform: none !important;
         }
 
-        /* === CORAZONES DEL JUGADOR === */
         .heart-counter {
             background: rgba(26, 26, 46, 0.85);
             backdrop-filter: blur(6px);
@@ -261,7 +264,6 @@
             box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
         }
 
-        /* === CORAZONES DEL RIVAL (ESQUINA) === */
         .rival-hearts {
             position: fixed;
             top: 20px;
@@ -303,7 +305,6 @@
             opacity: 0.4;
         }
 
-        /* === BUSCADOR YOUTUBE === */
         .youtube-search {
             width: 100%;
             background: rgba(26, 26, 46, 0.8);
@@ -435,7 +436,6 @@
         .youtube-results::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); border-radius: 10px; }
         .youtube-results::-webkit-scrollbar-thumb { background: #ff3b5c88; border-radius: 10px; }
 
-        /* === GAME OVER OVERLAY === */
         .game-over-overlay {
             position: fixed;
             top: 0;
@@ -532,7 +532,6 @@
         body.game-over-active { overflow: hidden; }
         .youtube-search.hidden, .youtube-results.hidden { display: none !important; }
 
-        /* === MODAL === */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -653,7 +652,6 @@
             background: linear-gradient(135deg, #ef5350, #c62828);
         }
 
-        /* === CHAT === */
         .chat-container {
             width: 100%;
             background: rgba(26, 26, 46, 0.7);
@@ -797,7 +795,7 @@
 
 <!-- CORAZONES DEL RIVAL -->
 <div class="rival-hearts" id="rivalHearts">
-    <div class="rival-label">👤 RIVAL</div>
+    <div class="rival-label" id="rivalLabel">👤 RIVAL</div>
     <div class="rival-container" id="rivalContainer">
         <span class="rival-heart">❤️</span>
         <span class="rival-heart">❤️</span>
@@ -806,19 +804,16 @@
 </div>
 
 <div class="main-container" id="mainContainer">
-    <!-- LOGO -->
     <div class="logo-container">
         <div class="logo-text">NoTeRias</div>
         <div class="logo-sub">★ play & enjoy ★</div>
     </div>
 
-    <!-- BOTONES MULTIJUGADOR -->
     <div class="multiplayer-buttons" id="multiplayerButtons">
         <button id="multiplayerBtn">🎮 Multijugador</button>
         <button id="exitRoomBtn" class="danger" style="display:none;">🚪 Salir Sala</button>
     </div>
 
-    <!-- CORAZONES DEL JUGADOR -->
     <div class="heart-counter" id="heartCounter">
         <div class="player-label" id="playerLabel">👤 TÚ</div>
         <div class="hearts-container" id="heartsContainer">
@@ -829,7 +824,6 @@
         <button id="resetBtn" class="reset-btn">⟳ Volver a intentar</button>
     </div>
 
-    <!-- CHAT -->
     <div class="chat-container" id="chatContainer">
         <div class="chat-messages" id="chatMessages"></div>
         <div class="chat-input-row">
@@ -838,7 +832,6 @@
         </div>
     </div>
 
-    <!-- BUSCADOR YOUTUBE -->
     <div class="youtube-search" id="youtubeSearch">
         <span class="search-icon">🔍</span>
         <input type="text" id="searchInput" placeholder="Pega la URL de YouTube..." value="">
@@ -849,7 +842,6 @@
         <div id="videoContainer"></div>
     </div>
 
-    <!-- CRÉDITOS -->
     <div class="credits">
         <span>CCO</span> Raphapro900 <span>- V1.0</span>
     </div>
@@ -858,6 +850,9 @@
 <!-- AUDIOS -->
 <audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3" type="audio/mpeg"></audio>
 <audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3" type="audio/mpeg"></audio>
+<audio id="ayAudio" preload="auto"><source src="Ay.mp3" type="audio/mpeg"></audio>
+<audio id="nooAudio" preload="auto"><source src="Noo.mp3" type="audio/mpeg"></audio>
+<audio id="wthbAudio" preload="auto"><source src="WTHB.mp3" type="audio/mpeg"></audio>
 <audio id="vineBoomAudio" preload="auto"><source src="VineBoom.mp3" type="audio/mpeg"></audio>
 <audio id="oofAudio" preload="auto"><source src="oof.mp3" type="audio/mpeg"></audio>
 
@@ -871,10 +866,13 @@
         let roomCode = '';
         let isAdmin = false;
         let playerName = 'TÚ';
+        let playerEmoji = '👤';
 
         // --- ESTADO DEL RIVAL ---
         let rivalHearts = [true, true, true];
         let rivalName = 'RIVAL';
+        let rivalEmoji = '👤';
+        let rivalConnected = false;
 
         // --- ELEMENTOS DOM ---
         const heartElements = document.querySelectorAll('.heart');
@@ -891,7 +889,6 @@
         const goResetBtn = document.getElementById('goResetBtn');
         const goSubText = document.getElementById('goSubText');
 
-        // MULTIJUGADOR
         const multiplayerBtn = document.getElementById('multiplayerBtn');
         const exitRoomBtn = document.getElementById('exitRoomBtn');
         const modalOverlay = document.getElementById('modalOverlay');
@@ -907,28 +904,32 @@
         const modalKickBtn = document.getElementById('modalKickBtn');
         const modalCloseBtn = document.getElementById('modalCloseBtn');
 
-        // CHAT
         const chatContainer = document.getElementById('chatContainer');
         const chatMessages = document.getElementById('chatMessages');
         const chatInput = document.getElementById('chatInput');
         const chatSendBtn = document.getElementById('chatSendBtn');
 
-        // RIVAL
         const rivalHeartsEl = document.getElementById('rivalHearts');
         const rivalContainer = document.getElementById('rivalContainer');
+        const rivalLabel = document.getElementById('rivalLabel');
         const playerLabel = document.getElementById('playerLabel');
 
         // --- AUDIOS ---
         const ayNoAudio = document.getElementById('ayNoAudio');
+        const ayAudio = document.getElementById('ayAudio');
+        const nooAudio = document.getElementById('nooAudio');
+        const wthbAudio = document.getElementById('wthbAudio');
         const vineBoomAudio = document.getElementById('vineBoomAudio');
         const oofAudio = document.getElementById('oofAudio');
 
         // --- FUNCIONES DE AUDIO ---
-        function playAyNo() {
+        function playRandomExclamation() {
+            const audios = [ayNoAudio, ayAudio, nooAudio, wthbAudio];
+            const audio = audios[Math.floor(Math.random() * audios.length)];
             try {
-                ayNoAudio.currentTime = 0;
-                ayNoAudio.volume = 0.8;
-                ayNoAudio.play().catch(() => {});
+                audio.currentTime = 0;
+                audio.volume = 0.8;
+                audio.play().catch(() => {});
             } catch(e) {}
         }
 
@@ -948,7 +949,6 @@
             } catch(e) {}
         }
 
-        // --- REPRODUCIR GAMEOVER.MP3 ---
         function playGameOverMusic() {
             try {
                 if (isMusicPlaying) return;
@@ -956,9 +956,7 @@
                 audioElement.volume = 1.0;
                 const playPromise = audioElement.play();
                 if (playPromise !== undefined) {
-                    playPromise.then(() => {
-                        isMusicPlaying = true;
-                    }).catch(() => {});
+                    playPromise.then(() => { isMusicPlaying = true; }).catch(() => {});
                 }
             } catch(e) {}
         }
@@ -983,7 +981,7 @@
             }, 500);
         }
 
-        // --- ACTUALIZAR UI CORAZONES ---
+        // --- ACTUALIZAR UI ---
         function updateHeartsUI() {
             heartElements.forEach((el, index) => {
                 if (hearts[index]) {
@@ -996,17 +994,16 @@
             });
         }
 
-        // --- ACTUALIZAR CORAZONES RIVAL ---
         function updateRivalUI() {
-            const hearts = rivalContainer.querySelectorAll('.rival-heart');
+            const heartsEl = rivalContainer.querySelectorAll('.rival-heart');
             rivalHearts.forEach((alive, index) => {
-                if (hearts[index]) {
+                if (heartsEl[index]) {
                     if (alive) {
-                        hearts[index].classList.remove('lost');
-                        hearts[index].textContent = '❤️';
+                        heartsEl[index].classList.remove('lost');
+                        heartsEl[index].textContent = '❤️';
                     } else {
-                        hearts[index].classList.add('lost');
-                        hearts[index].textContent = '💔';
+                        heartsEl[index].classList.add('lost');
+                        heartsEl[index].textContent = '💔';
                     }
                 }
             });
@@ -1028,12 +1025,8 @@
                 });
                 
                 shakeScreen();
-                
-                // Sonidos: VineBoom + GameOver
                 playVineBoom();
-                setTimeout(() => {
-                    playGameOverMusic();
-                }, 300);
+                setTimeout(() => { playGameOverMusic(); }, 300);
                 
                 setTimeout(() => {
                     showGameOverOverlay('💀 ¡Has perdido todos tus corazones!');
@@ -1041,7 +1034,6 @@
             }
         }
 
-        // --- GAME OVER ---
         function showGameOverOverlay(subText) {
             if (subText) goSubText.textContent = subText;
             gameOverOverlay.classList.add('show');
@@ -1063,7 +1055,6 @@
             isMusicPlaying = false;
         }
 
-        // --- REINICIAR ---
         function resetHearts() {
             stopGameOverMusic();
             isMusicPlaying = false;
@@ -1088,22 +1079,13 @@
             hearts[index] = false;
             updateHeartsUI();
 
-            const rect = heartEl.getBoundingClientRect();
-            const cx = rect.left + rect.width / 2;
-            const cy = rect.top + rect.height / 2;
-
             shakeScreen();
 
-            // Sonidos según vidas restantes
             const remaining = hearts.filter(h => h === true).length;
             if (remaining === 1) {
-                // 1 vida: AyNo + VineBoom
-                playAyNo();
-                setTimeout(() => {
-                    playVineBoom();
-                }, 200);
+                playRandomExclamation();
+                setTimeout(() => { playVineBoom(); }, 200);
             } else if (remaining === 0) {
-                // 0 vidas: VineBoom (se maneja en checkLoseCondition)
                 playVineBoom();
             }
 
@@ -1112,49 +1094,80 @@
 
             checkLoseCondition();
 
-            // Si es multijugador, notificar al rival
-            if (isMultiplayer) {
-                // Simulación: el rival también pierde un corazón si el admin lo decide
-                // En una implementación real, esto sería por WebSocket
+            // Notificar al rival en multijugador
+            if (isMultiplayer && rivalConnected) {
+                // Simulación: el rival también pierde un corazón
+                // En una implementación real con WebSocket, esto se enviaría al otro jugador
+                setTimeout(() => {
+                    const rivalRemaining = rivalHearts.filter(h => h === true).length;
+                    if (rivalRemaining > 0) {
+                        // El rival pierde un corazón también (simulado)
+                        for (let i = rivalHearts.length - 1; i >= 0; i--) {
+                            if (rivalHearts[i]) {
+                                rivalHearts[i] = false;
+                                break;
+                            }
+                        }
+                        updateRivalUI();
+                        // Si al rival le queda 1 vida, suena oof para el que sigue jugando
+                        const rivalLeft = rivalHearts.filter(h => h === true).length;
+                        if (rivalLeft === 1) {
+                            playOof();
+                        }
+                        // Si el rival perdió todos, mostrar mensaje
+                        if (rivalLeft === 0) {
+                            const msgDiv = document.createElement('div');
+                            msgDiv.className = 'msg';
+                            msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> ${rivalName} ha perdido todos sus corazones 💀`;
+                            chatMessages.appendChild(msgDiv);
+                            chatMessages.scrollTop = chatMessages.scrollHeight;
+                            // Al rival le suena GameOver
+                            playVineBoom();
+                            setTimeout(() => { playGameOverMusic(); }, 300);
+                        }
+                    }
+                }, 500);
             }
         }
 
-        // --- FUNCIONES DE CHAT ---
+        // --- CHAT ---
         function sendMessage() {
             const text = chatInput.value.trim();
             if (!text) return;
             const msgDiv = document.createElement('div');
             msgDiv.className = 'msg';
-            msgDiv.innerHTML = `<span class="sender">${playerName}:</span> ${text}`;
+            msgDiv.innerHTML = `<span class="sender">${playerEmoji} ${playerName}:</span> ${text}`;
             chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             chatInput.value = '';
             
-            // Simular respuesta del rival en multijugador
-            if (isMultiplayer && Math.random() > 0.6) {
+            if (isMultiplayer && rivalConnected) {
                 setTimeout(() => {
-                    const respuestas = ['👍', '😄', 'ok', 'jaja', 'buena', 'si', 'no', '🤔'];
+                    const respuestas = ['👍', '😄', 'ok', 'jaja', 'buena', 'si', 'no', '🤔', '😎', '🔥'];
                     const reply = respuestas[Math.floor(Math.random() * respuestas.length)];
                     const replyDiv = document.createElement('div');
                     replyDiv.className = 'msg';
-                    replyDiv.innerHTML = `<span class="sender">${rivalName}:</span> ${reply}`;
+                    replyDiv.innerHTML = `<span class="sender">${rivalEmoji} ${rivalName}:</span> ${reply}`;
                     chatMessages.appendChild(replyDiv);
                     chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 800 + Math.random() * 1200);
+                }, 600 + Math.random() * 1000);
             }
         }
 
-        // --- MULTIJUGADOR: CREAR SALA ---
+        // --- MULTIJUGADOR ---
         function createRoom() {
             const code = String(Math.floor(10000 + Math.random() * 90000));
             roomCode = code;
             isAdmin = true;
             isMultiplayer = true;
+            rivalConnected = true;
             playerName = 'ADMIN';
+            playerEmoji = '👑';
             playerLabel.textContent = '👑 ADMIN';
             rivalName = 'JUGADOR 2';
+            rivalEmoji = '👤';
+            rivalLabel.textContent = '👤 JUGADOR 2';
             
-            // Mostrar código
             codeDisplay.textContent = code;
             codeDisplay.style.display = 'block';
             modalInput.style.display = 'none';
@@ -1163,25 +1176,21 @@
             modalButtons.style.display = 'none';
             modalAdminButtons.style.display = 'flex';
             
-            // Activar UI multijugador
             rivalHeartsEl.classList.add('active');
             chatContainer.classList.add('active');
             exitRoomBtn.style.display = 'block';
             multiplayerBtn.textContent = '👥 Sala: ' + code;
             multiplayerBtn.disabled = true;
             
-            // Inicializar rival
             rivalHearts = [true, true, true];
             updateRivalUI();
             
-            // Mensaje de bienvenida
             const msgDiv = document.createElement('div');
             msgDiv.className = 'msg';
             msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> Sala creada. Código: ${code}`;
             chatMessages.appendChild(msgDiv);
         }
 
-        // --- MULTIJUGADOR: UNIRSE A SALA ---
         function joinRoom() {
             const code = modalInput.value.trim();
             if (code.length !== 5 || !/^\d{5}$/.test(code)) {
@@ -1191,40 +1200,43 @@
             roomCode = code;
             isAdmin = false;
             isMultiplayer = true;
+            rivalConnected = true;
             playerName = 'JUGADOR';
+            playerEmoji = '👤';
             playerLabel.textContent = '👤 JUGADOR';
             rivalName = 'ADMIN';
+            rivalEmoji = '👑';
+            rivalLabel.textContent = '👑 ADMIN';
             
-            // Ocultar modal
             modalOverlay.classList.remove('active');
             
-            // Activar UI multijugador
             rivalHeartsEl.classList.add('active');
             chatContainer.classList.add('active');
             exitRoomBtn.style.display = 'block';
             multiplayerBtn.textContent = '👥 Sala: ' + code;
             multiplayerBtn.disabled = true;
             
-            // Inicializar rival
             rivalHearts = [true, true, true];
             updateRivalUI();
             
-            // Mensaje de bienvenida
             const msgDiv = document.createElement('div');
             msgDiv.className = 'msg';
             msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> Te has unido a la sala ${code}`;
             chatMessages.appendChild(msgDiv);
         }
 
-        // --- MULTIJUGADOR: SALIR DE SALA ---
         function exitRoom() {
             if (confirm('¿Estás seguro de que quieras salir de la sala?')) {
                 isMultiplayer = false;
                 isAdmin = false;
+                rivalConnected = false;
                 roomCode = '';
                 playerName = 'TÚ';
+                playerEmoji = '👤';
                 playerLabel.textContent = '👤 TÚ';
                 rivalName = 'RIVAL';
+                rivalEmoji = '👤';
+                rivalLabel.textContent = '👤 RIVAL';
                 rivalHeartsEl.classList.remove('active');
                 chatContainer.classList.remove('active');
                 exitRoomBtn.style.display = 'none';
@@ -1233,8 +1245,6 @@
                 chatMessages.innerHTML = '';
                 rivalHearts = [true, true, true];
                 updateRivalUI();
-                
-                // Resetear corazones del rival visualmente
                 rivalContainer.querySelectorAll('.rival-heart').forEach(el => {
                     el.classList.remove('lost');
                     el.textContent = '❤️';
@@ -1242,20 +1252,20 @@
             }
         }
 
-        // --- MULTIJUGADOR: EXPULSAR JUGADOR (ADMIN) ---
         function kickPlayer() {
             if (!isAdmin) return;
             if (confirm('¿Expulsar al jugador de la sala?')) {
-                // Simular expulsión
+                rivalConnected = false;
                 const msgDiv = document.createElement('div');
                 msgDiv.className = 'msg';
                 msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> El jugador ha sido expulsado.`;
                 chatMessages.appendChild(msgDiv);
-                // En una implementación real, se desconectaría al otro jugador
+                rivalHeartsEl.classList.remove('active');
+                rivalHearts = [true, true, true];
+                updateRivalUI();
             }
         }
 
-        // --- MULTIJUGADOR: CERRAR SALA (ADMIN) ---
         function closeRoom() {
             if (!isAdmin) return;
             if (confirm('¿Cerrar la sala? Todos los jugadores serán desconectados.')) {
@@ -1264,7 +1274,7 @@
             }
         }
 
-        // --- BUSCADOR YOUTUBE ---
+        // --- YOUTUBE ---
         function loadYouTubeVideo() {
             let url = searchInput.value.trim();
             if (!url) {
@@ -1324,7 +1334,6 @@
             });
             closeResultsBtn.addEventListener('click', closeResults);
 
-            // MULTIJUGADOR
             multiplayerBtn.addEventListener('click', () => {
                 if (isMultiplayer) return;
                 modalOverlay.classList.add('active');
@@ -1336,35 +1345,27 @@
                 codeDisplay.style.display = 'none';
                 modalButtons.style.display = 'flex';
                 modalAdminButtons.style.display = 'none';
-                modalJoinBtn.textContent = '🔑 Unirse';
-                modalCreateBtn.textContent = '✨ Crear Sala';
             });
 
             modalJoinBtn.addEventListener('click', joinRoom);
             modalCreateBtn.addEventListener('click', createRoom);
-            modalCancelBtn.addEventListener('click', () => {
-                modalOverlay.classList.remove('active');
-            });
+            modalCancelBtn.addEventListener('click', () => { modalOverlay.classList.remove('active'); });
             modalKickBtn.addEventListener('click', kickPlayer);
             modalCloseBtn.addEventListener('click', closeRoom);
 
             exitRoomBtn.addEventListener('click', exitRoom);
 
-            // CHAT
             chatSendBtn.addEventListener('click', sendMessage);
             chatInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') sendMessage();
             });
 
-            // Cerrar modal con ESC
             document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape') {
-                    modalOverlay.classList.remove('active');
-                }
+                if (e.key === 'Escape') modalOverlay.classList.remove('active');
             });
 
             console.log('❤️ NoTeRias · Multijugador + Sonidos');
-            console.log('📁 Asegúrate de tener: GameOver.mp3, AyNo.mp3, VineBoom.mp3, oof.mp3, Log0.png');
+            console.log('📁 Archivos necesarios: GameOver.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, VineBoom.mp3, oof.mp3, Log0.png');
         }
 
         if (document.readyState === 'loading') {
