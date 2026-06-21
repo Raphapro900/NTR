@@ -543,7 +543,7 @@
         body.game-over-active { overflow: hidden; }
         .youtube-search.hidden, .youtube-results.hidden { display: none !important; }
 
-        /* === TUTORIAL VHS 4:3 CON VIDEO === */
+        /* === TUTORIAL VHS 4:3 === */
         .tutorial-overlay {
             position: fixed;
             top: 0;
@@ -582,6 +582,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            flex-direction: column;
         }
         .tv-container .tv-screen video {
             width: 100%;
@@ -591,11 +592,46 @@
             background: #000;
             object-fit: contain;
         }
-        .tv-container .tv-screen .placeholder-icon {
+        .tv-container .tv-screen .placeholder {
             color: #ff6b7c44;
-            font-size: 5rem;
             text-align: center;
             font-family: 'Segoe UI', Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .tv-container .tv-screen .placeholder .icon {
+            font-size: 4rem;
+        }
+        .tv-container .tv-screen .placeholder .msg {
+            font-size: 1.1rem;
+            color: #ff6b7c66;
+            letter-spacing: 2px;
+        }
+        .tv-container .tv-screen .placeholder .play-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.6rem 2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.2);
+        }
+        .tv-container .tv-screen .placeholder .play-btn:hover {
+            background: #ff4f6e;
+            transform: scale(1.02);
+            box-shadow: 0 4px 0 #881a2a, 0 12px 35px rgba(255,43,79,0.3);
+        }
+        .tv-container .tv-screen .placeholder .play-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #881a2a;
         }
         .tv-container .tv-screen .scanlines {
             position: absolute;
@@ -635,7 +671,7 @@
             text-transform: uppercase;
         }
 
-        /* === CINTA VHS GRANDE - SOLO IMAGEN === */
+        /* === CINTA VHS GRANDE === */
         .vhs-tape-drag {
             width: 150px;
             height: 150px;
@@ -718,6 +754,8 @@
             .tv-container .tv-screen { aspect-ratio: 4/3; }
             .vhs-tape-drag { width: 100px; height: 100px; }
             .how-to-play-btn { font-size: 0.9rem; padding: 0.5rem 1.5rem; }
+            .tv-container .tv-screen .placeholder .msg { font-size: 0.9rem; }
+            .tv-container .tv-screen .placeholder .play-btn { font-size: 1rem; padding: 0.5rem 1.5rem; }
         }
         @media (max-width: 400px) {
             .heart { font-size: 3rem; }
@@ -738,14 +776,18 @@
     <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
-<!-- TUTORIAL VHS CON VIDEO -->
+<!-- TUTORIAL VHS -->
 <div class="tutorial-overlay" id="tutorialOverlay">
     <div class="tv-container" id="tvContainer">
         <button class="tutorial-close-btn" id="tutorialCloseBtn">✕</button>
         <div class="tv-screen" id="tvScreen">
             <div class="vignette"></div>
             <div class="scanlines"></div>
-            <div id="tvPlaceholder" class="placeholder-icon">📼</div>
+            <div id="tvPlaceholder" class="placeholder">
+                <div class="icon">📼</div>
+                <div class="msg">Arrastra la cinta VHS a la TV</div>
+                <button class="play-btn" id="playVideoBtn">▶ Reproducir</button>
+            </div>
             <video id="tutorialVideo" style="display:none;" controls>
                 <source src="Tutoriall.mp4" type="video/mp4">
                 Tu navegador no soporta el video.
@@ -850,6 +892,7 @@
         const tvPlaceholder = document.getElementById('tvPlaceholder');
         const tvContainer = document.getElementById('tvContainer');
         const tutorialVideo = document.getElementById('tutorialVideo');
+        const playVideoBtn = document.getElementById('playVideoBtn');
 
         // AUDIOS
         const underAudio = document.getElementById('underAudio');
@@ -1121,14 +1164,14 @@
         logoContainer.addEventListener('click', toggleLogo);
 
         // ============================================================
-        // TUTORIAL VHS - DRAG & DROP CON VIDEO
+        // TUTORIAL VHS - DRAG & DROP + BOTÓN
         // ============================================================
         function openTutorial() {
             tutorialOverlay.classList.add('active');
             tutorialVideo.pause();
             tutorialVideo.currentTime = 0;
             tutorialVideo.style.display = 'none';
-            tvPlaceholder.style.display = 'block';
+            tvPlaceholder.style.display = 'flex';
             vhsTapeDrag.classList.remove('dragging');
         }
 
@@ -1136,10 +1179,24 @@
             tutorialVideo.pause();
             tutorialVideo.currentTime = 0;
             tutorialVideo.style.display = 'none';
-            tvPlaceholder.style.display = 'block';
+            tvPlaceholder.style.display = 'flex';
             vhsTapeDrag.classList.remove('dragging');
             tvContainer.classList.remove('drag-over');
             tutorialOverlay.classList.remove('active');
+        }
+
+        function playVideo() {
+            tvPlaceholder.style.display = 'none';
+            tutorialVideo.style.display = 'block';
+            tutorialVideo.currentTime = 0;
+            tutorialVideo.play().catch((err) => {
+                console.log('Error reproduciendo video:', err);
+                // Si falla, mostrar mensaje
+                tvPlaceholder.style.display = 'flex';
+                tutorialVideo.style.display = 'none';
+                const msg = tvPlaceholder.querySelector('.msg');
+                msg.textContent = '⚠️ No se pudo reproducir el video. Asegúrate de que Tutoriall.mp4 esté en la carpeta.';
+            });
         }
 
         // DRAG EVENTS
@@ -1167,26 +1224,18 @@
             this.classList.remove('drag-over');
             const data = e.dataTransfer.getData('text/plain');
             if (data === 'vhs') {
-                insertVHSTape();
+                playVideo();
             }
         });
 
-        function insertVHSTape() {
-            if (vhsTapeDrag.classList.contains('dragging')) return;
-            vhsTapeDrag.classList.add('dragging');
-            
-            setTimeout(() => {
-                tvPlaceholder.style.display = 'none';
-                tutorialVideo.style.display = 'block';
-                tutorialVideo.currentTime = 0;
-                tutorialVideo.play().catch(() => {});
-            }, 400);
+        // Botón de reproducción
+        playVideoBtn.addEventListener('click', playVideo);
 
-            tutorialVideo.addEventListener('ended', function onEnd() {
-                tutorialVideo.removeEventListener('ended', onEnd);
-                closeTutorial();
-            });
-        }
+        // Evento cuando el video termina
+        tutorialVideo.addEventListener('ended', function onEnd() {
+            tutorialVideo.removeEventListener('ended', onEnd);
+            closeTutorial();
+        });
 
         howToPlayBtn.addEventListener('click', openTutorial);
         tutorialCloseBtn.addEventListener('click', closeTutorial);
