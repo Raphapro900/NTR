@@ -68,7 +68,6 @@
         .logo-container.shaking-logo {
             animation: logoShakeStrong 0.4s ease-in-out 3;
         }
-        /* Loop infinito mientras esté en "Ríe" */
         .logo-container.shaking-loop {
             animation: logoShakeStrong 0.4s ease-in-out infinite;
         }
@@ -137,7 +136,6 @@
             letter-spacing: 4px;
         }
 
-        /* === CRÉDITOS === */
         .credits {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             font-size: 0.8rem;
@@ -152,7 +150,6 @@
         }
         .credits span { color: #ff6b7c66; }
 
-        /* === BOTÓN CÓMO JUGAR === */
         .how-to-play-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             background: transparent;
@@ -435,7 +432,6 @@
         .youtube-results::-webkit-scrollbar-thumb { background: #ff3b5c66; border-radius: 10px; }
         .youtube-results::-webkit-scrollbar-thumb:hover { background: #ff3b5c99; }
 
-        /* === GAME OVER OVERLAY === */
         .game-over-overlay {
             position: fixed;
             top: 0;
@@ -457,6 +453,7 @@
             60% { opacity: 1; background: #0a0005; }
             100% { opacity: 1; background: #0a0005; }
         }
+
         .game-over-overlay .go-text {
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
             font-size: 6rem;
@@ -485,17 +482,33 @@
             0% { opacity: 0.3; width: 100px; }
             100% { opacity: 1; width: 300px; }
         }
+
         .game-over-overlay .go-sub {
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             color: #ff8888;
             margin-top: 1.2rem;
             text-shadow: 0 0 30px #ff2b4f55;
             opacity: 0;
             animation: goSubFade 0.8s ease-out 0.6s forwards, goSubPulse 2s ease-in-out infinite alternate 0.5s;
+            text-align: center;
+            line-height: 1.4;
+            padding: 0 1rem;
+        }
+        /* Temblor del texto de victoria */
+        .game-over-overlay .go-sub.shaking-text {
+            animation: textShake 0.15s ease-in-out infinite;
+        }
+        @keyframes textShake {
+            0%, 100% { transform: translate(0,0) rotate(0deg); }
+            20% { transform: translate(-4px,3px) rotate(-1deg); }
+            40% { transform: translate(4px,-3px) rotate(1deg); }
+            60% { transform: translate(-3px,4px) rotate(-0.5deg); }
+            80% { transform: translate(3px,-4px) rotate(0.5deg); }
         }
         @keyframes goSubFade { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes goSubPulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
         .game-over-overlay .go-reset-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             background: #ff3b5c;
@@ -532,7 +545,7 @@
         body.game-over-active { overflow: hidden; }
         .youtube-search.hidden, .youtube-results.hidden { display: none !important; }
 
-        /* === OVERLAY TUTORIAL (VHS) === */
+        /* TUTORIAL OVERLAY (VHS) */
         .tutorial-overlay {
             position: fixed;
             top: 0;
@@ -627,7 +640,6 @@
             text-transform: uppercase;
         }
 
-        /* Cinta VHS */
         .vhs-tape {
             width: 100%;
             max-width: 400px;
@@ -747,7 +759,7 @@
     <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
-<!-- TUTORIAL OVERLAY (VHS) -->
+<!-- TUTORIAL OVERLAY -->
 <div class="tutorial-overlay" id="tutorialOverlay">
     <div class="tv-container">
         <button class="tutorial-close-btn" id="tutorialCloseBtn">✕</button>
@@ -762,8 +774,6 @@
         </div>
         <div class="tv-brand">✦ VHS ✦</div>
     </div>
-
-    <!-- Cinta VHS -->
     <div class="vhs-tape" id="vhsTape">
         <span class="tape-icon">📼</span>
         <div class="tape-label">
@@ -774,13 +784,11 @@
 </div>
 
 <div class="main-container" id="mainContainer">
-    <!-- LOGO CON ANIMACIÓN EN LOOP -->
     <div class="logo-container" id="logoContainer">
         <div class="logo-text" id="logoText">NoTeRias</div>
-        <div class="logo-sub" id="logoSub">★ play & enjoy ★</div>
+        <div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div>
     </div>
 
-    <!-- BOTÓN CÓMO JUGAR -->
     <button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
 
     <div class="heart-counter" id="heartCounter">
@@ -826,17 +834,17 @@
 <script>
     (function() {
         // ============================================================
-        // ESTADO DEL JUGADOR
+        // ESTADO
         // ============================================================
         let hearts = [true, true, true];
         let isGameOver = false;
         let isMusicPlaying = false;
-        let logoState = 0; // 0 = "NoTeRias", 1 = "Ríe"
+        let logoState = 0;
         let isWin = false;
         let areHeartsLaughing = false;
 
         // ============================================================
-        // DOM ELEMENTS
+        // DOM
         // ============================================================
         const heartElements = document.querySelectorAll('.heart');
         const resetBtn = document.getElementById('resetBtn');
@@ -856,9 +864,6 @@
         const logoContainer = document.getElementById('logoContainer');
         const logoText = document.getElementById('logoText');
         const logoSub = document.getElementById('logoSub');
-        const videoInfo = document.getElementById('videoInfo');
-        const videoTitle = document.getElementById('videoTitle');
-        const creatorName = document.getElementById('creatorName');
 
         // TUTORIAL
         const howToPlayBtn = document.getElementById('howToPlayBtn');
@@ -868,9 +873,7 @@
         const tutorialVideo = document.getElementById('tutorialVideo');
         const tvPlaceholder = document.getElementById('tvPlaceholder');
 
-        // ============================================================
         // AUDIOS
-        // ============================================================
         const underAudio = document.getElementById('underAudio');
         const ayNoAudio = document.getElementById('ayNoAudio');
         const ayAudio = document.getElementById('ayAudio');
@@ -880,7 +883,7 @@
         const shhAudio = document.getElementById('shhAudio');
 
         // ============================================================
-        // FUNCIONES DE AUDIO
+        // AUDIO FUNCTIONS
         // ============================================================
         function playLogoPress() {
             try {
@@ -930,10 +933,7 @@
                 if (isMusicPlaying) return;
                 audioElement.currentTime = 0;
                 audioElement.volume = 1.0;
-                const playPromise = audioElement.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => { isMusicPlaying = true; }).catch(() => {});
-                }
+                audioElement.play().then(() => { isMusicPlaying = true; }).catch(() => {});
             } catch(e) {}
         }
 
@@ -942,23 +942,16 @@
                 if (isMusicPlaying) return;
                 winAudio.currentTime = 0;
                 winAudio.volume = 1.0;
-                const playPromise = winAudio.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(() => { isMusicPlaying = true; }).catch(() => {});
-                }
+                winAudio.play().then(() => { isMusicPlaying = true; }).catch(() => {});
             } catch(e) {}
         }
 
         function stopGameOverMusic() {
             try {
-                if (!audioElement.paused) {
-                    audioElement.pause();
-                    audioElement.currentTime = 0;
-                }
-                if (!winAudio.paused) {
-                    winAudio.pause();
-                    winAudio.currentTime = 0;
-                }
+                if (!audioElement.paused) audioElement.pause();
+                if (!winAudio.paused) winAudio.pause();
+                audioElement.currentTime = 0;
+                winAudio.currentTime = 0;
                 isMusicPlaying = false;
             } catch(e) {}
         }
@@ -971,32 +964,30 @@
         }
 
         // ============================================================
-        // UI - CORAZONES
+        // UI
         // ============================================================
         function updateHeartsUI() {
             heartElements.forEach((el, index) => {
                 if (hearts[index]) {
                     el.classList.remove('lost', 'breaking');
-                    el.textContent = areHeartsLaughing ? '🤣' : '❤️';
+                    el.textContent = areHeartsLaughing ? '😂' : '❤️';
                 } else {
                     el.classList.add('lost');
-                    el.textContent = '💔';
+                    el.textContent = areHeartsLaughing ? '💔' : '💔';
                 }
             });
         }
 
         // ============================================================
-        // LOGO - CON LOOP DE TEMBLOR
+        // LOGO
         // ============================================================
         function toggleLogo() {
             if (isGameOver) return;
 
-            // Quitar animaciones previas
             logoContainer.classList.remove('shaking-logo', 'shaking-loop');
             void logoContainer.offsetWidth;
 
             if (logoState === 0) {
-                // Cambiar a "Ríe" - LOOP INFINITO
                 logoText.textContent = 'Ríe';
                 logoText.classList.add('switched');
                 logoSub.textContent = '★ laugh & enjoy ★';
@@ -1005,10 +996,8 @@
                 areHeartsLaughing = true;
                 updateHeartsUI();
                 playLogoPress();
-                // LOOP INFINITO de temblor
                 logoContainer.classList.add('shaking-loop');
             } else {
-                // Volver a "NoTeRias" - DETENER LOOP
                 logoText.textContent = 'NoTeRias';
                 logoText.classList.remove('switched');
                 logoSub.textContent = '★ play & enjoy ★';
@@ -1018,9 +1007,7 @@
                 updateHeartsUI();
                 stopLogoPress();
                 playShh();
-                // Quitar loop de temblor
                 logoContainer.classList.remove('shaking-loop');
-                // Un temblor final
                 logoContainer.classList.add('shaking-logo');
                 setTimeout(() => {
                     logoContainer.classList.remove('shaking-logo');
@@ -1044,7 +1031,7 @@
                 logoContainer.classList.remove('shaking-loop');
                 setTimeout(() => { playWinMusic(); }, 300);
                 setTimeout(() => {
-                    showGameOverOverlay('GANASTE XDD', '🤣TE REÍSTE DEMASIA- AY- AJAJAJAJAJ XDDDD');
+                    showGameOverOverlay('GANASTE XDDD', '🤣TE REÍSTE DEMASIA- AY- AJAJAJAJAJAJAJA XDDDDDD');
                 }, 600);
                 return;
             }
@@ -1057,7 +1044,7 @@
                     if (el.classList.contains('lost')) {
                         el.classList.remove('lost');
                         el.classList.add('breaking');
-                        el.textContent = areHeartsLaughing ? '🤣' : '❤️';
+                        el.textContent = areHeartsLaughing ? '😂' : '❤️';
                     }
                 });
                 shakeScreen();
@@ -1073,6 +1060,12 @@
         function showGameOverOverlay(title, sub) {
             goText.textContent = title;
             goSubText.textContent = sub;
+            // Si es victoria, agregar clase de temblor
+            if (isWin) {
+                goSubText.classList.add('shaking-text');
+            } else {
+                goSubText.classList.remove('shaking-text');
+            }
             gameOverOverlay.classList.add('show');
             document.body.classList.add('game-over-active');
             youtubeSearch.classList.add('hidden');
@@ -1091,6 +1084,7 @@
             youtubeResults.classList.remove('hidden');
             stopGameOverMusic();
             isMusicPlaying = false;
+            goSubText.classList.remove('shaking-text');
         }
 
         function resetHearts() {
@@ -1119,6 +1113,7 @@
             }
             goText.textContent = 'GAME OVER';
             goSubText.textContent = '❤️ Haz perdido todos tus corazones';
+            goSubText.classList.remove('shaking-text');
         }
 
         // ============================================================
@@ -1144,16 +1139,15 @@
         }
 
         // ============================================================
-        // LOGO - EVENTO CLICK
+        // LOGO - EVENTO
         // ============================================================
         logoContainer.addEventListener('click', toggleLogo);
 
         // ============================================================
-        // TUTORIAL - VHS
+        // TUTORIAL
         // ============================================================
         function openTutorial() {
             tutorialOverlay.classList.add('active');
-            // Resetear estado del video
             tutorialVideo.pause();
             tutorialVideo.currentTime = 0;
             tutorialVideo.style.display = 'none';
@@ -1172,31 +1166,23 @@
 
         function insertTape() {
             if (vhsTape.classList.contains('slid')) return;
-            
-            // Animación de deslizar la cinta
             vhsTape.classList.add('slid');
-            
-            // Mostrar el video después de la animación
             setTimeout(() => {
                 tvPlaceholder.style.display = 'none';
                 tutorialVideo.style.display = 'block';
                 tutorialVideo.currentTime = 0;
                 tutorialVideo.play().catch(() => {});
             }, 500);
-
-            // Cuando termina el video, volver a la pantalla principal
             tutorialVideo.addEventListener('ended', function onEnd() {
                 tutorialVideo.removeEventListener('ended', onEnd);
                 closeTutorial();
             });
         }
 
-        // Eventos del tutorial
         howToPlayBtn.addEventListener('click', openTutorial);
         tutorialCloseBtn.addEventListener('click', closeTutorial);
         vhsTape.addEventListener('click', insertTape);
 
-        // Cerrar con ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape' && tutorialOverlay.classList.contains('active')) {
                 closeTutorial();
@@ -1281,7 +1267,7 @@
             searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') loadYouTubeVideo(); });
             closeResultsBtn.addEventListener('click', closeResults);
 
-            console.log('❤️ NoTeRias · Corazones con VHS Tutorial');
+            console.log('❤️ NoTeRias · Corazones con risa y victoria XDDD');
             console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, Tutoriall.mp4, Log0.png');
         }
 
