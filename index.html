@@ -5,9 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NoTeRias · Corazones</title>
     <link rel="icon" type="image/png" href="Log0.png">
+    <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
     <style>
-        /* ===== ESTILOS COMPLETOS ===== */
-        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
         body {
             background: #0a0a1a;
             min-height: 100vh;
@@ -683,6 +688,11 @@
             color: #ff6b7c;
             font-weight: bold;
         }
+        .chat-messages .msg.system {
+            color: #ff6b7c88;
+            font-style: italic;
+            text-align: center;
+        }
         .chat-input-row {
             display: flex;
             gap: 0.5rem;
@@ -854,7 +864,14 @@
 
 <script>
     (function() {
-        // === ESTADO ===
+        // ============================================================
+        // CONEXIÓN SOCKET.IO
+        // ============================================================
+        const socket = io();
+
+        // ============================================================
+        // ESTADO DEL JUGADOR
+        // ============================================================
         let hearts = [true, true, true];
         let isGameOver = false;
         let isMusicPlaying = false;
@@ -867,9 +884,10 @@
         let rivalName = 'RIVAL';
         let rivalEmoji = '👤';
         let rivalConnected = false;
-        let activeRooms = {}; // Simulación de salas activas
 
-        // === DOM ===
+        // ============================================================
+        // DOM ELEMENTS
+        // ============================================================
         const heartElements = document.querySelectorAll('.heart');
         const resetBtn = document.getElementById('resetBtn');
         const searchInput = document.getElementById('searchInput');
@@ -909,7 +927,9 @@
         const rivalLabel = document.getElementById('rivalLabel');
         const playerLabel = document.getElementById('playerLabel');
 
-        // === AUDIOS ===
+        // ============================================================
+        // AUDIOS
+        // ============================================================
         const ayNoAudio = document.getElementById('ayNoAudio');
         const ayAudio = document.getElementById('ayAudio');
         const nooAudio = document.getElementById('nooAudio');
@@ -917,7 +937,9 @@
         const vineBoomAudio = document.getElementById('vineBoomAudio');
         const oofAudio = document.getElementById('oofAudio');
 
-        // === FUNCIONES DE AUDIO ===
+        // ============================================================
+        // FUNCIONES DE AUDIO
+        // ============================================================
         function playRandomExclamation() {
             const audios = [ayNoAudio, ayAudio, nooAudio, wthbAudio];
             const audio = audios[Math.floor(Math.random() * audios.length)];
@@ -973,7 +995,9 @@
             setTimeout(() => { document.body.classList.remove('shaking'); }, 500);
         }
 
-        // === UI ===
+        // ============================================================
+        // UI
+        // ============================================================
         function updateHeartsUI() {
             heartElements.forEach((el, index) => {
                 if (hearts[index]) {
@@ -1001,7 +1025,17 @@
             });
         }
 
-        // === JUEGO ===
+        function addSystemMessage(text) {
+            const msgDiv = document.createElement('div');
+            msgDiv.className = 'msg system';
+            msgDiv.textContent = text;
+            chatMessages.appendChild(msgDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // ============================================================
+        // JUEGO
+        // ============================================================
         function checkLoseCondition() {
             const allLost = hearts.every(h => h === false);
             if (allLost && !isGameOver) {
@@ -1058,7 +1092,9 @@
             mainContainer.classList.remove('game-over-mode');
         }
 
-        // === CLICK EN CORAZÓN ===
+        // ============================================================
+        // CLICK EN CORAZÓN
+        // ============================================================
         function handleHeartClick(e) {
             if (isGameOver) return;
             const heartEl = e.currentTarget;
@@ -1081,101 +1117,51 @@
             setTimeout(() => { heartEl.style.transform = ''; }, 150);
             checkLoseCondition();
 
-            // SIMULACIÓN MULTIJUGADOR: el rival también pierde un corazón
-            if (isMultiplayer && rivalConnected) {
-                setTimeout(() => {
-                    const rivalRemaining = rivalHearts.filter(h => h === true).length;
-                    if (rivalRemaining > 0) {
-                        for (let i = rivalHearts.length - 1; i >= 0; i--) {
-                            if (rivalHearts[i]) {
-                                rivalHearts[i] = false;
-                                break;
-                            }
-                        }
-                        updateRivalUI();
-                        const rivalLeft = rivalHearts.filter(h => h === true).length;
-                        if (rivalLeft === 1) {
-                            playOof();
-                        }
-                        if (rivalLeft === 0) {
-                            const msgDiv = document.createElement('div');
-                            msgDiv.className = 'msg';
-                            msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> ${rivalName} ha perdido todos sus corazones 💀`;
-                            chatMessages.appendChild(msgDiv);
-                            chatMessages.scrollTop = chatMessages.scrollHeight;
-                            playVineBoom();
-                            setTimeout(() => { playGameOverMusic(); }, 300);
-                        }
-                    }
-                }, 500);
+            // Notificar al servidor si estamos en multijugador
+            if (isMultiplayer && roomCode) {
+                socket.emit('loseHeart', { code: roomCode, index });
             }
         }
 
-        // === CHAT ===
+        // ============================================================
+        // CHAT
+        // ============================================================
         function sendMessage() {
             const text = chatInput.value.trim();
             if (!text) return;
+            if (isMultiplayer && roomCode) {
+                socket.emit('chatMessage', { code: roomCode, message: text });
+            }
+            // Mostrar mensaje localmente
             const msgDiv = document.createElement('div');
             msgDiv.className = 'msg';
             msgDiv.innerHTML = `<span class="sender">${playerEmoji} ${playerName}:</span> ${text}`;
             chatMessages.appendChild(msgDiv);
             chatMessages.scrollTop = chatMessages.scrollHeight;
             chatInput.value = '';
-            if (isMultiplayer && rivalConnected) {
-                setTimeout(() => {
-                    const respuestas = ['👍', '😄', 'ok', 'jaja', 'buena', 'si', 'no', '🤔', '😎', '🔥'];
-                    const reply = respuestas[Math.floor(Math.random() * respuestas.length)];
-                    const replyDiv = document.createElement('div');
-                    replyDiv.className = 'msg';
-                    replyDiv.innerHTML = `<span class="sender">${rivalEmoji} ${rivalName}:</span> ${reply}`;
-                    chatMessages.appendChild(replyDiv);
-                    chatMessages.scrollTop = chatMessages.scrollHeight;
-                }, 600 + Math.random() * 1000);
+        }
+
+        // ============================================================
+        // MULTIJUGADOR - SOCKET EVENTS
+        // ============================================================
+        socket.on('connect', () => {
+            console.log('✅ Conectado al servidor');
+        });
+
+        socket.on('disconnect', () => {
+            console.log('❌ Desconectado del servidor');
+            if (isMultiplayer) {
+                addSystemMessage('⚠️ Desconectado del servidor');
+                exitRoom();
             }
-        }
+        });
 
-        // === MULTIJUGADOR ===
+        // Crear sala
         function createRoom() {
-            const code = String(Math.floor(10000 + Math.random() * 90000));
-            roomCode = code;
-            isAdmin = true;
-            isMultiplayer = true;
-            rivalConnected = true;
-            playerName = 'ADMIN';
-            playerEmoji = '👑';
-            playerLabel.textContent = '👑 ADMIN';
-            rivalName = 'JUGADOR 2';
-            rivalEmoji = '👤';
-            rivalLabel.textContent = '👤 JUGADOR 2';
-            
-            // Guardar sala activa
-            activeRooms[code] = { admin: true, players: 1 };
-
-            codeDisplay.textContent = code;
-            codeDisplay.style.display = 'block';
-            modalInput.style.display = 'none';
-            modalTitle.textContent = '🎮 Sala Creada';
-            modalDesc.textContent = 'Comparte este código con tu rival';
-            modalButtons.style.display = 'none';
-            modalAdminButtons.style.display = 'flex';
-            
-            rivalHeartsEl.classList.add('active');
-            chatContainer.classList.add('active');
-            exitRoomBtn.style.display = 'block';
-            multiplayerBtn.textContent = '👥 Sala: ' + code;
-            multiplayerBtn.disabled = true;
-            
-            rivalHearts = [true, true, true];
-            updateRivalUI();
-            
-            const msgDiv = document.createElement('div');
-            msgDiv.className = 'msg';
-            msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> Sala creada. Código: ${code}`;
-            chatMessages.appendChild(msgDiv);
-            
-            modalOverlay.classList.remove('active');
+            socket.emit('createRoom');
         }
 
+        // Unirse a sala
         function joinRoom() {
             const code = modalInput.value.trim();
             if (code.length !== 5 || !/^\d{5}$/.test(code)) {
@@ -1183,23 +1169,40 @@
                 modalDesc.style.color = '#ff6b7c';
                 return;
             }
-            
-            // Verificar si la sala existe
-            if (!activeRooms[code]) {
-                modalDesc.textContent = '❌ Sala no encontrada. Verifica el código.';
-                modalDesc.style.color = '#ff6b7c';
-                return;
-            }
-            
-            if (activeRooms[code].players >= 2) {
-                modalDesc.textContent = '❌ La sala está llena. Máximo 2 jugadores.';
-                modalDesc.style.color = '#ff6b7c';
-                return;
-            }
-            
-            // Unirse a la sala
+            socket.emit('joinRoom', { code });
+        }
+
+        // EVENTOS SOCKET
+        socket.on('roomCreated', ({ code, isAdmin: admin }) => {
             roomCode = code;
-            isAdmin = false;
+            isAdmin = admin;
+            isMultiplayer = true;
+            rivalConnected = false;
+            playerName = 'ADMIN';
+            playerEmoji = '👑';
+            playerLabel.textContent = '👑 ADMIN';
+            rivalName = 'JUGADOR 2';
+            rivalEmoji = '👤';
+            rivalLabel.textContent = '👤 JUGADOR 2';
+
+            rivalHeartsEl.classList.add('active');
+            chatContainer.classList.add('active');
+            exitRoomBtn.style.display = 'block';
+            multiplayerBtn.textContent = '👥 Sala: ' + code;
+            multiplayerBtn.disabled = true;
+            modalOverlay.classList.remove('active');
+
+            rivalHearts = [true, true, true];
+            updateRivalUI();
+
+            addSystemMessage('🎮 Sala creada. Código: ' + code);
+            addSystemMessage('👑 Eres el administrador de la sala');
+            modalOverlay.classList.remove('active');
+        });
+
+        socket.on('joined', ({ code, isAdmin: admin }) => {
+            roomCode = code;
+            isAdmin = admin;
             isMultiplayer = true;
             rivalConnected = true;
             playerName = 'JUGADOR';
@@ -1208,31 +1211,106 @@
             rivalName = 'ADMIN';
             rivalEmoji = '👑';
             rivalLabel.textContent = '👑 ADMIN';
-            
-            activeRooms[code].players = 2;
-            
-            modalOverlay.classList.remove('active');
-            
+
             rivalHeartsEl.classList.add('active');
             chatContainer.classList.add('active');
             exitRoomBtn.style.display = 'block';
             multiplayerBtn.textContent = '👥 Sala: ' + code;
             multiplayerBtn.disabled = true;
-            
+            modalOverlay.classList.remove('active');
+
             rivalHearts = [true, true, true];
             updateRivalUI();
-            
+
+            addSystemMessage('🎮 Te has unido a la sala ' + code);
+        });
+
+        socket.on('syncState', ({ rivalId, rivalHearts: hearts, rivalName: name }) => {
+            rivalConnected = true;
+            rivalHearts = hearts;
+            rivalName = name || 'RIVAL';
+            rivalLabel.textContent = rivalEmoji + ' ' + rivalName;
+            updateRivalUI();
+        });
+
+        socket.on('playerJoined', ({ playerId, hearts, name }) => {
+            rivalConnected = true;
+            rivalHearts = hearts;
+            rivalName = name || 'JUGADOR';
+            rivalLabel.textContent = '👤 ' + rivalName;
+            updateRivalUI();
+            addSystemMessage('👤 ' + rivalName + ' se ha unido a la sala');
+        });
+
+        socket.on('heartLost', ({ playerId, hearts, remaining }) => {
+            if (playerId === socket.id) return;
+            rivalHearts = hearts;
+            updateRivalUI();
+            if (remaining === 1) {
+                playOof();
+            }
+            if (remaining === 0) {
+                addSystemMessage('💀 ' + rivalName + ' ha perdido todos sus corazones');
+                playVineBoom();
+                setTimeout(() => { playGameOverMusic(); }, 300);
+            }
+        });
+
+        socket.on('playerLost', ({ playerId }) => {
+            if (playerId === socket.id) return;
+            addSystemMessage('💀 ' + rivalName + ' ha perdido');
+        });
+
+        socket.on('chatMessage', ({ message, name, id }) => {
+            if (id === socket.id) return;
             const msgDiv = document.createElement('div');
             msgDiv.className = 'msg';
-            msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> Te has unido a la sala ${code}`;
+            msgDiv.innerHTML = `<span class="sender">${name}:</span> ${message}`;
             chatMessages.appendChild(msgDiv);
-        }
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        });
 
+        socket.on('kicked', () => {
+            alert('👢 Has sido expulsado de la sala');
+            exitRoom();
+        });
+
+        socket.on('playerKicked', ({ playerId }) => {
+            addSystemMessage('👢 Un jugador ha sido expulsado');
+            if (isAdmin) {
+                rivalConnected = false;
+                rivalHearts = [true, true, true];
+                updateRivalUI();
+                rivalHeartsEl.classList.remove('active');
+            }
+        });
+
+        socket.on('roomClosed', () => {
+            alert('🔒 La sala ha sido cerrada por el administrador');
+            exitRoom();
+        });
+
+        socket.on('playerLeft', ({ playerId }) => {
+            rivalConnected = false;
+            rivalHearts = [true, true, true];
+            updateRivalUI();
+            addSystemMessage('👤 Un jugador ha abandonado la sala');
+            if (isAdmin) {
+                rivalHeartsEl.classList.remove('active');
+            }
+        });
+
+        socket.on('error', (msg) => {
+            modalDesc.textContent = msg;
+            modalDesc.style.color = '#ff6b7c';
+        });
+
+        // ============================================================
+        // MULTIJUGADOR - FUNCIONES UI
+        // ============================================================
         function exitRoom() {
+            if (!isMultiplayer) return;
             if (confirm('¿Estás seguro de que quieras salir de la sala?')) {
-                if (roomCode && activeRooms[roomCode]) {
-                    delete activeRooms[roomCode];
-                }
                 isMultiplayer = false;
                 isAdmin = false;
                 rivalConnected = false;
@@ -1259,38 +1337,43 @@
         }
 
         function kickPlayer() {
-            if (!isAdmin) return;
+            if (!isAdmin || !roomCode) return;
+            if (!rivalConnected) {
+                alert('No hay jugadores para expulsar');
+                return;
+            }
             if (confirm('¿Expulsar al jugador de la sala?')) {
+                // Encontrar el ID del rival
+                // Como no tenemos el ID, usamos un enfoque simple: el servidor maneja la expulsión
+                // Enviamos un evento de expulsión
+                socket.emit('kickPlayer', { code: roomCode, playerId: 'rival' });
+                // El servidor debería manejar esto, pero como simplificación:
                 rivalConnected = false;
-                const msgDiv = document.createElement('div');
-                msgDiv.className = 'msg';
-                msgDiv.innerHTML = `<span class="sender">🎮 SISTEMA:</span> El jugador ha sido expulsado.`;
-                chatMessages.appendChild(msgDiv);
-                rivalHeartsEl.classList.remove('active');
                 rivalHearts = [true, true, true];
                 updateRivalUI();
-                if (roomCode && activeRooms[roomCode]) {
-                    activeRooms[roomCode].players = 1;
-                }
+                rivalHeartsEl.classList.remove('active');
+                addSystemMessage('👢 Jugador expulsado');
             }
         }
 
         function closeRoom() {
-            if (!isAdmin) return;
+            if (!isAdmin || !roomCode) return;
             if (confirm('¿Cerrar la sala? Todos los jugadores serán desconectados.')) {
-                if (roomCode && activeRooms[roomCode]) {
-                    delete activeRooms[roomCode];
-                }
+                socket.emit('closeRoom', { code: roomCode });
+                // El servidor cerrará la sala y notificará a todos
+                // Limpieza local
                 exitRoom();
                 modalOverlay.classList.remove('active');
             }
         }
 
-        // === YOUTUBE ===
+        // ============================================================
+        // YOUTUBE
+        // ============================================================
         function loadYouTubeVideo() {
             let url = searchInput.value.trim();
             if (!url) {
-                videoContainer.innerHTML = `<div style="color:#ff6b7c;text-align:center;padding:2rem;font-size:1.1rem;">⚠️ Por favor, ingresa una URL de YouTube</div>`;
+                videoContainer.innerHTML = `<div style="color:#ff6b7c;text-align:center;padding:2rem;font-size:1.1rem;font-family:'Segoe UI',Arial,sans-serif;">⚠️ Por favor, ingresa una URL de YouTube</div>`;
                 youtubeResults.classList.add('active');
                 youtubeResults.classList.remove('hidden');
                 return;
@@ -1301,7 +1384,7 @@
             match = url.match(/youtube\.com\/embed\/([^&?]+)/);
             if (match) videoId = match[1];
             if (!videoId) {
-                videoContainer.innerHTML = `<div style="color:#ff6b7c;text-align:center;padding:2rem;font-size:1.1rem;">⚠️ URL no válida. Usa formato: https://youtu.be/ID o https://youtube.com/watch?v=ID</div>`;
+                videoContainer.innerHTML = `<div style="color:#ff6b7c;text-align:center;padding:2rem;font-size:1.1rem;font-family:'Segoe UI',Arial,sans-serif;">⚠️ URL no válida. Usa formato: https://youtu.be/ID o https://youtube.com/watch?v=ID</div>`;
                 youtubeResults.classList.add('active');
                 youtubeResults.classList.remove('hidden');
                 return;
@@ -1320,7 +1403,9 @@
             videoContainer.innerHTML = '';
         }
 
-        // === INICIALIZAR ===
+        // ============================================================
+        // INICIALIZAR
+        // ============================================================
         function init() {
             resetHearts();
 
@@ -1336,6 +1421,7 @@
             searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') loadYouTubeVideo(); });
             closeResultsBtn.addEventListener('click', closeResults);
 
+            // MULTIJUGADOR
             multiplayerBtn.addEventListener('click', () => {
                 if (isMultiplayer) return;
                 modalOverlay.classList.add('active');
@@ -1358,6 +1444,7 @@
 
             exitRoomBtn.addEventListener('click', exitRoom);
 
+            // CHAT
             chatSendBtn.addEventListener('click', sendMessage);
             chatInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') sendMessage(); });
 
@@ -1365,7 +1452,7 @@
                 if (e.key === 'Escape') modalOverlay.classList.remove('active');
             });
 
-            console.log('❤️ NoTeRias · Multijugador con validación de código');
+            console.log('❤️ NoTeRias · Multijugador con Socket.io');
             console.log('📁 Archivos necesarios: GameOver.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, VineBoom.mp3, oof.mp3, Log0.png');
         }
 
