@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>❤️ Corazones · Game Over MP3</title>
+    <title>❤️ Corazones · Undertale Game Over</title>
     <style>
         * {
             margin: 0;
@@ -21,6 +21,7 @@
             margin: 0;
             padding: 20px;
             transition: transform 0.05s;
+            overflow-x: hidden;
         }
         body.shaking {
             animation: shake 0.5s ease-in-out;
@@ -46,6 +47,12 @@
             gap: 1.5rem;
             width: 100%;
             max-width: 700px;
+            transition: opacity 0.5s ease;
+        }
+        .main-container.game-over-mode {
+            opacity: 0.3;
+            filter: blur(4px);
+            pointer-events: none;
         }
 
         .heart-counter {
@@ -207,50 +214,15 @@
             align-items: center;
             flex-wrap: wrap;
             justify-content: center;
+            transition: opacity 0.5s ease;
         }
-        .youtube-search input {
-            flex: 1;
-            min-width: 200px;
-            padding: 0.8rem 1.5rem;
-            border-radius: 60px;
-            border: 2px solid #ff6b7c55;
-            background: rgba(255, 255, 255, 0.08);
-            color: #fff;
-            font-size: 1rem;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            outline: none;
-            transition: all 0.3s;
-        }
-        .youtube-search input::placeholder {
-            color: #8888aa;
-        }
-        .youtube-search input:focus {
-            border-color: #ff3b5c;
-            background: rgba(255, 255, 255, 0.12);
-            box-shadow: 0 0 25px #ff3b5c44;
-        }
-        .youtube-search button {
-            padding: 0.8rem 1.8rem;
-            border-radius: 60px;
-            border: none;
-            background: #ff3b5c;
-            color: #1a1a2e;
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 4px 0 #881a2a;
-        }
-        .youtube-search button:hover {
-            background: #ff4f6e;
-            transform: scale(1.02);
-        }
-        .youtube-search button:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #881a2a;
+        .youtube-search.hidden {
+            opacity: 0;
+            pointer-events: none;
+            height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
         }
 
         .youtube-results {
@@ -345,9 +317,112 @@
             }
         }
 
-        /* Reproductor de audio oculto */
-        #gameOverAudio {
+        /* === GAME OVER OVERLAY (Estilo Undertale) === */
+        .game-over-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
             display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 10000;
+            animation: undertaleFadeIn 1.5s ease-out forwards;
+        }
+        .game-over-overlay.show {
+            display: flex;
+        }
+        @keyframes undertaleFadeIn {
+            0% {
+                opacity: 0;
+                background: #000000;
+            }
+            50% {
+                opacity: 1;
+                background: #0a0005;
+            }
+            100% {
+                opacity: 1;
+                background: #0a0005;
+            }
+        }
+
+        .game-over-overlay .go-text {
+            font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
+            font-size: 6rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 40px #ff2b4f, 0 0 80px #ff2b4f, 0 0 120px #ff2b4f;
+            animation: goPulse 2s ease-in-out infinite alternate;
+            letter-spacing: 10px;
+        }
+        @keyframes goPulse {
+            0% {
+                text-shadow: 0 0 40px #ff2b4f, 0 0 80px #ff2b4f, 0 0 120px #ff2b4f;
+                transform: scale(1);
+            }
+            100% {
+                text-shadow: 0 0 60px #ff2b4f, 0 0 120px #ff2b4f, 0 0 180px #ff2b4f;
+                transform: scale(1.05);
+            }
+        }
+
+        .game-over-overlay .go-sub {
+            font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
+            font-size: 2rem;
+            color: #ff8888;
+            margin-top: 1rem;
+            text-shadow: 0 0 30px #ff2b4f55;
+            animation: goSubPulse 2s ease-in-out infinite alternate 0.5s;
+        }
+        @keyframes goSubPulse {
+            0% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+
+        .game-over-overlay .go-reset-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 2rem;
+            font-weight: bold;
+            padding: 1rem 3rem;
+            margin-top: 2.5rem;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #881a2a, 0 12px 30px #000000aa;
+            transition: all 0.08s linear;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: 2px solid #ff9eae;
+            animation: goBtnPulse 1.5s ease-in-out infinite alternate;
+        }
+        .game-over-overlay .go-reset-btn:hover {
+            background: #ff4f6e;
+            transform: scale(1.05);
+            box-shadow: 0 8px 0 #881a2a, 0 15px 35px #000000dd;
+        }
+        .game-over-overlay .go-reset-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
+        }
+        @keyframes goBtnPulse {
+            0% { box-shadow: 0 8px 0 #881a2a, 0 12px 30px #000000aa; }
+            100% { box-shadow: 0 8px 0 #881a2a, 0 12px 50px #ff2b4f66, 0 0 60px #ff2b4f33; }
+        }
+
+        /* Ocultar scroll cuando game over */
+        body.game-over-active {
+            overflow: hidden;
+        }
+
+        .youtube-search.hidden,
+        .youtube-results.hidden {
+            display: none !important;
         }
 
         @media (max-width: 550px) {
@@ -359,12 +434,22 @@
             .youtube-search button { font-size: 0.85rem; padding: 0.6rem 1.2rem; }
             .youtube-results iframe { height: 200px; }
             .damage-text { font-size: 3rem; }
+            .game-over-overlay .go-text { font-size: 3.5rem; }
+            .game-over-overlay .go-sub { font-size: 1.3rem; }
+            .game-over-overlay .go-reset-btn { font-size: 1.4rem; padding: 0.7rem 1.8rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="main-container">
+<!-- GAME OVER OVERLAY (estilo Undertale) -->
+<div class="game-over-overlay" id="gameOverOverlay">
+    <div class="go-text">GAME OVER</div>
+    <div class="go-sub">❤️ Haz perdido todos tus corazones</div>
+    <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
+</div>
+
+<div class="main-container" id="mainContainer">
     <div class="heart-counter" id="heartCounter">
         <div class="hearts-container" id="heartsContainer">
             <span class="heart" data-index="0">❤️</span>
@@ -376,7 +461,7 @@
         <button id="resetBtn" class="reset-btn">⟳ Volver a intentar</button>
     </div>
 
-    <div class="youtube-search">
+    <div class="youtube-search" id="youtubeSearch">
         <input type="text" id="searchInput" placeholder="Pega la URL de YouTube (ej: https://youtu.be/...)" value="https://youtu.be/1n6-WD2s5Ik?si=qbcHMWBxL0xrrBLz">
         <button id="searchBtn">▶ Cargar</button>
     </div>
@@ -406,7 +491,11 @@
         const youtubeResults = document.getElementById('youtubeResults');
         const videoContainer = document.getElementById('videoContainer');
         const closeResultsBtn = document.getElementById('closeResults');
+        const youtubeSearch = document.getElementById('youtubeSearch');
+        const mainContainer = document.getElementById('mainContainer');
         const audioElement = document.getElementById('gameOverAudio');
+        const gameOverOverlay = document.getElementById('gameOverOverlay');
+        const goResetBtn = document.getElementById('goResetBtn');
 
         // --- SONIDO DE DAÑO ---
         function playHurtSound() {
@@ -456,21 +545,20 @@
             } catch (e) {}
         }
 
-        // --- REPRODUCIR GAMEOVER.MP3 ---
+        // --- REPRODUCIR GAMEOVER.MP3 (más fuerte) ---
         function playGameOverMusic() {
             try {
                 if (isMusicPlaying) return;
                 
-                // Reiniciar el audio
                 audioElement.currentTime = 0;
+                audioElement.volume = 1.0; // Volumen al máximo
                 
-                // Intentar reproducir
                 const playPromise = audioElement.play();
                 
                 if (playPromise !== undefined) {
                     playPromise.then(() => {
                         isMusicPlaying = true;
-                        console.log('🎵 GameOver.mp3 reproduciendo');
+                        console.log('🎵 GameOver.mp3 reproduciendo (volumen alto)');
                     }).catch(error => {
                         console.log('Error reproduciendo GameOver.mp3:', error);
                     });
@@ -532,6 +620,33 @@
             });
         }
 
+        function showGameOverOverlay() {
+            gameOverOverlay.classList.add('show');
+            document.body.classList.add('game-over-active');
+            
+            // Ocultar el buscador y el video
+            youtubeSearch.classList.add('hidden');
+            youtubeResults.classList.remove('active');
+            youtubeResults.classList.add('hidden');
+            videoContainer.innerHTML = '';
+            
+            // Desenfocar el fondo
+            mainContainer.classList.add('game-over-mode');
+            
+            // Reproducir música
+            playGameOverMusic();
+        }
+
+        function hideGameOverOverlay() {
+            gameOverOverlay.classList.remove('show');
+            document.body.classList.remove('game-over-active');
+            mainContainer.classList.remove('game-over-mode');
+            youtubeSearch.classList.remove('hidden');
+            youtubeResults.classList.remove('hidden');
+            stopGameOverMusic();
+            isMusicPlaying = false;
+        }
+
         function checkLoseCondition() {
             const allLost = hearts.every(h => h === false);
             if (allLost && !isGameOver) {
@@ -548,7 +663,11 @@
                 });
                 
                 shakeScreen();
-                playGameOverMusic();
+                
+                // Mostrar overlay de Game Over después de un breve retraso
+                setTimeout(() => {
+                    showGameOverOverlay();
+                }, 500);
                 
             } else if (!allLost) {
                 loseMessageEl.classList.add('hidden');
@@ -566,6 +685,13 @@
             resetBtn.classList.remove('visible');
             document.body.classList.remove('shaking');
             document.querySelectorAll('.damage-text').forEach(el => el.remove());
+            
+            hideGameOverOverlay();
+            
+            // Restaurar el buscador
+            youtubeSearch.classList.remove('hidden');
+            youtubeResults.classList.remove('hidden');
+            mainContainer.classList.remove('game-over-mode');
         }
 
         // --- MANEJADOR CLICK CORAZÓN ---
@@ -618,6 +744,7 @@
                     </div>
                 `;
                 youtubeResults.classList.add('active');
+                youtubeResults.classList.remove('hidden');
                 return;
             }
             
@@ -631,6 +758,7 @@
                 <div class="video-title">▶ ${videoId}</div>
             `;
             youtubeResults.classList.add('active');
+            youtubeResults.classList.remove('hidden');
         }
 
         function closeResults() {
@@ -650,6 +778,9 @@
             resetBtn.removeEventListener('click', resetHearts);
             resetBtn.addEventListener('click', resetHearts);
 
+            goResetBtn.removeEventListener('click', resetHearts);
+            goResetBtn.addEventListener('click', resetHearts);
+
             searchBtn.removeEventListener('click', loadYouTubeVideo);
             searchBtn.addEventListener('click', loadYouTubeVideo);
             searchInput.addEventListener('keypress', (e) => {
@@ -659,9 +790,8 @@
 
             setTimeout(loadYouTubeVideo, 300);
 
-            console.log('❤️ Corazones · GameOver.mp3');
-            console.log('📁 Asegúrate de tener el archivo GameOver.mp3 en la misma carpeta');
-            console.log('📦 Listo para GitHub Pages');
+            console.log('❤️ Corazones · Undertale Game Over');
+            console.log('📁 Asegúrate de tener GameOver.mp3 en la misma carpeta');
         }
 
         if (document.readyState === 'loading') {
