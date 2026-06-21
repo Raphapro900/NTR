@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NoTeRias · Corazones</title>
-    <!-- FAVICON -->
     <link rel="icon" type="image/png" href="Log0.png">
     <style>
         * {
@@ -22,24 +21,57 @@
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
             margin: 0;
             padding: 20px;
-            transition: transform 0.05s;
+            transition: transform 0.05s, filter 0.05s;
             overflow-x: hidden;
         }
         body.shaking {
-            animation: shake 0.5s ease-in-out;
+            animation: shakeWithBlur 0.5s ease-in-out;
         }
-        @keyframes shake {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            10% { transform: translate(-10px, 6px) rotate(-1.5deg); }
-            20% { transform: translate(10px, -6px) rotate(1.5deg); }
-            30% { transform: translate(-6px, 10px) rotate(-1deg); }
-            40% { transform: translate(6px, -10px) rotate(1deg); }
-            50% { transform: translate(-10px, 4px) rotate(-1.2deg); }
-            60% { transform: translate(10px, -4px) rotate(1.2deg); }
-            70% { transform: translate(-4px, 8px) rotate(-0.8deg); }
-            80% { transform: translate(4px, -8px) rotate(0.8deg); }
-            90% { transform: translate(-6px, 4px) rotate(-0.5deg); }
-            100% { transform: translate(0, 0) rotate(0deg); }
+        @keyframes shakeWithBlur {
+            0%, 100% {
+                transform: translate(0, 0) rotate(0deg);
+                filter: blur(0px);
+            }
+            10% {
+                transform: translate(-12px, 8px) rotate(-2deg);
+                filter: blur(3px);
+            }
+            20% {
+                transform: translate(12px, -8px) rotate(2deg);
+                filter: blur(4px);
+            }
+            30% {
+                transform: translate(-8px, 12px) rotate(-1.5deg);
+                filter: blur(3px);
+            }
+            40% {
+                transform: translate(8px, -12px) rotate(1.5deg);
+                filter: blur(4px);
+            }
+            50% {
+                transform: translate(-12px, 6px) rotate(-2deg);
+                filter: blur(5px);
+            }
+            60% {
+                transform: translate(12px, -6px) rotate(2deg);
+                filter: blur(4px);
+            }
+            70% {
+                transform: translate(-6px, 10px) rotate(-1deg);
+                filter: blur(3px);
+            }
+            80% {
+                transform: translate(6px, -10px) rotate(1deg);
+                filter: blur(3px);
+            }
+            90% {
+                transform: translate(-8px, 4px) rotate(-0.5deg);
+                filter: blur(2px);
+            }
+            100% {
+                transform: translate(0, 0) rotate(0deg);
+                filter: blur(0px);
+            }
         }
 
         .main-container {
@@ -103,13 +135,22 @@
             text-transform: uppercase;
             font-weight: normal;
         }
-        @media (max-width: 600px) {
-            .logo-text { font-size: 3.5rem; letter-spacing: 4px; }
-            .logo-sub { font-size: 0.9rem; letter-spacing: 6px; }
+
+        /* === CRÉDITOS === */
+        .credits {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            font-size: 0.9rem;
+            color: #ff6b7c55;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-top: -0.5rem;
+            padding: 0.3rem 0;
+            border-top: 1px solid #ff6b7c22;
+            width: 100%;
+            max-width: 400px;
         }
-        @media (max-width: 400px) {
-            .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
-            .logo-sub { font-size: 0.7rem; letter-spacing: 4px; }
+        .credits span {
+            color: #ff6b7c77;
         }
 
         .heart-counter {
@@ -548,12 +589,17 @@
             .game-over-overlay .go-reset-btn { font-size: 1.4rem; padding: 0.7rem 1.8rem; }
             .blood-particle { font-size: 1.6rem; }
             .youtube-search .search-icon { font-size: 1.2rem; }
+            .logo-text { font-size: 3.5rem; letter-spacing: 4px; }
+            .logo-sub { font-size: 0.9rem; letter-spacing: 6px; }
+            .credits { font-size: 0.7rem; }
         }
         @media (max-width: 400px) {
             .heart { font-size: 3.4rem; }
             .hearts-container { gap: 0.8rem; }
             .youtube-search input { min-width: 100px; font-size: 0.8rem; }
             .youtube-search button { font-size: 0.75rem; padding: 0.5rem 1rem; }
+            .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
+            .logo-sub { font-size: 0.7rem; letter-spacing: 4px; }
         }
     </style>
 </head>
@@ -585,12 +631,17 @@
     <!-- BUSCADOR DE YOUTUBE CON DISEÑO -->
     <div class="youtube-search" id="youtubeSearch">
         <span class="search-icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Pega la URL de YouTube (ej: https://youtu.be/...)" value="https://youtu.be/1n6-WD2s5Ik?si=qbcHMWBxL0xrrBLz">
+        <input type="text" id="searchInput" placeholder="Pega la URL de YouTube (ej: https://youtu.be/...)" value="">
         <button id="searchBtn"><span class="btn-icon">▶</span> Cargar</button>
     </div>
     <div class="youtube-results" id="youtubeResults">
         <button class="close-btn" id="closeResults">✕</button>
         <div id="videoContainer"></div>
+    </div>
+
+    <!-- CRÉDITOS -->
+    <div class="credits">
+        <span>CCO</span> Raphapro900 <span>- V1.0</span>
     </div>
 </div>
 
@@ -618,6 +669,47 @@
         const audioElement = document.getElementById('gameOverAudio');
         const gameOverOverlay = document.getElementById('gameOverOverlay');
         const goResetBtn = document.getElementById('goResetBtn');
+
+        // --- SONIDO DE CLICK ---
+        function playClickSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const now = ctx.currentTime;
+
+                // Click corto y agudo
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(800, now);
+                osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.06);
+
+                // Pequeño ruido de click
+                const bufferSize = ctx.sampleRate * 0.02;
+                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * 0.2 * Math.exp(-i / (bufferSize * 0.2));
+                }
+                const noise = ctx.createBufferSource();
+                noise.buffer = buffer;
+                const gainNoise = ctx.createGain();
+                gainNoise.gain.setValueAtTime(0.3, now);
+                gainNoise.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+                noise.connect(gainNoise);
+                gainNoise.connect(ctx.destination);
+                noise.start(now);
+                noise.stop(now + 0.03);
+
+            } catch (e) {
+                // Silencio si falla
+            }
+        }
 
         // --- SONIDO DE DAÑO ---
         function playHurtSound() {
@@ -737,7 +829,7 @@
             } catch (e) {}
         }
 
-        // --- TEMBLOR DE PANTALLA ---
+        // --- TEMBLOR DE PANTALLA CON MOTION BLUR ---
         function shakeScreen() {
             document.body.classList.remove('shaking');
             void document.body.offsetWidth;
@@ -831,6 +923,9 @@
             const index = parseInt(heartEl.dataset.index, 10);
             if (!hearts[index]) return;
 
+            // Sonido de click
+            playClickSound();
+
             hearts[index] = false;
             updateHeartsUI();
 
@@ -852,8 +947,15 @@
         function loadYouTubeVideo() {
             let url = searchInput.value.trim();
             if (!url) {
-                url = 'https://youtu.be/1n6-WD2s5Ik?si=qbcHMWBxL0xrrBLz';
-                searchInput.value = url;
+                // Si está vacío, no hacer nada o mostrar mensaje
+                videoContainer.innerHTML = `
+                    <div style="color: #ff6b7c; text-align: center; padding: 2rem; font-size: 1.2rem; font-family: 'Segoe UI', Arial, sans-serif;">
+                        ⚠️ Por favor, ingresa una URL de YouTube
+                    </div>
+                `;
+                youtubeResults.classList.add('active');
+                youtubeResults.classList.remove('hidden');
+                return;
             }
             
             let videoId = null;
@@ -916,8 +1018,6 @@
                 if (e.key === 'Enter') loadYouTubeVideo();
             });
             closeResultsBtn.addEventListener('click', closeResults);
-
-            setTimeout(loadYouTubeVideo, 300);
 
             console.log('❤️ NoTeRias · Corazones con Game Over mejorado');
             console.log('📁 Asegúrate de tener GameOver.mp3 y Log0.png en la misma carpeta');
