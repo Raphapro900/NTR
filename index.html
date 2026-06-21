@@ -56,7 +56,7 @@
             pointer-events: none;
         }
 
-        /* === LOGO CON ANIMACIÓN RÁPIDA Y FUERTE === */
+        /* === LOGO CON ANIMACIÓN EN LOOP === */
         .logo-container {
             width: 100%;
             text-align: center;
@@ -67,6 +67,10 @@
         }
         .logo-container.shaking-logo {
             animation: logoShakeStrong 0.4s ease-in-out 3;
+        }
+        /* Loop infinito mientras esté en "Ríe" */
+        .logo-container.shaking-loop {
+            animation: logoShakeStrong 0.4s ease-in-out infinite;
         }
         @keyframes logoShakeStrong {
             0%, 100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
@@ -133,6 +137,7 @@
             letter-spacing: 4px;
         }
 
+        /* === CRÉDITOS === */
         .credits {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             font-size: 0.8rem;
@@ -146,6 +151,28 @@
             max-width: 400px;
         }
         .credits span { color: #ff6b7c66; }
+
+        /* === BOTÓN CÓMO JUGAR === */
+        .how-to-play-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: transparent;
+            border: 2px solid #ff6b7c66;
+            color: #ff6b7c88;
+            font-size: 1.1rem;
+            padding: 0.6rem 2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(255,43,79,0.1);
+        }
+        .how-to-play-btn:hover {
+            background: #ff6b7c22;
+            border-color: #ff6b7c;
+            box-shadow: 0 0 40px rgba(255,43,79,0.2);
+            transform: scale(1.02);
+        }
 
         .heart-counter {
             background: rgba(26,26,46,0.85);
@@ -408,6 +435,7 @@
         .youtube-results::-webkit-scrollbar-thumb { background: #ff3b5c66; border-radius: 10px; }
         .youtube-results::-webkit-scrollbar-thumb:hover { background: #ff3b5c99; }
 
+        /* === GAME OVER OVERLAY === */
         .game-over-overlay {
             position: fixed;
             top: 0;
@@ -504,6 +532,176 @@
         body.game-over-active { overflow: hidden; }
         .youtube-search.hidden, .youtube-results.hidden { display: none !important; }
 
+        /* === OVERLAY TUTORIAL (VHS) === */
+        .tutorial-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 30000;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .tutorial-overlay.active { display: flex; }
+
+        .tv-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            background: #1a1a2e;
+            border-radius: 2rem;
+            padding: 2rem 2rem 3rem;
+            border: 3px solid #ff6b7c55;
+            box-shadow: 0 0 60px rgba(255,43,79,0.15), inset 0 0 60px rgba(255,43,79,0.05);
+        }
+        .tv-container .tv-screen {
+            background: #0a0a1a;
+            border-radius: 1.2rem;
+            padding: 0.5rem;
+            border: 2px solid #ff6b7c33;
+            position: relative;
+            overflow: hidden;
+            min-height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .tv-container .tv-screen video {
+            width: 100%;
+            height: 100%;
+            max-height: 400px;
+            border-radius: 0.8rem;
+            display: block;
+            background: #000;
+            object-fit: contain;
+        }
+        .tv-container .tv-screen .placeholder-text {
+            color: #ff6b7c44;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 2rem;
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            letter-spacing: 4px;
+        }
+        .tv-container .tv-screen .scanlines {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: repeating-linear-gradient(0deg, 
+                transparent 0px, 
+                transparent 3px, 
+                rgba(0,0,0,0.08) 3px, 
+                rgba(0,0,0,0.08) 4px);
+            z-index: 2;
+            border-radius: 0.8rem;
+        }
+        .tv-container .tv-screen .vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.4) 100%);
+            z-index: 1;
+            border-radius: 0.8rem;
+        }
+        .tv-container .tv-brand {
+            position: absolute;
+            bottom: 0.8rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff6b7c33;
+            font-size: 0.8rem;
+            letter-spacing: 6px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            text-transform: uppercase;
+        }
+
+        /* Cinta VHS */
+        .vhs-tape {
+            width: 100%;
+            max-width: 400px;
+            margin: 1.5rem auto 0;
+            background: linear-gradient(180deg, #1a1a2e, #0d0d1a);
+            border-radius: 1rem;
+            padding: 0.8rem 1.5rem;
+            border: 2px solid #ff6b7c33;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        .vhs-tape:hover {
+            border-color: #ff6b7c77;
+            transform: scale(1.02);
+            box-shadow: 0 8px 40px rgba(255,43,79,0.15);
+        }
+        .vhs-tape .tape-icon {
+            font-size: 2.5rem;
+            filter: drop-shadow(0 4px 15px rgba(255,43,79,0.2));
+        }
+        .vhs-tape .tape-label {
+            flex: 1;
+            color: #ffb3b3aa;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .vhs-tape .tape-label span {
+            color: #ff6b7c;
+            font-weight: bold;
+        }
+        .vhs-tape .tape-arrow {
+            color: #ff6b7c55;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        .vhs-tape:hover .tape-arrow {
+            color: #ff6b7c;
+            transform: translateX(8px);
+        }
+        .vhs-tape.slid {
+            transform: translateY(-20px) scale(0.95);
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .tutorial-close-btn {
+            position: absolute;
+            top: 0.8rem;
+            right: 1.2rem;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            border-radius: 50%;
+            width: 2.8rem;
+            height: 2.8rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            box-shadow: 0 2px 20px rgba(255,43,79,0.3);
+            z-index: 10;
+        }
+        .tutorial-close-btn:hover {
+            transform: scale(1.1) rotate(90deg);
+            background: #ff4f6e;
+        }
+
         @media (max-width: 600px) {
             .logo-text { font-size: 3.5rem; letter-spacing: 4px; }
             .logo-sub { font-size: 0.8rem; letter-spacing: 6px; }
@@ -522,6 +720,12 @@
             .game-over-overlay .go-sub { font-size: 1.2rem; }
             .game-over-overlay .go-reset-btn { font-size: 1.3rem; padding: 0.6rem 1.8rem; }
             .credits { font-size: 0.7rem; }
+            .tv-container { padding: 1rem; }
+            .tv-container .tv-screen { min-height: 200px; }
+            .tv-container .tv-screen video { max-height: 250px; }
+            .vhs-tape { padding: 0.6rem 1rem; }
+            .vhs-tape .tape-icon { font-size: 2rem; }
+            .how-to-play-btn { font-size: 0.9rem; padding: 0.5rem 1.5rem; }
         }
         @media (max-width: 400px) {
             .heart { font-size: 3rem; }
@@ -529,6 +733,8 @@
             .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
             .youtube-results iframe { height: 170px; }
             .game-over-overlay .go-text { font-size: 2.8rem; letter-spacing: 4px; }
+            .tv-container .tv-screen { min-height: 150px; }
+            .tv-container .tv-screen video { max-height: 180px; }
         }
     </style>
 </head>
@@ -541,12 +747,41 @@
     <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
+<!-- TUTORIAL OVERLAY (VHS) -->
+<div class="tutorial-overlay" id="tutorialOverlay">
+    <div class="tv-container">
+        <button class="tutorial-close-btn" id="tutorialCloseBtn">✕</button>
+        <div class="tv-screen" id="tvScreen">
+            <div class="vignette"></div>
+            <div class="scanlines"></div>
+            <div id="tvPlaceholder" class="placeholder-text">📼 <br>Inserta la cinta</div>
+            <video id="tutorialVideo" style="display:none;" controls>
+                <source src="Tutoriall.mp4" type="video/mp4">
+                Tu navegador no soporta el video.
+            </video>
+        </div>
+        <div class="tv-brand">✦ VHS ✦</div>
+    </div>
+
+    <!-- Cinta VHS -->
+    <div class="vhs-tape" id="vhsTape">
+        <span class="tape-icon">📼</span>
+        <div class="tape-label">
+            <span>▶</span> Tutorial <span>·</span> Cómo jugar
+        </div>
+        <span class="tape-arrow">➜</span>
+    </div>
+</div>
+
 <div class="main-container" id="mainContainer">
-    <!-- LOGO CON ANIMACIÓN RÁPIDA Y FUERTE -->
+    <!-- LOGO CON ANIMACIÓN EN LOOP -->
     <div class="logo-container" id="logoContainer">
         <div class="logo-text" id="logoText">NoTeRias</div>
         <div class="logo-sub" id="logoSub">★ play & enjoy ★</div>
     </div>
+
+    <!-- BOTÓN CÓMO JUGAR -->
+    <button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
 
     <div class="heart-counter" id="heartCounter">
         <div class="player-label" id="playerLabel">👤 TÚ</div>
@@ -598,6 +833,7 @@
         let isMusicPlaying = false;
         let logoState = 0; // 0 = "NoTeRias", 1 = "Ríe"
         let isWin = false;
+        let areHeartsLaughing = false;
 
         // ============================================================
         // DOM ELEMENTS
@@ -623,6 +859,14 @@
         const videoInfo = document.getElementById('videoInfo');
         const videoTitle = document.getElementById('videoTitle');
         const creatorName = document.getElementById('creatorName');
+
+        // TUTORIAL
+        const howToPlayBtn = document.getElementById('howToPlayBtn');
+        const tutorialOverlay = document.getElementById('tutorialOverlay');
+        const tutorialCloseBtn = document.getElementById('tutorialCloseBtn');
+        const vhsTape = document.getElementById('vhsTape');
+        const tutorialVideo = document.getElementById('tutorialVideo');
+        const tvPlaceholder = document.getElementById('tvPlaceholder');
 
         // ============================================================
         // AUDIOS
@@ -727,13 +971,13 @@
         }
 
         // ============================================================
-        // UI
+        // UI - CORAZONES
         // ============================================================
         function updateHeartsUI() {
             heartElements.forEach((el, index) => {
                 if (hearts[index]) {
                     el.classList.remove('lost', 'breaking');
-                    el.textContent = '🤣';
+                    el.textContent = areHeartsLaughing ? '🤣' : '❤️';
                 } else {
                     el.classList.add('lost');
                     el.textContent = '💔';
@@ -742,42 +986,46 @@
         }
 
         // ============================================================
-        // LOGO - CAMBIO DE TEXTO CON ANIMACIÓN RÁPIDA Y FUERTE
+        // LOGO - CON LOOP DE TEMBLOR
         // ============================================================
         function toggleLogo() {
             if (isGameOver) return;
 
-            // Quitar animación previa
-            logoContainer.classList.remove('shaking-logo');
+            // Quitar animaciones previas
+            logoContainer.classList.remove('shaking-logo', 'shaking-loop');
             void logoContainer.offsetWidth;
 
             if (logoState === 0) {
-                // Cambiar a "Ríe"
+                // Cambiar a "Ríe" - LOOP INFINITO
                 logoText.textContent = 'Ríe';
                 logoText.classList.add('switched');
                 logoSub.textContent = '★ laugh & enjoy ★';
                 logoSub.classList.add('switched');
                 logoState = 1;
-                // Iniciar loop de LogoPress
+                areHeartsLaughing = true;
+                updateHeartsUI();
                 playLogoPress();
+                // LOOP INFINITO de temblor
+                logoContainer.classList.add('shaking-loop');
             } else {
-                // Volver a "NoTeRias"
+                // Volver a "NoTeRias" - DETENER LOOP
                 logoText.textContent = 'NoTeRias';
                 logoText.classList.remove('switched');
                 logoSub.textContent = '★ play & enjoy ★';
                 logoSub.classList.remove('switched');
                 logoState = 0;
-                // Detener loop de LogoPress
+                areHeartsLaughing = false;
+                updateHeartsUI();
                 stopLogoPress();
-                // Reproducir Shh
                 playShh();
+                // Quitar loop de temblor
+                logoContainer.classList.remove('shaking-loop');
+                // Un temblor final
+                logoContainer.classList.add('shaking-logo');
+                setTimeout(() => {
+                    logoContainer.classList.remove('shaking-logo');
+                }, 1200);
             }
-
-            // Aplicar animación de temblor rápido y fuerte
-            logoContainer.classList.add('shaking-logo');
-            setTimeout(() => {
-                logoContainer.classList.remove('shaking-logo');
-            }, 1200);
         }
 
         // ============================================================
@@ -785,18 +1033,15 @@
         // ============================================================
         function checkLoseCondition() {
             const allLost = hearts.every(h => h === false);
-            const allWin = hearts.every(h => h === true);
+            const allAlive = hearts.every(h => h === true);
             
-            if (allWin && !isGameOver && hearts.length === 3) {
-                // GANASTE XDD - todos los corazones están en 🤣
+            if (allAlive && areHeartsLaughing && !isGameOver) {
                 isGameOver = true;
                 isWin = true;
                 resetBtn.classList.add('visible');
-                
-                // Animación de celebración
                 shakeScreen();
-                // Detener LogoPress si está sonando
                 stopLogoPress();
+                logoContainer.classList.remove('shaking-loop');
                 setTimeout(() => { playWinMusic(); }, 300);
                 setTimeout(() => {
                     showGameOverOverlay('GANASTE XDD', '🤣TE REÍSTE DEMASIA- AY- AJAJAJAJAJ XDDDD');
@@ -812,12 +1057,12 @@
                     if (el.classList.contains('lost')) {
                         el.classList.remove('lost');
                         el.classList.add('breaking');
-                        el.textContent = '🤣';
+                        el.textContent = areHeartsLaughing ? '🤣' : '❤️';
                     }
                 });
                 shakeScreen();
-                // Detener LogoPress si está sonando
                 stopLogoPress();
+                logoContainer.classList.remove('shaking-loop');
                 setTimeout(() => { playGameOverMusic(); }, 300);
                 setTimeout(() => {
                     showGameOverOverlay('GAME OVER', '💀 Has perdido todos tus corazones');
@@ -861,17 +1106,17 @@
             youtubeSearch.classList.remove('hidden');
             youtubeResults.classList.remove('hidden');
             mainContainer.classList.remove('game-over-mode');
-            // Si LogoPress estaba sonando, detenerlo
             stopLogoPress();
-            // Si el logo estaba en "Ríe", volver a "NoTeRias"
+            logoContainer.classList.remove('shaking-loop');
             if (logoState === 1) {
                 logoText.textContent = 'NoTeRias';
                 logoText.classList.remove('switched');
                 logoSub.textContent = '★ play & enjoy ★';
                 logoSub.classList.remove('switched');
                 logoState = 0;
+                areHeartsLaughing = false;
+                updateHeartsUI();
             }
-            // Restaurar texto del overlay
             goText.textContent = 'GAME OVER';
             goSubText.textContent = '❤️ Haz perdido todos tus corazones';
         }
@@ -888,20 +1133,13 @@
             hearts[index] = false;
             updateHeartsUI();
             shakeScreen();
-
-            // under.mp3 siempre al perder cualquier corazón
             playUnder();
 
             const remaining = hearts.filter(h => h === true).length;
-            
-            // Si queda 1 vida: sonido aleatorio
             if (remaining === 1) {
                 playRandomExclamation();
             }
             
-            // Verificar si todos los corazones están perdidos o todos están en 🤣
-            // Pero como ahora los corazones vivos son 🤣, la condición de victoria es que todos sean 🤣
-            // y la condición de derrota es que todos sean 💔
             checkLoseCondition();
         }
 
@@ -911,7 +1149,62 @@
         logoContainer.addEventListener('click', toggleLogo);
 
         // ============================================================
-        // YOUTUBE - CON INFORMACIÓN DEL VIDEO
+        // TUTORIAL - VHS
+        // ============================================================
+        function openTutorial() {
+            tutorialOverlay.classList.add('active');
+            // Resetear estado del video
+            tutorialVideo.pause();
+            tutorialVideo.currentTime = 0;
+            tutorialVideo.style.display = 'none';
+            tvPlaceholder.style.display = 'block';
+            vhsTape.classList.remove('slid');
+        }
+
+        function closeTutorial() {
+            tutorialVideo.pause();
+            tutorialVideo.currentTime = 0;
+            tutorialVideo.style.display = 'none';
+            tvPlaceholder.style.display = 'block';
+            vhsTape.classList.remove('slid');
+            tutorialOverlay.classList.remove('active');
+        }
+
+        function insertTape() {
+            if (vhsTape.classList.contains('slid')) return;
+            
+            // Animación de deslizar la cinta
+            vhsTape.classList.add('slid');
+            
+            // Mostrar el video después de la animación
+            setTimeout(() => {
+                tvPlaceholder.style.display = 'none';
+                tutorialVideo.style.display = 'block';
+                tutorialVideo.currentTime = 0;
+                tutorialVideo.play().catch(() => {});
+            }, 500);
+
+            // Cuando termina el video, volver a la pantalla principal
+            tutorialVideo.addEventListener('ended', function onEnd() {
+                tutorialVideo.removeEventListener('ended', onEnd);
+                closeTutorial();
+            });
+        }
+
+        // Eventos del tutorial
+        howToPlayBtn.addEventListener('click', openTutorial);
+        tutorialCloseBtn.addEventListener('click', closeTutorial);
+        vhsTape.addEventListener('click', insertTape);
+
+        // Cerrar con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && tutorialOverlay.classList.contains('active')) {
+                closeTutorial();
+            }
+        });
+
+        // ============================================================
+        // YOUTUBE
         // ============================================================
         function loadYouTubeVideo() {
             let url = searchInput.value.trim();
@@ -938,8 +1231,6 @@
             }
             
             const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
-            
-            // Obtener información del video usando la API de oEmbed
             const oembedUrl = `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`;
             
             fetch(oembedUrl)
@@ -955,7 +1246,6 @@
                     youtubeResults.classList.remove('hidden');
                 })
                 .catch(() => {
-                    // Fallback: mostrar solo el video sin información
                     videoContainer.innerHTML = `
                         <iframe src="${embedUrl}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     `;
@@ -991,8 +1281,8 @@
             searchInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') loadYouTubeVideo(); });
             closeResultsBtn.addEventListener('click', closeResults);
 
-            console.log('❤️ NoTeRias · Corazones con risa y victoria XDD');
-            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, Log0.png');
+            console.log('❤️ NoTeRias · Corazones con VHS Tutorial');
+            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, Tutoriall.mp4, Log0.png');
         }
 
         if (document.readyState === 'loading') {
