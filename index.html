@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoTeRias</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: #1a1a2e;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+            transition: transform 0.05s;
+        }
+        body.shaking {
+            animation: shake 0.5s ease-in-out;
+        }
+        @keyframes shake {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            10% { transform: translate(-10px, 6px) rotate(-1.5deg); }
+            20% { transform: translate(10px, -6px) rotate(1.5deg); }
+            30% { transform: translate(-6px, 10px) rotate(-1deg); }
+            40% { transform: translate(6px, -10px) rotate(1deg); }
+            50% { transform: translate(-10px, 4px) rotate(-1.2deg); }
+            60% { transform: translate(10px, -4px) rotate(1.2deg); }
+            70% { transform: translate(-4px, 8px) rotate(-0.8deg); }
+            80% { transform: translate(4px, -8px) rotate(0.8deg); }
+            90% { transform: translate(-6px, 4px) rotate(-0.5deg); }
+            100% { transform: translate(0, 0) rotate(0deg); }
+        }
+
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1.5rem;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .heart-counter {
+            background: rgba(26, 26, 46, 0.85);
+            backdrop-filter: blur(6px);
+            border-radius: 4rem;
+            padding: 2.8rem 3.5rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 3px #ff3b5c55 inset;
+            text-align: center;
+            min-width: 340px;
+            width: 100%;
+            border: 2px solid #ff6b7c66;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .hearts-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.8rem;
+            margin: 0.5rem 0 1.2rem 0;
+            flex-wrap: wrap;
+        }
+
+        .heart {
+            font-size: 5.8rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.2s, opacity 0.2s;
+            text-shadow: 0 8px 25px rgba(255, 50, 80, 0.7);
+            color: #ff2b4f;
+            filter: drop-shadow(0 8px 12px #00000077);
+            transform: scale(1);
+            position: relative;
+        }
+        .heart:hover {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 22px #ff3b5c);
+        }
+        .heart:active {
+            transform: scale(0.85);
+        }
+        .heart.lost {
+            color: #3d2c33;
+            text-shadow: 0 0 8px #220000;
+            filter: grayscale(0.9) brightness(0.4);
+            cursor: default;
+            transform: scale(0.92);
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        .heart.breaking {
+            animation: breakHeart 1.2s ease-out forwards;
+            pointer-events: none !important;
+        }
+        @keyframes breakHeart {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                color: #ff2b4f;
+                text-shadow: 0 0 30px #ff2b4f;
+            }
+            25% {
+                transform: scale(1.4) rotate(-15deg);
+                color: #ff4455;
+                text-shadow: 0 0 60px #ff2b4f;
+            }
+            50% {
+                transform: scale(1.6) rotate(10deg) translateY(-20px);
+                color: #ff0020;
+                text-shadow: 0 0 80px #ff0020;
+            }
+            75% {
+                transform: scale(1.8) rotate(-5deg) translateY(-40px);
+                color: #cc0018;
+                text-shadow: 0 0 100px #cc0018;
+                opacity: 0.8;
+            }
+            100% {
+                transform: scale(2.5) rotate(20deg) translateY(-80px);
+                color: #880010;
+                text-shadow: 0 0 120px #880010;
+                opacity: 0;
+            }
+        }
+
+        .lose-message {
+            font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
+            font-size: 3.4rem;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #ffb3b3;
+            text-shadow: 0 0 20px #ff2b4f, 0 0 45px #a00020, 4px 4px 0 #3d0a0a;
+            background: #1f0f12dd;
+            padding: 0.6rem 2rem;
+            border-radius: 60px;
+            display: inline-block;
+            margin: 0.5rem 0 0.8rem 0;
+            border: 2px solid #ff7a8a;
+            box-shadow: 0 0 35px #ff2b4f88;
+            backdrop-filter: blur(2px);
+            transform: rotate(-0.5deg);
+            animation: pulseGlow 1s ease-in-out infinite alternate;
+        }
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 35px #ff2b4f88; }
+            100% { box-shadow: 0 0 60px #ff2b4fcc, 0 0 100px #ff2b4f44; }
+        }
+
+        .lose-message.hidden {
+            display: none;
+        }
+
+        .reset-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 0.9rem 2.4rem;
+            margin-top: 0.8rem;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #881a2a, 0 12px 30px #000000aa;
+            transition: all 0.08s linear;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: 2px solid #ff9eae;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+        }
+        .reset-btn.visible {
+            display: block;
+        }
+        .reset-btn:hover {
+            background: #ff4f6e;
+            transform: scale(1.03);
+            box-shadow: 0 8px 0 #881a2a, 0 15px 35px #000000dd;
+        }
+        .reset-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
+        }
+
+        .youtube-search {
+            width: 100%;
+            background: rgba(26, 26, 46, 0.7);
+            backdrop-filter: blur(4px);
+            border-radius: 2rem;
+            padding: 1.2rem 1.8rem;
+            border: 2px solid #ff6b7c44;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .youtube-search input {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.8rem 1.5rem;
+            border-radius: 60px;
+            border: 2px solid #ff6b7c55;
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            font-size: 1rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            outline: none;
+            transition: all 0.3s;
+        }
+        .youtube-search input::placeholder {
+            color: #8888aa;
+        }
+        .youtube-search input:focus {
+            border-color: #ff3b5c;
+            background: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 0 25px #ff3b5c44;
+        }
+        .youtube-search button {
+            padding: 0.8rem 1.8rem;
+            border-radius: 60px;
+            border: none;
+            background: #ff3b5c;
+            color: #1a1a2e;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 0 #881a2a;
+        }
+        .youtube-search button:hover {
+            background: #ff4f6e;
+            transform: scale(1.02);
+        }
+        .youtube-search button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #881a2a;
+        }
+
+        .youtube-results {
+            width: 100%;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.3s ease;
+            opacity: 0;
+            background: rgba(26, 26, 46, 0.5);
+            backdrop-filter: blur(4px);
+            border-radius: 1.5rem;
+            padding: 0 1.5rem;
+            border: 2px solid transparent;
+            position: relative;
+        }
+        .youtube-results.active {
+            max-height: 600px;
+            opacity: 1;
+            padding: 1.5rem;
+            border-color: #ff6b7c55;
+            overflow-y: auto;
+        }
+        .youtube-results iframe {
+            width: 100%;
+            height: 315px;
+            border-radius: 1rem;
+            border: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+        .youtube-results .video-title {
+            color: #ffb3b3;
+            font-size: 1.1rem;
+            margin-top: 0.8rem;
+            text-align: center;
+            text-shadow: 0 0 20px rgba(255, 50, 80, 0.3);
+            word-break: break-all;
+        }
+        .youtube-results .close-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.2rem;
+            border-radius: 50%;
+            width: 2.2rem;
+            height: 2.2rem;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+            z-index: 10;
+        }
+        .youtube-results .close-btn:hover {
+            transform: scale(1.1);
+            background: #ff4f6e;
+        }
+
+        .youtube-results::-webkit-scrollbar {
+            width: 6px;
+        }
+        .youtube-results::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+        }
+        .youtube-results::-webkit-scrollbar-thumb {
+            background: #ff3b5c88;
+            border-radius: 10px;
+        }
+
+        .damage-text {
+            position: fixed;
+            pointer-events: none;
+            font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
+            font-weight: bold;
+            font-size: 4rem;
+            color: #ff2244;
+            text-shadow: 0 0 20px #ff0040, 0 0 40px #cc0020, 0 0 80px #880018, 2px 2px 0 #3d0a0a;
+            animation: floatUp 0.9s ease-out forwards;
+            z-index: 9999;
+            will-change: transform, opacity;
+            letter-spacing: 2px;
+        }
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(0.6) rotate(-10deg);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(1.8) rotate(15deg);
+            }
+        }
+
+        /* Reproductor de audio oculto */
+        #gameOverAudio {
+            display: none;
+        }
+
+        @media (max-width: 550px) {
+            .heart-counter { padding: 1.8rem; min-width: unset; width: 100%; }
+            .heart { font-size: 4.2rem; }
+            .lose-message { font-size: 2.4rem; padding: 0.3rem 1.2rem; }
+            .reset-btn { font-size: 1.3rem; padding: 0.6rem 1.8rem; }
+            .youtube-search input { min-width: 140px; font-size: 0.85rem; }
+            .youtube-search button { font-size: 0.85rem; padding: 0.6rem 1.2rem; }
+            .youtube-results iframe { height: 200px; }
+            .damage-text { font-size: 3rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="main-container">
+    <div class="heart-counter" id="heartCounter">
+        <div class="hearts-container" id="heartsContainer">
+            <span class="heart" data-index="0">❤️</span>
+            <span class="heart" data-index="1">❤️</span>
+            <span class="heart" data-index="2">❤️</span>
+        </div>
+
+        <div id="loseMessage" class="lose-message hidden">Haz perdido :/</div>
+        <button id="resetBtn" class="reset-btn">⟳ Volver a intentar</button>
+    </div>
+
+    <div class="youtube-search">
+        <input type="text" id="searchInput" placeholder="Pega la URL de YouTube (ej: https://youtu.be/...)" value="https://youtu.be/1n6-WD2s5Ik?si=qbcHMWBxL0xrrBLz">
+        <button id="searchBtn">▶ Cargar</button>
+    </div>
+    <div class="youtube-results" id="youtubeResults">
+        <button class="close-btn" id="closeResults">✕</button>
+        <div id="videoContainer"></div>
+    </div>
+</div>
+
+<!-- Reproductor de audio oculto para GameOver.mp3 -->
+<audio id="gameOverAudio" preload="auto">
+    <source src="GameOver.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+    (function() {
+        // --- ESTADO ---
+        let hearts = [true, true, true];
+        let isGameOver = false;
+        let isMusicPlaying = false;
+
+        const heartElements = document.querySelectorAll('.heart');
+        const loseMessageEl = document.getElementById('loseMessage');
+        const resetBtn = document.getElementById('resetBtn');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+        const youtubeResults = document.getElementById('youtubeResults');
+        const videoContainer = document.getElementById('videoContainer');
+        const closeResultsBtn = document.getElementById('closeResults');
+        const audioElement = document.getElementById('gameOverAudio');
+
+        // --- SONIDO DE DAÑO ---
+        function playHurtSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const now = ctx.currentTime;
+
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.exponentialRampToValueAtTime(80, now + 0.15);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(now);
+                osc.stop(now + 0.25);
+
+                const osc2 = ctx.createOscillator();
+                const gain2 = ctx.createGain();
+                osc2.type = 'square';
+                osc2.frequency.setValueAtTime(400, now);
+                osc2.frequency.exponentialRampToValueAtTime(150, now + 0.1);
+                gain2.gain.setValueAtTime(0.15, now);
+                gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                osc2.connect(gain2);
+                gain2.connect(ctx.destination);
+                osc2.start(now);
+                osc2.stop(now + 0.15);
+
+                const bufferSize = ctx.sampleRate * 0.05;
+                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const data = buffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * 0.3 * Math.exp(-i / (bufferSize * 0.3));
+                }
+                const noise = ctx.createBufferSource();
+                noise.buffer = buffer;
+                const gainNoise = ctx.createGain();
+                gainNoise.gain.setValueAtTime(0.2, now);
+                gainNoise.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                noise.connect(gainNoise);
+                gainNoise.connect(ctx.destination);
+                noise.start(now);
+                noise.stop(now + 0.06);
+            } catch (e) {}
+        }
+
+        // --- REPRODUCIR GAMEOVER.MP3 ---
+        function playGameOverMusic() {
+            try {
+                if (isMusicPlaying) return;
+                
+                // Reiniciar el audio
+                audioElement.currentTime = 0;
+                
+                // Intentar reproducir
+                const playPromise = audioElement.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        isMusicPlaying = true;
+                        console.log('🎵 GameOver.mp3 reproduciendo');
+                    }).catch(error => {
+                        console.log('Error reproduciendo GameOver.mp3:', error);
+                        // No hay fallback, solo mostramos el error en consola
+                    });
+                }
+            } catch (e) {
+                console.log('Error:', e);
+            }
+        }
+
+        function stopGameOverMusic() {
+            try {
+                if (!audioElement.paused) {
+                    audioElement.pause();
+                    audioElement.currentTime = 0;
+                }
+                isMusicPlaying = false;
+            } catch (e) {}
+        }
+
+        // --- EFECTO -1 ---
+        function spawnDamageText(x, y) {
+            const el = document.createElement('div');
+            el.className = 'damage-text';
+            el.textContent = '-1 ❤️';
+            const size = 3.5 + Math.random() * 2;
+            el.style.fontSize = size + 'rem';
+            const angle = -Math.PI / 2 + (Math.random() - 0.5) * 1.2;
+            const distance = 80 + Math.random() * 120;
+            const tx = Math.cos(angle) * distance;
+            const ty = Math.sin(angle) * distance - 60;
+            el.style.setProperty('--tx', tx + 'px');
+            el.style.setProperty('--ty', ty + 'px');
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => { if (el.parentNode) el.remove(); }, 950);
+        }
+
+        // --- TEMBLOR DE PANTALLA ---
+        function shakeScreen() {
+            document.body.classList.remove('shaking');
+            void document.body.offsetWidth;
+            document.body.classList.add('shaking');
+            setTimeout(() => {
+                document.body.classList.remove('shaking');
+            }, 500);
+        }
+
+        // --- FUNCIONES UI ---
+        function updateHeartsUI() {
+            heartElements.forEach((el, index) => {
+                if (hearts[index]) {
+                    el.classList.remove('lost', 'breaking');
+                    el.textContent = '❤️';
+                } else {
+                    el.classList.add('lost');
+                    el.textContent = '🖤';
+                }
+            });
+        }
+
+        function checkLoseCondition() {
+            const allLost = hearts.every(h => h === false);
+            if (allLost && !isGameOver) {
+                isGameOver = true;
+                loseMessageEl.classList.remove('hidden');
+                resetBtn.classList.add('visible');
+                
+                heartElements.forEach(el => {
+                    if (el.classList.contains('lost')) {
+                        el.classList.remove('lost');
+                        el.classList.add('breaking');
+                        el.textContent = '❤️';
+                    }
+                });
+                
+                shakeScreen();
+                playGameOverMusic();
+                
+            } else if (!allLost) {
+                loseMessageEl.classList.add('hidden');
+                resetBtn.classList.remove('visible');
+            }
+        }
+
+        function resetHearts() {
+            stopGameOverMusic();
+            isMusicPlaying = false;
+            isGameOver = false;
+            hearts = [true, true, true];
+            updateHeartsUI();
+            loseMessageEl.classList.add('hidden');
+            resetBtn.classList.remove('visible');
+            document.body.classList.remove('shaking');
+            document.querySelectorAll('.damage-text').forEach(el => el.remove());
+        }
+
+        // --- MANEJADOR CLICK CORAZÓN ---
+        function handleHeartClick(e) {
+            if (isGameOver) return;
+            
+            const heartEl = e.currentTarget;
+            const index = parseInt(heartEl.dataset.index, 10);
+            if (!hearts[index]) return;
+
+            hearts[index] = false;
+            updateHeartsUI();
+
+            const rect = heartEl.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+
+            playHurtSound();
+            spawnDamageText(cx, cy);
+            shakeScreen();
+
+            heartEl.style.transform = 'scale(0.7) rotate(-8deg)';
+            setTimeout(() => { heartEl.style.transform = ''; }, 150);
+
+            checkLoseCondition();
+        }
+
+        // --- BUSCADOR YOUTUBE ---
+        function loadYouTubeVideo() {
+            let url = searchInput.value.trim();
+            if (!url) {
+                url = 'https://youtu.be/1n6-WD2s5Ik?si=qbcHMWBxL0xrrBLz';
+                searchInput.value = url;
+            }
+            
+            let videoId = null;
+            let match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&?]+)/);
+            if (match) {
+                videoId = match[1];
+            }
+            match = url.match(/youtube\.com\/embed\/([^&?]+)/);
+            if (match) {
+                videoId = match[1];
+            }
+            
+            if (!videoId) {
+                videoContainer.innerHTML = `
+                    <div style="color: #ff6b7c; text-align: center; padding: 2rem; font-size: 1.2rem;">
+                        ⚠️ URL no válida. Usa formato: https://youtu.be/ID o https://youtube.com/watch?v=ID
+                    </div>
+                `;
+                youtubeResults.classList.add('active');
+                return;
+            }
+            
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=0&rel=0`;
+            
+            videoContainer.innerHTML = `
+                <iframe src="${embedUrl}" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen>
+                </iframe>
+                <div class="video-title">▶ ${videoId}</div>
+            `;
+            youtubeResults.classList.add('active');
+        }
+
+        function closeResults() {
+            youtubeResults.classList.remove('active');
+            videoContainer.innerHTML = '';
+        }
+
+        // --- INICIALIZAR ---
+        function init() {
+            resetHearts();
+
+            heartElements.forEach(el => {
+                el.removeEventListener('click', handleHeartClick);
+                el.addEventListener('click', handleHeartClick);
+            });
+
+            resetBtn.removeEventListener('click', resetHearts);
+            resetBtn.addEventListener('click', resetHearts);
+
+            searchBtn.removeEventListener('click', loadYouTubeVideo);
+            searchBtn.addEventListener('click', loadYouTubeVideo);
+            searchInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') loadYouTubeVideo();
+            });
+            closeResultsBtn.addEventListener('click', closeResults);
+
+            setTimeout(loadYouTubeVideo, 300);
+
+            console.log('❤️ Corazones · GameOver.mp3 (sin fallback)');
+            console.log('📁 Asegúrate de tener el archivo GameOver.mp3 en la misma carpeta');
+        }
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+        window.resetHearts = resetHearts;
+    })();
+</script>
+</body>
+</html>
