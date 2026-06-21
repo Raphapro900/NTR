@@ -670,39 +670,45 @@
         const gameOverOverlay = document.getElementById('gameOverOverlay');
         const goResetBtn = document.getElementById('goResetBtn');
 
-        // --- SONIDO DE CLICK ---
+        // --- SONIDO DE CLICK (GLOBAL) ---
+        let clickAudioCtx = null;
         function playClickSound() {
             try {
-                const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                const now = ctx.currentTime;
+                if (!clickAudioCtx) {
+                    clickAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (clickAudioCtx.state === 'suspended') {
+                    clickAudioCtx.resume();
+                }
+                const now = clickAudioCtx.currentTime;
 
                 // Click corto y agudo
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
+                const osc = clickAudioCtx.createOscillator();
+                const gain = clickAudioCtx.createGain();
                 osc.type = 'square';
                 osc.frequency.setValueAtTime(800, now);
                 osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
-                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.setValueAtTime(0.12, now);
                 gain.gain.exponentialRampToValueAtTime(0.001, now + 0.06);
                 osc.connect(gain);
-                gain.connect(ctx.destination);
+                gain.connect(clickAudioCtx.destination);
                 osc.start(now);
                 osc.stop(now + 0.06);
 
                 // Pequeño ruido de click
-                const bufferSize = ctx.sampleRate * 0.02;
-                const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+                const bufferSize = clickAudioCtx.sampleRate * 0.02;
+                const buffer = clickAudioCtx.createBuffer(1, bufferSize, clickAudioCtx.sampleRate);
                 const data = buffer.getChannelData(0);
                 for (let i = 0; i < bufferSize; i++) {
-                    data[i] = (Math.random() * 2 - 1) * 0.2 * Math.exp(-i / (bufferSize * 0.2));
+                    data[i] = (Math.random() * 2 - 1) * 0.15 * Math.exp(-i / (bufferSize * 0.2));
                 }
-                const noise = ctx.createBufferSource();
+                const noise = clickAudioCtx.createBufferSource();
                 noise.buffer = buffer;
-                const gainNoise = ctx.createGain();
-                gainNoise.gain.setValueAtTime(0.3, now);
+                const gainNoise = clickAudioCtx.createGain();
+                gainNoise.gain.setValueAtTime(0.25, now);
                 gainNoise.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
                 noise.connect(gainNoise);
-                gainNoise.connect(ctx.destination);
+                gainNoise.connect(clickAudioCtx.destination);
                 noise.start(now);
                 noise.stop(now + 0.03);
 
@@ -710,6 +716,15 @@
                 // Silencio si falla
             }
         }
+
+        // --- CLICK GLOBAL EN TODA LA PÁGINA ---
+        document.addEventListener('click', function(e) {
+            // Evitar que el sonido se reproduzca en el game over overlay cuando está oculto
+            // o en el audio (no tiene sentido)
+            if (e.target.closest('#gameOverAudio')) return;
+            // Si el juego está en game over, igual suena click en el overlay
+            playClickSound();
+        });
 
         // --- SONIDO DE DAÑO ---
         function playHurtSound() {
@@ -923,9 +938,6 @@
             const index = parseInt(heartEl.dataset.index, 10);
             if (!hearts[index]) return;
 
-            // Sonido de click
-            playClickSound();
-
             hearts[index] = false;
             updateHeartsUI();
 
@@ -947,7 +959,6 @@
         function loadYouTubeVideo() {
             let url = searchInput.value.trim();
             if (!url) {
-                // Si está vacío, no hacer nada o mostrar mensaje
                 videoContainer.innerHTML = `
                     <div style="color: #ff6b7c; text-align: center; padding: 2rem; font-size: 1.2rem; font-family: 'Segoe UI', Arial, sans-serif;">
                         ⚠️ Por favor, ingresa una URL de YouTube
