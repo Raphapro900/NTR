@@ -3,15 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoTeRias · Corazones</title>
+    <title>NoTeRias · Corazones + VHS 3D</title>
     <link rel="icon" type="image/png" href="Log0.png">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            user-select: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; user-select: none; }
         body {
             background: #0a0a1a;
             min-height: 100vh;
@@ -28,7 +23,7 @@
             animation: shakeWithBlur 0.5s ease-in-out;
         }
         @keyframes shakeWithBlur {
-            0%, 100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
+            0%,100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
             10% { transform: translate(-12px,8px) rotate(-2deg); filter: blur(3px); }
             20% { transform: translate(12px,-8px) rotate(2deg); filter: blur(4px); }
             30% { transform: translate(-8px,12px) rotate(-1.5deg); filter: blur(3px); }
@@ -40,7 +35,6 @@
             90% { transform: translate(-8px,4px) rotate(-0.5deg); filter: blur(2px); }
             100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
         }
-
         .main-container {
             display: flex;
             flex-direction: column;
@@ -50,11 +44,7 @@
             max-width: 850px;
             transition: opacity 0.5s ease, filter 0.5s ease;
         }
-        .main-container.game-over-mode {
-            opacity: 0.1;
-            filter: blur(8px);
-            pointer-events: none;
-        }
+        .main-container.game-over-mode { opacity: 0.1; filter: blur(8px); pointer-events: none; }
 
         .logo-container {
             width: 100%;
@@ -64,14 +54,10 @@
             cursor: pointer;
             position: relative;
         }
-        .logo-container.shaking-logo {
-            animation: logoShakeStrong 0.4s ease-in-out 3;
-        }
-        .logo-container.shaking-loop {
-            animation: logoShakeStrong 0.4s ease-in-out infinite;
-        }
+        .logo-container.shaking-logo { animation: logoShakeStrong 0.4s ease-in-out 3; }
+        .logo-container.shaking-loop { animation: logoShakeStrong 0.4s ease-in-out infinite; }
         @keyframes logoShakeStrong {
-            0%, 100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
+            0%,100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
             10% { transform: translate(-14px,10px) rotate(-3deg); filter: blur(4px); }
             20% { transform: translate(14px,-10px) rotate(3deg); filter: blur(5px); }
             30% { transform: translate(-10px,14px) rotate(-2.5deg); filter: blur(4px); }
@@ -83,7 +69,6 @@
             90% { transform: translate(-10px,6px) rotate(-1.5deg); filter: blur(3px); }
             100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
         }
-
         .logo-text {
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
             font-size: 5rem;
@@ -98,12 +83,8 @@
             display: inline-block;
             transition: transform 0.15s ease, filter 0.3s ease;
         }
-        .logo-text:hover {
-            transform: scale(1.02);
-        }
-        .logo-text:active {
-            transform: scale(0.95);
-        }
+        .logo-text:hover { transform: scale(1.02); }
+        .logo-text:active { transform: scale(0.95); }
         .logo-text::after {
             content: '';
             position: absolute;
@@ -120,7 +101,6 @@
             background: linear-gradient(90deg, transparent, #ff6b7c, #ff2b4f, #ff6b7c, transparent);
             width: 60%;
         }
-
         .logo-sub {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             font-size: 1rem;
@@ -130,10 +110,7 @@
             text-transform: uppercase;
             transition: all 0.3s ease;
         }
-        .logo-sub.switched {
-            color: #ff6b7c44;
-            letter-spacing: 4px;
-        }
+        .logo-sub.switched { color: #ff6b7c44; letter-spacing: 4px; }
 
         .credits {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
@@ -148,11 +125,7 @@
             max-width: 500px;
             transition: all 0.3s ease;
         }
-        .credits.switched {
-            color: #ff6b7c66;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
+        .credits.switched { color: #ff6b7c66; font-size: 0.9rem; letter-spacing: 1px; }
         .credits span { color: #ff6b7c66; }
         .credits.switched span { color: #ff6b7caa; }
 
@@ -170,12 +143,7 @@
             text-transform: uppercase;
             box-shadow: 0 0 20px rgba(255,43,79,0.1);
         }
-        .how-to-play-btn:hover {
-            background: #ff6b7c22;
-            border-color: #ff6b7c;
-            box-shadow: 0 0 40px rgba(255,43,79,0.2);
-            transform: scale(1.02);
-        }
+        .how-to-play-btn:hover { background: #ff6b7c22; border-color: #ff6b7c; box-shadow: 0 0 40px rgba(255,43,79,0.2); transform: scale(1.02); }
         .how-to-play-btn.switched {
             font-size: 1.3rem;
             border-color: #ff6b7c88;
@@ -211,21 +179,13 @@
             letter-spacing: 2px;
             box-shadow: 0 4px 0 #1a2a88, 0 8px 25px rgba(43,79,255,0.25);
         }
-        .multiplayer-btn:hover {
-            background: linear-gradient(135deg, #7c8cff, #3848ee);
-            transform: scale(1.02);
-        }
-        .multiplayer-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #1a2a88;
-        }
+        .multiplayer-btn:hover { background: linear-gradient(135deg, #7c8cff, #3848ee); transform: scale(1.02); }
+        .multiplayer-btn:active { transform: translateY(4px); box-shadow: 0 0px 0 #1a2a88; }
         .multiplayer-btn.active {
             background: linear-gradient(135deg, #ff3b5c, #dd0028);
             box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.25);
         }
-        .multiplayer-btn.active:hover {
-            background: linear-gradient(135deg, #ff4f6e, #ee0038);
-        }
+        .multiplayer-btn.active:hover { background: linear-gradient(135deg, #ff4f6e, #ee0038); }
 
         .exit-mp-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
@@ -241,16 +201,9 @@
             letter-spacing: 2px;
             display: none;
         }
-        .exit-mp-btn:hover {
-            border-color: #ff6b7c88;
-            color: #ff6b7caa;
-            background: #ff6b7c11;
-        }
-        .exit-mp-btn.visible {
-            display: inline-block;
-        }
+        .exit-mp-btn:hover { border-color: #ff6b7c88; color: #ff6b7caa; background: #ff6b7c11; }
+        .exit-mp-btn.visible { display: inline-block; }
 
-        /* === CORAZONES === */
         .heart-counter {
             background: rgba(26,26,46,0.85);
             backdrop-filter: blur(6px);
@@ -289,19 +242,9 @@
             transform: scale(1);
             position: relative;
         }
-        .heart:hover {
-            transform: scale(1.12);
-            filter: drop-shadow(0 0 22px #ff3b5c);
-        }
-        .heart:active {
-            transform: scale(0.85);
-        }
-        .heart.lost {
-            cursor: default;
-            transform: scale(0.92);
-            pointer-events: none;
-            opacity: 0.4;
-        }
+        .heart:hover { transform: scale(1.12); filter: drop-shadow(0 0 22px #ff3b5c); }
+        .heart:active { transform: scale(0.85); }
+        .heart.lost { cursor: default; transform: scale(0.92); pointer-events: none; opacity: 0.4; }
         .heart.breaking {
             animation: breakHeart 1.2s ease-out forwards;
             pointer-events: none !important;
@@ -313,7 +256,6 @@
             75% { transform: scale(1.8) rotate(-5deg) translateY(-40px); opacity: 0.8; }
             100% { transform: scale(2.5) rotate(20deg) translateY(-80px); opacity: 0; }
         }
-
         .reset-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             background: #ff3b5c;
@@ -336,15 +278,8 @@
             display: none;
         }
         .reset-btn.visible { display: block; }
-        .reset-btn:hover {
-            background: #ff4f6e;
-            transform: scale(1.03);
-            box-shadow: 0 6px 0 #881a2a, 0 15px 35px #000000dd;
-        }
-        .reset-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
-        }
+        .reset-btn:hover { background: #ff4f6e; transform: scale(1.03); box-shadow: 0 6px 0 #881a2a, 0 15px 35px #000000dd; }
+        .reset-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000; }
 
         .color-picker-container {
             display: flex;
@@ -361,15 +296,9 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .color-picker-container .color-btn:hover {
-            transform: scale(1.15);
-        }
-        .color-picker-container .color-btn.active {
-            border-color: #ffffff;
-            box-shadow: 0 0 20px rgba(255,255,255,0.3);
-        }
+        .color-picker-container .color-btn:hover { transform: scale(1.15); }
+        .color-picker-container .color-btn.active { border-color: #ffffff; box-shadow: 0 0 20px rgba(255,255,255,0.3); }
 
-        /* === MODO 2 JUGADORES === */
         .players-container {
             display: none;
             gap: 2rem;
@@ -378,9 +307,7 @@
             justify-content: center;
             margin-top: 0.5rem;
         }
-        .players-container.active {
-            display: flex;
-        }
+        .players-container.active { display: flex; }
         .player-card {
             flex: 1;
             min-width: 280px;
@@ -415,19 +342,9 @@
             filter: drop-shadow(0 8px 12px #00000077);
             transform: scale(1);
         }
-        .player-card .heart:hover {
-            transform: scale(1.12);
-            filter: drop-shadow(0 0 22px currentColor);
-        }
-        .player-card .heart:active {
-            transform: scale(0.85);
-        }
-        .player-card .heart.lost {
-            cursor: default;
-            transform: scale(0.92);
-            pointer-events: none;
-            opacity: 0.4;
-        }
+        .player-card .heart:hover { transform: scale(1.12); filter: drop-shadow(0 0 22px currentColor); }
+        .player-card .heart:active { transform: scale(0.85); }
+        .player-card .heart.lost { cursor: default; transform: scale(0.92); pointer-events: none; opacity: 0.4; }
         .player-card .heart.breaking {
             animation: breakHeart 1.2s ease-out forwards;
             pointer-events: none !important;
@@ -454,14 +371,8 @@
             display: none;
         }
         .player-card .reset-btn.visible { display: block; }
-        .player-card .reset-btn:hover {
-            background: #ff4f6e;
-            transform: scale(1.03);
-        }
-        .player-card .reset-btn:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #881a2a;
-        }
+        .player-card .reset-btn:hover { background: #ff4f6e; transform: scale(1.03); }
+        .player-card .reset-btn:active { transform: translateY(4px); box-shadow: 0 0px 0 #881a2a; }
         .player-card .player-status {
             text-align: center;
             font-size: 0.9rem;
@@ -496,15 +407,9 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .player-card .color-picker-container .color-btn:hover {
-            transform: scale(1.15);
-        }
-        .player-card .color-picker-container .color-btn.active {
-            border-color: #ffffff;
-            box-shadow: 0 0 20px rgba(255,255,255,0.3);
-        }
+        .player-card .color-picker-container .color-btn:hover { transform: scale(1.15); }
+        .player-card .color-picker-container .color-btn.active { border-color: #ffffff; box-shadow: 0 0 20px rgba(255,255,255,0.3); }
 
-        /* === REPRODUCTOR PERSONALIZADO (SIN VHS) === */
         .custom-player {
             width: 100%;
             background: rgba(26,26,46,0.7);
@@ -543,15 +448,12 @@
             gap: 0.5rem;
             background: #0a0a1a;
         }
-        .custom-player .player-container .placeholder .icon {
-            font-size: 4rem;
-        }
+        .custom-player .player-container .placeholder .icon { font-size: 4rem; }
         .custom-player .player-container .placeholder .msg {
             font-size: 1.1rem;
             color: #ff6b7c66;
             letter-spacing: 2px;
         }
-
         .player-controls {
             display: flex;
             gap: 0.8rem;
@@ -594,21 +496,14 @@
             letter-spacing: 1.5px;
             box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.25);
         }
-        .player-controls button:hover {
-            background: linear-gradient(135deg, #ff4f6e, #ee0038);
-            transform: scale(1.02);
-        }
-        .player-controls button:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #881a2a;
-        }
+        .player-controls button:hover { background: linear-gradient(135deg, #ff4f6e, #ee0038); transform: scale(1.02); }
+        .player-controls button:active { transform: translateY(4px); box-shadow: 0 0px 0 #881a2a; }
         .player-controls button.switched {
             background: linear-gradient(135deg, #ff6b7c, #ff2b4f);
             font-size: 1.1rem;
             animation: btnPulse 1s ease-in-out infinite alternate;
         }
 
-        /* === TUTORIAL POPUP (contenido normal) === */
         .tutorial-popup {
             position: fixed;
             top: 0;
@@ -666,20 +561,10 @@
             letter-spacing: 2px;
             box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.2);
         }
-        .tutorial-popup .tutorial-content .close-tutorial:hover {
-            background: #ff4f6e;
-            transform: scale(1.02);
-        }
-        .tutorial-popup .tutorial-content .close-tutorial:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #881a2a;
-        }
-        .tutorial-popup .tutorial-content .tutorial-icon {
-            font-size: 4rem;
-            margin-bottom: 0.5rem;
-        }
+        .tutorial-popup .tutorial-content .close-tutorial:hover { background: #ff4f6e; transform: scale(1.02); }
+        .tutorial-popup .tutorial-content .close-tutorial:active { transform: translateY(4px); box-shadow: 0 0px 0 #881a2a; }
+        .tutorial-popup .tutorial-content .tutorial-icon { font-size: 4rem; margin-bottom: 0.5rem; }
 
-        /* === OVERLAY VHS 3D (se abre con "Cómo jugar") === */
         .vhs-overlay {
             position: fixed;
             top: 0;
@@ -691,9 +576,7 @@
             z-index: 60000;
             overflow: hidden;
         }
-        .vhs-overlay.active {
-            display: block;
-        }
+        .vhs-overlay.active { display: block; }
         .vhs-overlay #vhsCanvas {
             width: 100%;
             height: 100%;
@@ -717,11 +600,7 @@
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
         }
-        .vhs-overlay #vhsExit:hover {
-            background: rgba(255,43,79,0.25);
-            border-color: #ff6b7c88;
-            color: #ff6b7c;
-        }
+        .vhs-overlay #vhsExit:hover { background: rgba(255,43,79,0.25); border-color: #ff6b7c88; color: #ff6b7c; }
         .vhs-overlay #vhsCrosshair {
             position: fixed;
             top: 50%;
@@ -786,9 +665,7 @@
             opacity: 0;
             transition: opacity 0.4s ease;
         }
-        .vhs-overlay .vhs-message.show {
-            opacity: 1;
-        }
+        .vhs-overlay .vhs-message.show { opacity: 1; }
 
         .game-over-overlay {
             position: fixed;
@@ -811,7 +688,6 @@
             60% { opacity: 1; background: #0a0005; }
             100% { opacity: 1; background: #0a0005; }
         }
-
         .game-over-overlay .go-text {
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
             font-size: 6rem;
@@ -840,7 +716,6 @@
             0% { opacity: 0.3; width: 100px; }
             100% { opacity: 1; width: 300px; }
         }
-
         .game-over-overlay .go-sub {
             font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
             font-size: 1.8rem;
@@ -857,7 +732,7 @@
             animation: textShake 0.15s ease-in-out infinite;
         }
         @keyframes textShake {
-            0%, 100% { transform: translate(0,0) rotate(0deg); }
+            0%,100% { transform: translate(0,0) rotate(0deg); }
             20% { transform: translate(-4px,3px) rotate(-1deg); }
             40% { transform: translate(4px,-3px) rotate(1deg); }
             60% { transform: translate(-3px,4px) rotate(-0.5deg); }
@@ -865,7 +740,6 @@
         }
         @keyframes goSubFade { 0% { opacity: 0; } 100% { opacity: 1; } }
         @keyframes goSubPulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
-
         .game-over-overlay .go-reset-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             background: #ff3b5c;
@@ -890,15 +764,8 @@
             0% { transform: translateY(200px); opacity: 0; }
             100% { transform: translateY(0); opacity: 1; }
         }
-        .game-over-overlay .go-reset-btn:hover {
-            background: #ff4f6e;
-            transform: scale(1.05);
-            box-shadow: 0 8px 0 #881a2a, 0 15px 35px #000000dd;
-        }
-        .game-over-overlay .go-reset-btn:active {
-            transform: translateY(6px);
-            box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
-        }
+        .game-over-overlay .go-reset-btn:hover { background: #ff4f6e; transform: scale(1.05); box-shadow: 0 8px 0 #881a2a, 0 15px 35px #000000dd; }
+        .game-over-overlay .go-reset-btn:active { transform: translateY(6px); box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000; }
         body.game-over-active { overflow: hidden; }
 
         @media (max-width: 650px) {
@@ -941,23 +808,7 @@
     <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
-<!-- TUTORIAL POPUP (texto normal) -->
-<div class="tutorial-popup" id="tutorialPopup">
-    <div class="tutorial-content">
-        <div class="tutorial-icon">🎮</div>
-        <h2 id="tutorialTitle">Cómo jugar</h2>
-        <p id="tutorialText">
-            <strong>🎯 Objetivo:</strong> Los dos jugadores tienen 3 corazones. El que pierda todos sus corazones primero, pierde.<br><br>
-            <strong>❤️ Corazones:</strong> Haz clic en un corazón para perderlo. Cada jugador tiene su propio color.<br><br>
-            <strong>🎨 Colores:</strong> Cada jugador puede cambiar el color de sus corazones con los botones de abajo.<br><br>
-            <strong>🔄 Reiniciar:</strong> Si pierdes todos tus corazones, presiona "Reiniciar" para volver a empezar.<br><br>
-            <strong>🎬 YouTube:</strong> Pega el link de un video de YouTube y presiona "Cargar" para verlo.
-        </p>
-        <button class="close-tutorial" id="closeTutorialBtn">✕ Entendido</button>
-    </div>
-</div>
-
-<!-- OVERLAY VHS 3D (se abre con "Cómo jugar") -->
+<!-- VHS OVERLAY -->
 <div class="vhs-overlay" id="vhsOverlay">
     <canvas id="vhsCanvas"></canvas>
     <div id="vhsCrosshair">+</div>
@@ -968,7 +819,6 @@
 </div>
 
 <div class="main-container" id="mainContainer">
-    <!-- LOGO -->
     <div class="logo-container" id="logoContainer">
         <div class="logo-text" id="logoText">NoTeRias</div>
         <div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div>
@@ -980,7 +830,6 @@
         <button class="exit-mp-btn" id="exitMpBtn">🚪 Salir 2P</button>
     </div>
 
-    <!-- CORAZONES -->
     <div class="heart-counter" id="heartCounter">
         <div class="player-label" id="playerLabel">👤 TÚ</div>
         <div class="hearts-container" id="heartsContainer">
@@ -998,7 +847,6 @@
         <button id="resetBtn" class="reset-btn">⟳ Volver a intentar</button>
     </div>
 
-    <!-- MODO 2 JUGADORES -->
     <div class="players-container" id="playersContainer">
         <div class="player-card" id="player1Card">
             <div class="player-label" id="player1Label">👤 JUGADOR 1</div>
@@ -1036,7 +884,6 @@
         </div>
     </div>
 
-    <!-- REPRODUCTOR PERSONALIZADO (SIN VHS) -->
     <div class="custom-player" id="customPlayer">
         <div class="player-container" id="playerContainer">
             <div id="playerPlaceholder" class="placeholder">
@@ -1069,6 +916,10 @@
 <audio id="shhAudio" preload="auto"><source src="Shh.mp3" type="audio/mpeg"></audio>
 <audio id="xddAudio" preload="auto"><source src="XDD.mp3" type="audio/mpeg"></audio>
 
+<!-- THREE.JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+
 <script>
     (function() {
         // ============================================================
@@ -1088,7 +939,7 @@
         };
 
         // ============================================================
-        // DOM PRINCIPAL
+        // DOM
         // ============================================================
         const logoContainer = document.getElementById('logoContainer');
         const logoText = document.getElementById('logoText');
@@ -1122,11 +973,6 @@
         const playerIframe = document.getElementById('playerIframe');
         const playerPlaceholder = document.getElementById('playerPlaceholder');
         const playerPlaceholderMsg = document.getElementById('playerPlaceholderMsg');
-
-        const tutorialPopup = document.getElementById('tutorialPopup');
-        const closeTutorialBtn = document.getElementById('closeTutorialBtn');
-        const tutorialTitle = document.getElementById('tutorialTitle');
-        const tutorialText = document.getElementById('tutorialText');
 
         const colorBtns = document.querySelectorAll('#colorPicker .color-btn');
 
@@ -1179,594 +1025,7 @@
         }
 
         // ============================================================
-        // TUTORIAL (texto normal)
-        // ============================================================
-        function openTutorial() {
-            const isLaugh = logoState === 1;
-            if (isLaugh) {
-                tutorialTitle.textContent = 'Como reírse AJAJAJAJA';
-                tutorialText.innerHTML = `
-                    <strong>🎯 Objetivo:</strong> Los dos jugadores tienen 3 corazones. El que pierda todos sus corazones primero, pierde.<br><br>
-                    <strong>😂 Corazones:</strong> Haz clic en un corazón para perderlo. Cada jugador tiene su propio color.<br><br>
-                    <strong>🎨 Colores:</strong> Cada jugador puede cambiar el color de sus corazones con los botones de abajo.<br><br>
-                    <strong>🔄 Reiniciar:</strong> Si pierdes todos tus corazones, presiona "Reiniciar" para volver a empezar.<br><br>
-                    <strong>🎬 YouTube:</strong> Pega el link de un video de YouTube y presiona "JAJAJA" para verlo.<br><br>
-                    <strong>🤣 Modo Ríe:</strong> Presiona el logo "NoTeRias" para cambiarlo a "Ríe" y activar el modo de risa.
-                `;
-            } else {
-                tutorialTitle.textContent = 'Cómo jugar';
-                tutorialText.innerHTML = `
-                    <strong>🎯 Objetivo:</strong> Los dos jugadores tienen 3 corazones. El que pierda todos sus corazones primero, pierde.<br><br>
-                    <strong>❤️ Corazones:</strong> Haz clic en un corazón para perderlo. Cada jugador tiene su propio color.<br><br>
-                    <strong>🎨 Colores:</strong> Cada jugador puede cambiar el color de sus corazones con los botones de abajo.<br><br>
-                    <strong>🔄 Reiniciar:</strong> Si pierdes todos tus corazones, presiona "Reiniciar" para volver a empezar.<br><br>
-                    <strong>🎬 YouTube:</strong> Pega el link de un video de YouTube y presiona "Cargar" para verlo.
-                `;
-            }
-            tutorialPopup.classList.add('active');
-        }
-
-        function closeTutorial() {
-            tutorialPopup.classList.remove('active');
-        }
-
-        howToPlayBtn.addEventListener('click', function() {
-            // Abrir el VHS 3D en lugar del tutorial de texto
-            openVHS();
-        });
-
-        closeTutorialBtn.addEventListener('click', closeTutorial);
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && tutorialPopup.classList.contains('active')) {
-                closeTutorial();
-            }
-        });
-
-        // ============================================================
-        // VHS 3D
-        // ============================================================
-        let vhsInitialized = false;
-        let vhsScene, vhsCamera, vhsRenderer;
-        let vhsVideoElement = null;
-        let vhsVideoTexture = null;
-        let vhsHasVHS = false;
-        let vhsIsWatching = false;
-        let vhsPlayerPos = new THREE.Vector3(0, 1.7, 5);
-        let vhsPlayerRot = 0;
-        let vhsPitch = 0;
-        let vhsTargetPitch = 0;
-        let vhsIsLocked = false;
-        let vhsMouseX = 0;
-        let vhsMouseY = 0;
-        let vhsKeys = { w: false, a: false, s: false, d: false };
-        let vhsMessageTimeout = null;
-
-        const vhsSpeed = 0.06;
-
-        function showVHSMessage(text) {
-            if (vhsMessageTimeout) clearTimeout(vhsMessageTimeout);
-            vhsMessage.textContent = text;
-            vhsMessage.classList.add('show');
-            vhsMessageTimeout = setTimeout(() => {
-                vhsMessage.classList.remove('show');
-            }, 2000);
-        }
-
-        function initVHS() {
-            if (vhsInitialized) return;
-            vhsInitialized = true;
-
-            const canvas = document.getElementById('vhsCanvas');
-            const container = document.getElementById('vhsOverlay');
-
-            // Escena
-            vhsScene = new THREE.Scene();
-            vhsScene.background = new THREE.Color(0x000000);
-            vhsScene.fog = new THREE.Fog(0x000000, 10, 30);
-
-            // Cámara
-            vhsCamera = new THREE.PerspectiveCamera(70, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
-            vhsCamera.position.set(0, 1.7, 5);
-
-            // Renderer
-            vhsRenderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-            vhsRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
-            vhsRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            vhsRenderer.shadowMap.enabled = true;
-            vhsRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
-            vhsRenderer.toneMapping = THREE.ACESFilmicToneMapping;
-            vhsRenderer.toneMappingExposure = 1.2;
-
-            // Luces
-            const ambientLight = new THREE.AmbientLight(0x222244, 0.3);
-            vhsScene.add(ambientLight);
-
-            const pointLight = new THREE.PointLight(0xff6b7c, 1.5, 15);
-            pointLight.position.set(0, 4, 2);
-            vhsScene.add(pointLight);
-
-            const pointLight2 = new THREE.PointLight(0x4466ff, 0.5, 10);
-            pointLight2.position.set(-3, 2, -1);
-            vhsScene.add(pointLight2);
-
-            const pointLight3 = new THREE.PointLight(0x4422aa, 0.3, 8);
-            pointLight3.position.set(3, 1, -2);
-            vhsScene.add(pointLight3);
-
-            const tvLight = new THREE.PointLight(0x8888ff, 0.5, 8);
-            tvLight.position.set(0, 1.5, 0);
-            vhsScene.add(tvLight);
-
-            // Suelo
-            const floorGeometry = new THREE.PlaneGeometry(20, 20);
-            const floorMaterial = new THREE.MeshStandardMaterial({
-                color: 0x0a0a0a,
-                roughness: 0.9,
-                metalness: 0.1,
-                side: THREE.DoubleSide
-            });
-            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-            floor.rotation.x = -Math.PI / 2;
-            floor.position.y = -0.5;
-            floor.receiveShadow = true;
-            vhsScene.add(floor);
-
-            // Paredes
-            function createWallVHS(width, height, posX, posY, posZ, rotY = 0) {
-                const geo = new THREE.PlaneGeometry(width, height);
-                const mat = new THREE.MeshStandardMaterial({
-                    color: 0x0a0a12,
-                    roughness: 0.8,
-                    metalness: 0.2,
-                    side: THREE.DoubleSide
-                });
-                const mesh = new THREE.Mesh(geo, mat);
-                mesh.position.set(posX, posY, posZ);
-                mesh.rotation.y = rotY;
-                mesh.receiveShadow = true;
-                vhsScene.add(mesh);
-                return mesh;
-            }
-            createWallVHS(12, 4, 0, 1.5, -6, 0);
-            createWallVHS(12, 4, 0, 1.5, 6, Math.PI);
-            createWallVHS(12, 4, -6, 1.5, 0, Math.PI / 2);
-            createWallVHS(12, 4, 6, 1.5, 0, -Math.PI / 2);
-
-            // Televisión
-            const tvGroup = new THREE.Group();
-            tvGroup.position.set(0, 1.2, -2.5);
-
-            const tvBodyGeo = new THREE.BoxGeometry(2.2, 1.8, 0.6);
-            const tvBodyMat = new THREE.MeshStandardMaterial({
-                color: 0x1a1a2a,
-                roughness: 0.6,
-                metalness: 0.4,
-                emissive: 0x0a0a1a,
-                emissiveIntensity: 0.1
-            });
-            const tvBody = new THREE.Mesh(tvBodyGeo, tvBodyMat);
-            tvBody.position.z = 0;
-            tvBody.castShadow = true;
-            tvGroup.add(tvBody);
-
-            const screenGeo = new THREE.PlaneGeometry(1.8, 1.35);
-            const screenMat = new THREE.MeshStandardMaterial({
-                color: 0x0a0a1a,
-                emissive: 0x111133,
-                emissiveIntensity: 0.2,
-                roughness: 0.3,
-                metalness: 0.1
-            });
-            const screen = new THREE.Mesh(screenGeo, screenMat);
-            screen.position.set(0, 0.05, 0.31);
-            tvGroup.add(screen);
-
-            const frameMat = new THREE.MeshStandardMaterial({ color: 0x222244, roughness: 0.5, metalness: 0.3 });
-            const frameGeo = new THREE.BoxGeometry(1.85, 0.04, 0.05);
-            const frameTop = new THREE.Mesh(frameGeo, frameMat);
-            frameTop.position.set(0, 0.68, 0.31);
-            tvGroup.add(frameTop);
-            const frameBottom = new THREE.Mesh(frameGeo, frameMat);
-            frameBottom.position.set(0, -0.68, 0.31);
-            tvGroup.add(frameBottom);
-            const frameLeft = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.35, 0.05), frameMat);
-            frameLeft.position.set(-0.91, 0.05, 0.31);
-            tvGroup.add(frameLeft);
-            const frameRight = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.35, 0.05), frameMat);
-            frameRight.position.set(0.91, 0.05, 0.31);
-            tvGroup.add(frameRight);
-
-            const powerBtnGeo = new THREE.SphereGeometry(0.05, 8, 8);
-            const powerBtnMat = new THREE.MeshStandardMaterial({
-                color: 0x44ff44,
-                emissive: 0x44ff44,
-                emissiveIntensity: 0.5
-            });
-            const powerBtn = new THREE.Mesh(powerBtnGeo, powerBtnMat);
-            powerBtn.position.set(0.5, -0.5, 0.35);
-            tvGroup.add(powerBtn);
-
-            const baseGeo = new THREE.BoxGeometry(1.2, 0.1, 0.4);
-            const baseMat = new THREE.MeshStandardMaterial({ color: 0x111122, roughness: 0.8 });
-            const base = new THREE.Mesh(baseGeo, baseMat);
-            base.position.set(0, -0.95, 0);
-            tvGroup.add(base);
-
-            const legMat = new THREE.MeshStandardMaterial({ color: 0x222244, metalness: 0.5, roughness: 0.3 });
-            const legPositions = [[-0.4, -1.0, 0.2], [0.4, -1.0, 0.2], [-0.4, -1.0, -0.2], [0.4, -1.0, -0.2]];
-            legPositions.forEach(pos => {
-                const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.1, 6), legMat);
-                leg.position.set(pos[0], pos[1], pos[2]);
-                tvGroup.add(leg);
-            });
-
-            vhsScene.add(tvGroup);
-            const tvScreen = screen;
-
-            // Sistema de video de la TV
-            let vhsVideoElement = null;
-            let vhsVideoTexture = null;
-            let vhsIsPlaying = false;
-
-            function createVideoElement(src, loop = true) {
-                const video = document.createElement('video');
-                video.src = src;
-                video.crossOrigin = 'anonymous';
-                video.playsInline = true;
-                video.muted = false;
-                video.loop = loop;
-                video.volume = 0.5;
-                return video;
-            }
-
-            function setTVScreen(video) {
-                if (vhsVideoTexture) {
-                    vhsVideoTexture.dispose();
-                }
-                vhsVideoTexture = new THREE.VideoTexture(video);
-                vhsVideoTexture.minFilter = THREE.LinearFilter;
-                vhsVideoTexture.magFilter = THREE.LinearFilter;
-
-                tvScreen.material = new THREE.MeshStandardMaterial({
-                    map: vhsVideoTexture,
-                    emissive: new THREE.Color(0x4488ff),
-                    emissiveIntensity: 0.3,
-                    roughness: 0.2,
-                    metalness: 0.1,
-                    side: THREE.DoubleSide
-                });
-
-                tvLight.intensity = 1.5;
-                vhsIsPlaying = true;
-            }
-
-            function playScreenLoop() {
-                if (vhsVideoElement) {
-                    vhsVideoElement.pause();
-                    vhsVideoElement.currentTime = 0;
-                    vhsVideoElement = null;
-                }
-                vhsVideoElement = createVideoElement('Screen.mp4', true);
-                setTVScreen(vhsVideoElement);
-                vhsVideoElement.play().catch(() => {});
-            }
-
-            function playNoIn() {
-                if (vhsVideoElement) {
-                    vhsVideoElement.pause();
-                    vhsVideoElement.currentTime = 0;
-                    vhsVideoElement = null;
-                }
-                vhsVideoElement = createVideoElement('NoIn.mp4', false);
-                setTVScreen(vhsVideoElement);
-                vhsVideoElement.addEventListener('ended', function onEnd() {
-                    vhsVideoElement.removeEventListener('ended', onEnd);
-                    playScreenLoop();
-                });
-                vhsVideoElement.play().catch(() => { playScreenLoop(); });
-            }
-
-            function playTutorial() {
-                if (vhsVideoElement) {
-                    vhsVideoElement.pause();
-                    vhsVideoElement.currentTime = 0;
-                    vhsVideoElement = null;
-                }
-                vhsVideoElement = createVideoElement('Tutoriall.mp4', false);
-                setTVScreen(vhsVideoElement);
-                vhsVideoElement.addEventListener('ended', function onEnd() {
-                    vhsVideoElement.removeEventListener('ended', onEnd);
-                    playScreenLoop();
-                    vhsIsWatching = false;
-                    document.getElementById('vhsCrosshair').style.display = 'block';
-                });
-                vhsVideoElement.play().catch(() => { playScreenLoop(); });
-            }
-
-            setTimeout(() => { playScreenLoop(); }, 500);
-
-            // Cinta VHS en el suelo
-            const vhsGroup = new THREE.Group();
-            vhsGroup.position.set(1.5, 0.1, -1.5);
-
-            const tapeMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2a, roughness: 0.7, metalness: 0.2 });
-            const tapeBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.25, 0.6), tapeMat);
-            tapeBody.castShadow = true;
-            vhsGroup.add(tapeBody);
-
-            const labelMat = new THREE.MeshStandardMaterial({ color: 0x222244, roughness: 0.5, emissive: 0x111133, emissiveIntensity: 0.1 });
-            const label = new THREE.Mesh(new THREE.PlaneGeometry(0.25, 0.1), labelMat);
-            label.position.set(0, 0.13, 0.31);
-            vhsGroup.add(label);
-
-            const windowMat = new THREE.MeshStandardMaterial({ color: 0x0a0a1a, roughness: 0.1, metalness: 0.3, emissive: 0x222244, emissiveIntensity: 0.1 });
-            const windowMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.15, 0.08), windowMat);
-            windowMesh.position.set(0, 0.0, 0.31);
-            vhsGroup.add(windowMesh);
-
-            const coilMat = new THREE.MeshStandardMaterial({ color: 0x333355, roughness: 0.3, metalness: 0.5 });
-            const coilPos = [[-0.08, 0, 0.3], [0.08, 0, 0.3]];
-            coilPos.forEach(pos => {
-                const coil = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.02, 8), coilMat);
-                coil.rotation.x = Math.PI / 2;
-                coil.position.set(pos[0], pos[1], pos[2]);
-                vhsGroup.add(coil);
-            });
-
-            vhsScene.add(vhsGroup);
-
-            // Cinta en la mano
-            const handVHSGroup = new THREE.Group();
-            handVHSGroup.position.set(0.4, -0.3, -0.6);
-            handVHSGroup.scale.set(0.5, 0.5, 0.5);
-            handVHSGroup.rotation.x = 0.2;
-            handVHSGroup.rotation.z = -0.3;
-            handVHSGroup.visible = false;
-
-            const handTapeBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.25, 0.6), tapeMat);
-            handTapeBody.castShadow = true;
-            handVHSGroup.add(handTapeBody);
-            const handLabel = new THREE.Mesh(new THREE.PlaneGeometry(0.25, 0.1), labelMat);
-            handLabel.position.set(0, 0.13, 0.31);
-            handVHSGroup.add(handLabel);
-            const handWindow = new THREE.Mesh(new THREE.PlaneGeometry(0.15, 0.08), windowMat);
-            handWindow.position.set(0, 0.0, 0.31);
-            handVHSGroup.add(handWindow);
-            const handCoilPos = [[-0.08, 0, 0.3], [0.08, 0, 0.3]];
-            handCoilPos.forEach(pos => {
-                const coil = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.02, 8), coilMat);
-                coil.rotation.x = Math.PI / 2;
-                coil.position.set(pos[0], pos[1], pos[2]);
-                handVHSGroup.add(coil);
-            });
-
-            vhsCamera.add(handVHSGroup);
-            vhsScene.add(vhsCamera);
-
-            // Raycaster para interacción
-            const raycaster = new THREE.Raycaster();
-            const pointer = new THREE.Vector2();
-
-            // Eventos del VHS
-            function handleVHSClick(e) {
-                if (vhsIsWatching) return;
-
-                const rect = vhsRenderer.domElement.getBoundingClientRect();
-                pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-                pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-                raycaster.setFromCamera(pointer, vhsCamera);
-
-                const vhsIntersects = raycaster.intersectObject(vhsGroup, true);
-                if (vhsIntersects.length > 0 && !vhsHasVHS) {
-                    vhsHasVHS = true;
-                    vhsScene.remove(vhsGroup);
-                    handVHSGroup.visible = true;
-                    showVHSMessage('📼 Cinta recogida');
-                    return;
-                }
-
-                const tvIntersects = raycaster.intersectObject(tvGroup, true);
-                if (tvIntersects.length > 0) {
-                    if (vhsHasVHS) {
-                        showVHSMessage('📺 Reproduciendo...');
-                        playTutorial();
-                        vhsIsWatching = true;
-                        document.getElementById('vhsCrosshair').style.display = 'none';
-                        handVHSGroup.visible = false;
-                    } else {
-                        showVHSMessage('📺 Sin cinta');
-                        playNoIn();
-                    }
-                    return;
-                }
-            }
-
-            vhsRenderer.domElement.addEventListener('click', handleVHSClick);
-
-            // Teclas del VHS
-            document.addEventListener('keydown', (e) => {
-                const key = e.key.toLowerCase();
-                if (vhsOverlay.classList.contains('active')) {
-                    if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
-                        vhsKeys[key] = true;
-                        e.preventDefault();
-                    }
-                    if (e.key === 'Escape' && vhsIsWatching) {
-                        vhsIsWatching = false;
-                        document.getElementById('vhsCrosshair').style.display = 'block';
-                        if (vhsVideoElement) {
-                            vhsVideoElement.pause();
-                            vhsVideoElement.currentTime = 0;
-                            vhsVideoElement = null;
-                        }
-                        playScreenLoop();
-                        if (vhsHasVHS) {
-                            handVHSGroup.visible = true;
-                        }
-                    }
-                }
-            });
-
-            document.addEventListener('keyup', (e) => {
-                const key = e.key.toLowerCase();
-                if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
-                    vhsKeys[key] = false;
-                    e.preventDefault();
-                }
-            });
-
-            // Mouse lock del VHS
-            vhsRenderer.domElement.addEventListener('click', () => {
-                if (!vhsIsLocked && !vhsIsWatching && vhsOverlay.classList.contains('active')) {
-                    vhsRenderer.domElement.requestPointerLock();
-                }
-            });
-
-            document.addEventListener('pointerlockchange', () => {
-                vhsIsLocked = document.pointerLockElement === vhsRenderer.domElement;
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                if (vhsIsLocked && !vhsIsWatching && vhsOverlay.classList.contains('active')) {
-                    vhsMouseX += e.movementX * 0.002;
-                    vhsMouseY -= e.movementY * 0.002;
-                    vhsMouseY = Math.max(-1.0, Math.min(1.0, vhsMouseY));
-                }
-            });
-
-            // Animación del VHS
-            let vhsStartTime = Date.now();
-
-            function animateVHS() {
-                if (!vhsOverlay.classList.contains('active')) {
-                    requestAnimationFrame(animateVHS);
-                    return;
-                }
-
-                requestAnimationFrame(animateVHS);
-
-                const now = Date.now();
-                const delta = Math.min((now - vhsStartTime) / 16.67, 3);
-                vhsStartTime = now;
-
-                if (!vhsIsWatching) {
-                    if (vhsIsLocked) {
-                        vhsPlayerRot += vhsMouseX * 0.5;
-                        vhsMouseX = 0;
-                        vhsTargetPitch = vhsMouseY * 0.6;
-                    }
-
-                    vhsPitch += (vhsTargetPitch - vhsPitch) * 0.12;
-
-                    const forward = new THREE.Vector3(-Math.sin(vhsPlayerRot), 0, -Math.cos(vhsPlayerRot));
-                    const right = new THREE.Vector3(Math.cos(vhsPlayerRot), 0, -Math.sin(vhsPlayerRot));
-
-                    const moveVec = new THREE.Vector3(0, 0, 0);
-                    if (vhsKeys.w) moveVec.add(forward);
-                    if (vhsKeys.s) moveVec.sub(forward);
-                    if (vhsKeys.a) moveVec.sub(right);
-                    if (vhsKeys.d) moveVec.add(right);
-
-                    if (moveVec.length() > 0) {
-                        moveVec.normalize().multiplyScalar(vhsSpeed * delta);
-                        vhsPlayerPos.add(moveVec);
-                        vhsPlayerPos.x = Math.max(-4.5, Math.min(4.5, vhsPlayerPos.x));
-                        vhsPlayerPos.z = Math.max(-4.5, Math.min(4.5, vhsPlayerPos.z));
-                    }
-
-                    vhsCamera.position.copy(vhsPlayerPos);
-                    vhsCamera.position.y = 1.7;
-
-                    const euler = new THREE.Euler(vhsPitch, vhsPlayerRot, 0, 'YXZ');
-                    vhsCamera.quaternion.setFromEuler(euler);
-
-                    if (handVHSGroup.visible) {
-                        handVHSGroup.position.x = 0.4 + Math.sin(now / 800) * 0.02;
-                        handVHSGroup.position.y = -0.3 + Math.sin(now / 600) * 0.01;
-                        handVHSGroup.rotation.z = -0.3 + Math.sin(now / 700) * 0.02;
-                    }
-                } else {
-                    vhsCamera.position.set(0, 1.3, -0.5);
-                    vhsCamera.lookAt(0, 0.8, -2.5);
-                }
-
-                if (!vhsHasVHS && vhsGroup.parent) {
-                    vhsGroup.rotation.y += 0.005;
-                    vhsGroup.position.y = 0.1 + Math.sin(now / 1000) * 0.02;
-                }
-
-                vhsRenderer.render(vhsScene, vhsCamera);
-            }
-
-            // Redimensionar VHS
-            function resizeVHS() {
-                const canvas = document.getElementById('vhsCanvas');
-                const container = document.getElementById('vhsOverlay');
-                const w = canvas.clientWidth;
-                const h = canvas.clientHeight;
-                if (vhsCamera) {
-                    vhsCamera.aspect = w / h;
-                    vhsCamera.updateProjectionMatrix();
-                }
-                if (vhsRenderer) {
-                    vhsRenderer.setSize(w, h);
-                }
-            }
-
-            window.addEventListener('resize', resizeVHS);
-
-            // Iniciar animación
-            animateVHS();
-
-            // Guardar referencia para cerrar
-            window.vhsResize = resizeVHS;
-        }
-
-        function openVHS() {
-            if (!vhsInitialized) {
-                initVHS();
-            }
-            vhsOverlay.classList.add('active');
-            // Forzar resize
-            if (window.vhsResize) setTimeout(window.vhsResize, 100);
-            // Solicitar lock al hacer clic
-            setTimeout(() => {
-                if (!vhsIsLocked && !vhsIsWatching) {
-                    vhsRenderer.domElement.requestPointerLock();
-                }
-            }, 500);
-        }
-
-        function closeVHS() {
-            vhsOverlay.classList.remove('active');
-            document.exitPointerLock();
-            vhsIsLocked = false;
-            // Restaurar posición de la cámara
-            vhsPlayerPos.set(0, 1.7, 5);
-            vhsPlayerRot = 0;
-            vhsPitch = 0;
-            vhsTargetPitch = 0;
-            vhsCamera.position.set(0, 1.7, 5);
-            const euler = new THREE.Euler(0, 0, 0, 'YXZ');
-            vhsCamera.quaternion.setFromEuler(euler);
-            // Si estaba viendo el tutorial, detenerlo
-            if (vhsIsWatching) {
-                vhsIsWatching = false;
-                document.getElementById('vhsCrosshair').style.display = 'block';
-                if (vhsVideoElement) {
-                    vhsVideoElement.pause();
-                    vhsVideoElement.currentTime = 0;
-                    vhsVideoElement = null;
-                }
-                playScreenLoop();
-            }
-        }
-
-        vhsExit.addEventListener('click', closeVHS);
-
-        // ============================================================
-        // UI CORAZÓN ÚNICO
+        // UI CORAZONES
         // ============================================================
         function getHeartEmoji(alive, isLaughMode) {
             if (isLaughMode) {
@@ -1808,9 +1067,6 @@
             }
         }
 
-        // ============================================================
-        // UI JUGADORES 2P
-        // ============================================================
         function updatePlayerUI(playerId) {
             const player = players[playerId];
             const hearts = playerId === 1 ? hearts1 : hearts2;
@@ -2018,7 +1274,7 @@
         }
 
         // ============================================================
-        // REINICIAR (ÚNICO)
+        // REINICIAR
         // ============================================================
         function resetSinglePlayer() {
             hearts = [true, true, true];
@@ -2035,9 +1291,6 @@
             }
         }
 
-        // ============================================================
-        // REINICIAR (2P)
-        // ============================================================
         function resetPlayer(playerId) {
             const player = players[playerId];
             player.hearts = [true, true, true];
@@ -2062,7 +1315,7 @@
         }
 
         // ============================================================
-        // COLOR PICKER (ÚNICO)
+        // COLOR PICKER
         // ============================================================
         colorBtns.forEach(btn => {
             btn.addEventListener('click', function() {
@@ -2074,9 +1327,6 @@
             });
         });
 
-        // ============================================================
-        // COLOR PICKER (2P)
-        // ============================================================
         document.querySelectorAll('#colorPicker1 .color-btn, #colorPicker2 .color-btn').forEach(btn => {
             btn.addEventListener('click', function() {
                 const playerId = parseInt(this.dataset.player);
@@ -2099,7 +1349,7 @@
         // ============================================================
         // MULTIJUGADOR
         // ============================================================
-        function activateMultiplayer() {
+        multiplayerBtn.addEventListener('click', function() {
             if (isMultiplayer) return;
             isMultiplayer = true;
             playersContainer.classList.add('active');
@@ -2120,9 +1370,9 @@
             
             document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
             if (logoState === 1) { updateAllTexts(); }
-        }
+        });
 
-        function deactivateMultiplayer() {
+        exitMpBtn.addEventListener('click', function() {
             if (!isMultiplayer) return;
             if (confirm('¿Estás seguro de que quieres salir del modo 2 jugadores?')) {
                 isMultiplayer = false;
@@ -2139,10 +1389,7 @@
                 updateAllPlayers();
                 resetSinglePlayer();
             }
-        }
-
-        multiplayerBtn.addEventListener('click', activateMultiplayer);
-        exitMpBtn.addEventListener('click', deactivateMultiplayer);
+        });
 
         // ============================================================
         // GAME OVER OVERLAY
@@ -2280,9 +1527,588 @@
         });
 
         // ============================================================
-        // INICIALIZAR
+        // VHS 3D - CON TRES.JS
         // ============================================================
-        function init() {
+        let vhsInitialized = false;
+        let vhsScene, vhsCamera, vhsRenderer;
+        let vhsVideoElement = null;
+        let vhsHasVHS = false;
+        let vhsIsWatching = false;
+        let vhsPlayerPos = new THREE.Vector3(0, 1.7, 5);
+        let vhsPlayerRot = 0;
+        let vhsPitch = 0;
+        let vhsTargetPitch = 0;
+        let vhsIsLocked = false;
+        let vhsMouseX = 0;
+        let vhsMouseY = 0;
+        let vhsKeys = { w: false, a: false, s: false, d: false };
+        let vhsTapeGroup = new THREE.Group();
+        let vhsHandTapeGroup = new THREE.Group();
+
+        function showVHSMessage(text) {
+            vhsMessage.textContent = text;
+            vhsMessage.classList.add('show');
+            clearTimeout(vhsMessage._timeout);
+            vhsMessage._timeout = setTimeout(() => {
+                vhsMessage.classList.remove('show');
+            }, 2000);
+        }
+
+        function initVHS() {
+            if (vhsInitialized) return;
+            vhsInitialized = true;
+
+            const canvas = document.getElementById('vhsCanvas');
+
+            // Escena
+            vhsScene = new THREE.Scene();
+            vhsScene.background = new THREE.Color(0x000000);
+            vhsScene.fog = new THREE.Fog(0x000000, 10, 30);
+
+            // Cámara
+            vhsCamera = new THREE.PerspectiveCamera(70, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+            vhsCamera.position.set(0, 1.7, 5);
+
+            // Renderer
+            vhsRenderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            vhsRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            vhsRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            vhsRenderer.shadowMap.enabled = true;
+            vhsRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            vhsRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+            vhsRenderer.toneMappingExposure = 1.2;
+
+            // Luces
+            const ambientLight = new THREE.AmbientLight(0x222244, 0.3);
+            vhsScene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xff6b7c, 1.5, 15);
+            pointLight.position.set(0, 4, 2);
+            vhsScene.add(pointLight);
+
+            const pointLight2 = new THREE.PointLight(0x4466ff, 0.5, 10);
+            pointLight2.position.set(-3, 2, -1);
+            vhsScene.add(pointLight2);
+
+            const pointLight3 = new THREE.PointLight(0x4422aa, 0.3, 8);
+            pointLight3.position.set(3, 1, -2);
+            vhsScene.add(pointLight3);
+
+            const tvLight = new THREE.PointLight(0x8888ff, 0.5, 8);
+            tvLight.position.set(0, 1.5, 0);
+            vhsScene.add(tvLight);
+
+            // Suelo
+            const floorGeometry = new THREE.PlaneGeometry(20, 20);
+            const floorMaterial = new THREE.MeshStandardMaterial({
+                color: 0x0a0a0a,
+                roughness: 0.9,
+                metalness: 0.1,
+                side: THREE.DoubleSide
+            });
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -0.5;
+            floor.receiveShadow = true;
+            vhsScene.add(floor);
+
+            // Paredes
+            function createWallVHS(width, height, posX, posY, posZ, rotY = 0) {
+                const geo = new THREE.PlaneGeometry(width, height);
+                const mat = new THREE.MeshStandardMaterial({
+                    color: 0x0a0a12,
+                    roughness: 0.8,
+                    metalness: 0.2,
+                    side: THREE.DoubleSide
+                });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(posX, posY, posZ);
+                mesh.rotation.y = rotY;
+                mesh.receiveShadow = true;
+                vhsScene.add(mesh);
+                return mesh;
+            }
+            createWallVHS(12, 4, 0, 1.5, -6, 0);
+            createWallVHS(12, 4, 0, 1.5, 6, Math.PI);
+            createWallVHS(12, 4, -6, 1.5, 0, Math.PI / 2);
+            createWallVHS(12, 4, 6, 1.5, 0, -Math.PI / 2);
+
+            // Televisión
+            const tvGroup = new THREE.Group();
+            tvGroup.position.set(0, 1.2, -2.5);
+
+            const tvBodyGeo = new THREE.BoxGeometry(2.2, 1.8, 0.6);
+            const tvBodyMat = new THREE.MeshStandardMaterial({
+                color: 0x1a1a2a,
+                roughness: 0.6,
+                metalness: 0.4,
+                emissive: 0x0a0a1a,
+                emissiveIntensity: 0.1
+            });
+            const tvBody = new THREE.Mesh(tvBodyGeo, tvBodyMat);
+            tvBody.position.z = 0;
+            tvBody.castShadow = true;
+            tvGroup.add(tvBody);
+
+            const screenGeo = new THREE.PlaneGeometry(1.8, 1.35);
+            const screenMat = new THREE.MeshStandardMaterial({
+                color: 0x0a0a1a,
+                emissive: 0x111133,
+                emissiveIntensity: 0.2,
+                roughness: 0.3,
+                metalness: 0.1
+            });
+            const screen = new THREE.Mesh(screenGeo, screenMat);
+            screen.position.set(0, 0.05, 0.31);
+            tvGroup.add(screen);
+
+            const frameMat = new THREE.MeshStandardMaterial({ color: 0x222244, roughness: 0.5, metalness: 0.3 });
+            const frameGeo = new THREE.BoxGeometry(1.85, 0.04, 0.05);
+            const frameTop = new THREE.Mesh(frameGeo, frameMat);
+            frameTop.position.set(0, 0.68, 0.31);
+            tvGroup.add(frameTop);
+            const frameBottom = new THREE.Mesh(frameGeo, frameMat);
+            frameBottom.position.set(0, -0.68, 0.31);
+            tvGroup.add(frameBottom);
+            const frameLeft = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.35, 0.05), frameMat);
+            frameLeft.position.set(-0.91, 0.05, 0.31);
+            tvGroup.add(frameLeft);
+            const frameRight = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.35, 0.05), frameMat);
+            frameRight.position.set(0.91, 0.05, 0.31);
+            tvGroup.add(frameRight);
+
+            const powerBtnGeo = new THREE.SphereGeometry(0.05, 8, 8);
+            const powerBtnMat = new THREE.MeshStandardMaterial({
+                color: 0x44ff44,
+                emissive: 0x44ff44,
+                emissiveIntensity: 0.5
+            });
+            const powerBtn = new THREE.Mesh(powerBtnGeo, powerBtnMat);
+            powerBtn.position.set(0.5, -0.5, 0.35);
+            tvGroup.add(powerBtn);
+
+            const baseGeo = new THREE.BoxGeometry(1.2, 0.1, 0.4);
+            const baseMat = new THREE.MeshStandardMaterial({ color: 0x111122, roughness: 0.8 });
+            const base = new THREE.Mesh(baseGeo, baseMat);
+            base.position.set(0, -0.95, 0);
+            tvGroup.add(base);
+
+            const legMat = new THREE.MeshStandardMaterial({ color: 0x222244, metalness: 0.5, roughness: 0.3 });
+            const legPositions = [[-0.4, -1.0, 0.2], [0.4, -1.0, 0.2], [-0.4, -1.0, -0.2], [0.4, -1.0, -0.2]];
+            legPositions.forEach(pos => {
+                const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.1, 6), legMat);
+                leg.position.set(pos[0], pos[1], pos[2]);
+                tvGroup.add(leg);
+            });
+
+            vhsScene.add(tvGroup);
+            const tvScreen = screen;
+
+            // Sistema de video de la TV
+            let vhsVideoElement = null;
+            let vhsVideoTexture = null;
+
+            function createVideoElement(src, loop = true) {
+                const video = document.createElement('video');
+                video.src = src;
+                video.crossOrigin = 'anonymous';
+                video.playsInline = true;
+                video.muted = false;
+                video.loop = loop;
+                video.volume = 0.5;
+                return video;
+            }
+
+            function setTVScreen(video) {
+                if (vhsVideoTexture) {
+                    vhsVideoTexture.dispose();
+                }
+                vhsVideoTexture = new THREE.VideoTexture(video);
+                vhsVideoTexture.minFilter = THREE.LinearFilter;
+                vhsVideoTexture.magFilter = THREE.LinearFilter;
+
+                tvScreen.material = new THREE.MeshStandardMaterial({
+                    map: vhsVideoTexture,
+                    emissive: new THREE.Color(0x4488ff),
+                    emissiveIntensity: 0.3,
+                    roughness: 0.2,
+                    metalness: 0.1,
+                    side: THREE.DoubleSide
+                });
+
+                tvLight.intensity = 1.5;
+            }
+
+            function playScreenLoop() {
+                if (vhsVideoElement) {
+                    vhsVideoElement.pause();
+                    vhsVideoElement.currentTime = 0;
+                    vhsVideoElement = null;
+                }
+                vhsVideoElement = createVideoElement('Screen.mp4', true);
+                setTVScreen(vhsVideoElement);
+                vhsVideoElement.play().catch(() => {});
+            }
+
+            function playNoIn() {
+                if (vhsVideoElement) {
+                    vhsVideoElement.pause();
+                    vhsVideoElement.currentTime = 0;
+                    vhsVideoElement = null;
+                }
+                vhsVideoElement = createVideoElement('NoIn.mp4', false);
+                setTVScreen(vhsVideoElement);
+                vhsVideoElement.addEventListener('ended', function onEnd() {
+                    vhsVideoElement.removeEventListener('ended', onEnd);
+                    playScreenLoop();
+                });
+                vhsVideoElement.play().catch(() => { playScreenLoop(); });
+            }
+
+            function playTutorial() {
+                if (vhsVideoElement) {
+                    vhsVideoElement.pause();
+                    vhsVideoElement.currentTime = 0;
+                    vhsVideoElement = null;
+                }
+                vhsVideoElement = createVideoElement('Tutoriall.mp4', false);
+                setTVScreen(vhsVideoElement);
+                vhsVideoElement.addEventListener('ended', function onEnd() {
+                    vhsVideoElement.removeEventListener('ended', onEnd);
+                    playScreenLoop();
+                    vhsIsWatching = false;
+                    document.getElementById('vhsCrosshair').style.display = 'block';
+                });
+                vhsVideoElement.play().catch(() => { playScreenLoop(); });
+            }
+
+            setTimeout(() => { playScreenLoop(); }, 500);
+
+            // ============================================================
+            // CINTA VHS (modelo GLB o fallback)
+            // ============================================================
+            const textureLoader = new THREE.TextureLoader();
+            const vhsTexture = textureLoader.load('VHS.png');
+
+            vhsTapeGroup.position.set(1.5, 0.1, -1.5);
+
+            // Fallback: crear una cinta simple
+            function createFallbackVHS() {
+                const tapeMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2a, roughness: 0.7, metalness: 0.2 });
+                const tapeBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.25, 0.6), tapeMat);
+                tapeBody.castShadow = true;
+                vhsTapeGroup.add(tapeBody);
+
+                const labelMat = new THREE.MeshStandardMaterial({ 
+                    map: vhsTexture,
+                    roughness: 0.5,
+                    metalness: 0.2,
+                    side: THREE.DoubleSide
+                });
+                const label = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.15), labelMat);
+                label.position.set(0, 0.13, 0.31);
+                vhsTapeGroup.add(label);
+
+                vhsScene.add(vhsTapeGroup);
+
+                // Copia para la mano
+                const handBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.25, 0.6), tapeMat);
+                handBody.castShadow = true;
+                vhsHandTapeGroup.add(handBody);
+                const handLabel = new THREE.Mesh(new THREE.PlaneGeometry(0.3, 0.15), labelMat);
+                handLabel.position.set(0, 0.13, 0.31);
+                vhsHandTapeGroup.add(handLabel);
+                vhsHandTapeGroup.scale.set(0.35, 0.35, 0.35);
+                vhsHandTapeGroup.position.set(0.4, -0.3, -0.6);
+                vhsHandTapeGroup.rotation.x = 0.2;
+                vhsHandTapeGroup.rotation.z = -0.3;
+                vhsHandTapeGroup.visible = false;
+                vhsCamera.add(vhsHandTapeGroup);
+                vhsScene.add(vhsCamera);
+            }
+
+            // Intentar cargar GLB
+            const loader = new THREE.GLTFLoader();
+            loader.load('vhs_tape.glb', function(gltf) {
+                const model = gltf.scene;
+                model.scale.set(0.7, 0.7, 0.7);
+                model.position.y = 0;
+                
+                model.traverse(function(child) {
+                    if (child.isMesh) {
+                        if (child.name && (child.name.toLowerCase().includes('top') || 
+                                           child.name.toLowerCase().includes('label') ||
+                                           child.name.toLowerCase().includes('cover'))) {
+                            const material = new THREE.MeshStandardMaterial({
+                                map: vhsTexture,
+                                roughness: 0.5,
+                                metalness: 0.2,
+                                side: THREE.DoubleSide
+                            });
+                            child.material = material;
+                        } else {
+                            if (child.material && !child.material.map) {
+                                const mat = new THREE.MeshStandardMaterial({
+                                    color: 0x1a1a2a,
+                                    roughness: 0.7,
+                                    metalness: 0.2
+                                });
+                                child.material = mat;
+                            }
+                        }
+                    }
+                });
+
+                vhsTapeGroup.add(model);
+                vhsScene.add(vhsTapeGroup);
+                
+                // Copia para la mano
+                const handModel = model.clone();
+                vhsHandTapeGroup.add(handModel);
+                vhsHandTapeGroup.scale.set(0.35, 0.35, 0.35);
+                vhsHandTapeGroup.position.set(0.4, -0.3, -0.6);
+                vhsHandTapeGroup.rotation.x = 0.2;
+                vhsHandTapeGroup.rotation.z = -0.3;
+                vhsHandTapeGroup.visible = false;
+                vhsCamera.add(vhsHandTapeGroup);
+                vhsScene.add(vhsCamera);
+
+                console.log('📼 Modelo VHS cargado');
+            }, undefined, function() {
+                console.log('📼 Usando fallback VHS');
+                createFallbackVHS();
+            });
+
+            // ============================================================
+            // CONTROLES
+            // ============================================================
+            document.addEventListener('keydown', (e) => {
+                const key = e.key.toLowerCase();
+                if (vhsOverlay.classList.contains('active')) {
+                    if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
+                        vhsKeys[key] = true;
+                        e.preventDefault();
+                    }
+                    if (e.key === 'Escape' && vhsIsWatching) {
+                        vhsIsWatching = false;
+                        document.getElementById('vhsCrosshair').style.display = 'block';
+                        if (vhsVideoElement) {
+                            vhsVideoElement.pause();
+                            vhsVideoElement.currentTime = 0;
+                            vhsVideoElement = null;
+                        }
+                        playScreenLoop();
+                        if (vhsHasVHS) {
+                            vhsHandTapeGroup.visible = true;
+                        }
+                    }
+                }
+            });
+
+            document.addEventListener('keyup', (e) => {
+                const key = e.key.toLowerCase();
+                if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
+                    vhsKeys[key] = false;
+                    e.preventDefault();
+                }
+            });
+
+            // Mouse lock
+            vhsRenderer.domElement.addEventListener('click', () => {
+                if (!vhsIsLocked && !vhsIsWatching && vhsOverlay.classList.contains('active')) {
+                    vhsRenderer.domElement.requestPointerLock();
+                }
+            });
+
+            document.addEventListener('pointerlockchange', () => {
+                vhsIsLocked = document.pointerLockElement === vhsRenderer.domElement;
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (vhsIsLocked && !vhsIsWatching && vhsOverlay.classList.contains('active')) {
+                    vhsMouseX += e.movementX * 0.002;
+                    vhsMouseY -= e.movementY * 0.002;
+                    vhsMouseY = Math.max(-0.8, Math.min(0.8, vhsMouseY));
+                }
+            });
+
+            // Raycaster
+            const raycaster = new THREE.Raycaster();
+            const pointer = new THREE.Vector2();
+
+            vhsRenderer.domElement.addEventListener('click', (e) => {
+                if (vhsIsWatching) return;
+
+                const rect = vhsRenderer.domElement.getBoundingClientRect();
+                pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+                raycaster.setFromCamera(pointer, vhsCamera);
+
+                if (vhsTapeGroup.parent) {
+                    const vhsIntersects = raycaster.intersectObject(vhsTapeGroup, true);
+                    if (vhsIntersects.length > 0 && !vhsHasVHS) {
+                        vhsHasVHS = true;
+                        vhsScene.remove(vhsTapeGroup);
+                        vhsHandTapeGroup.visible = true;
+                        showVHSMessage('📼 Cinta VHS recogida');
+                        return;
+                    }
+                }
+
+                const tvIntersects = raycaster.intersectObject(tvGroup, true);
+                if (tvIntersects.length > 0) {
+                    if (vhsHasVHS) {
+                        showVHSMessage('📺 Reproduciendo...');
+                        playTutorial();
+                        vhsIsWatching = true;
+                        document.getElementById('vhsCrosshair').style.display = 'none';
+                        vhsHandTapeGroup.visible = false;
+                    } else {
+                        showVHSMessage('📺 Sin cinta');
+                        playNoIn();
+                    }
+                    return;
+                }
+            });
+
+            // Animación
+            let vhsStartTime = Date.now();
+
+            function animateVHS() {
+                if (!vhsOverlay.classList.contains('active')) {
+                    requestAnimationFrame(animateVHS);
+                    return;
+                }
+
+                requestAnimationFrame(animateVHS);
+
+                const now = Date.now();
+                const delta = Math.min((now - vhsStartTime) / 16.67, 3);
+                vhsStartTime = now;
+
+                if (!vhsIsWatching) {
+                    if (vhsIsLocked) {
+                        vhsPlayerRot += vhsMouseX * 0.5;
+                        vhsMouseX = 0;
+                        vhsTargetPitch = vhsMouseY * 0.6;
+                    }
+
+                    vhsPitch += (vhsTargetPitch - vhsPitch) * 0.12;
+
+                    const forward = new THREE.Vector3(-Math.sin(vhsPlayerRot), 0, -Math.cos(vhsPlayerRot));
+                    const right = new THREE.Vector3(Math.cos(vhsPlayerRot), 0, -Math.sin(vhsPlayerRot));
+
+                    const moveVec = new THREE.Vector3(0, 0, 0);
+                    if (vhsKeys.w) moveVec.add(forward);
+                    if (vhsKeys.s) moveVec.sub(forward);
+                    if (vhsKeys.a) moveVec.sub(right);
+                    if (vhsKeys.d) moveVec.add(right);
+
+                    if (moveVec.length() > 0) {
+                        moveVec.normalize().multiplyScalar(0.06 * delta);
+                        vhsPlayerPos.add(moveVec);
+                        vhsPlayerPos.x = Math.max(-4.5, Math.min(4.5, vhsPlayerPos.x));
+                        vhsPlayerPos.z = Math.max(-4.5, Math.min(4.5, vhsPlayerPos.z));
+                    }
+
+                    vhsCamera.position.copy(vhsPlayerPos);
+                    vhsCamera.position.y = 1.7;
+
+                    const euler = new THREE.Euler(vhsPitch, vhsPlayerRot, 0, 'YXZ');
+                    vhsCamera.quaternion.setFromEuler(euler);
+
+                    if (vhsHandTapeGroup.visible) {
+                        vhsHandTapeGroup.position.x = 0.4 + Math.sin(now / 800) * 0.02;
+                        vhsHandTapeGroup.position.y = -0.3 + Math.sin(now / 600) * 0.01;
+                        vhsHandTapeGroup.rotation.z = -0.3 + Math.sin(now / 700) * 0.02;
+                    }
+                } else {
+                    vhsCamera.position.set(0, 1.3, -0.5);
+                    vhsCamera.lookAt(0, 0.8, -2.5);
+                }
+
+                if (!vhsHasVHS && vhsTapeGroup.parent) {
+                    vhsTapeGroup.rotation.y += 0.005;
+                    vhsTapeGroup.position.y = 0.1 + Math.sin(now / 1000) * 0.02;
+                }
+
+                vhsRenderer.render(vhsScene, vhsCamera);
+            }
+
+            // Redimensionar
+            function resizeVHS() {
+                const canvas = document.getElementById('vhsCanvas');
+                const w = canvas.clientWidth;
+                const h = canvas.clientHeight;
+                if (vhsCamera) {
+                    vhsCamera.aspect = w / h;
+                    vhsCamera.updateProjectionMatrix();
+                }
+                if (vhsRenderer) {
+                    vhsRenderer.setSize(w, h);
+                }
+            }
+
+            window.addEventListener('resize', resizeVHS);
+            animateVHS();
+            window.vhsResize = resizeVHS;
+        }
+
+        // ============================================================
+        // ABRIR/CERRAR VHS
+        // ============================================================
+        function openVHS() {
+            if (!vhsInitialized) {
+                initVHS();
+            }
+            vhsOverlay.classList.add('active');
+            if (window.vhsResize) setTimeout(window.vhsResize, 100);
+            setTimeout(() => {
+                if (!vhsIsLocked && !vhsIsWatching) {
+                    vhsRenderer.domElement.requestPointerLock();
+                }
+            }, 500);
+        }
+
+        function closeVHS() {
+            vhsOverlay.classList.remove('active');
+            document.exitPointerLock();
+            vhsIsLocked = false;
+            vhsPlayerPos.set(0, 1.7, 5);
+            vhsPlayerRot = 0;
+            vhsPitch = 0;
+            vhsTargetPitch = 0;
+            if (vhsCamera) {
+                vhsCamera.position.set(0, 1.7, 5);
+                const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+                vhsCamera.quaternion.setFromEuler(euler);
+            }
+            if (vhsIsWatching) {
+                vhsIsWatching = false;
+                document.getElementById('vhsCrosshair').style.display = 'block';
+                if (vhsVideoElement) {
+                    vhsVideoElement.pause();
+                    vhsVideoElement.currentTime = 0;
+                    vhsVideoElement = null;
+                }
+                // playScreenLoop();
+            }
+        }
+
+        vhsExit.addEventListener('click', closeVHS);
+
+        // ============================================================
+        // BOTÓN CÓMO JUGAR - ABRE VHS
+        // ============================================================
+        howToPlayBtn.addEventListener('click', function() {
+            openVHS();
+        });
+
+        // ============================================================
+        // INICIALIZAR EVENTOS DE CORAZONES
+        // ============================================================
+        function initHeartEvents() {
             heartElements.forEach(el => {
                 el.removeEventListener('click', handleSingleHeartClick);
                 el.addEventListener('click', handleSingleHeartClick);
@@ -2296,13 +2122,19 @@
                 el.removeEventListener('click', handlePlayerHeartClick);
                 el.addEventListener('click', handlePlayerHeartClick);
             });
+        }
 
+        // ============================================================
+        // INICIALIZAR
+        // ============================================================
+        function init() {
+            initHeartEvents();
             updateSinglePlayerUI();
             updateAllPlayers();
             updateAllTexts();
 
-            console.log('❤️ NoTeRias · Corazones con VHS 3D en "Cómo jugar"');
-            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, oof.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, XDD.mp3, Log0.png, Screen.mp4, NoIn.mp4, Tutoriall.mp4');
+            console.log('❤️ NoTeRias · Corazones + VHS 3D');
+            console.log('📁 Archivos necesarios: vhs_tape.glb, VHS.png, Screen.mp4, NoIn.mp4, Tutoriall.mp4, Log0.png');
         }
 
         if (document.readyState === 'loading') {
