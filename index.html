@@ -3,774 +3,2317 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NoTeRias · VHS 3D</title>
+    <title>NoTeRias · Corazones</title>
+    <link rel="icon" type="image/png" href="Log0.png">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            user-select: none;
         }
         body {
-            background: #000;
-            overflow: hidden;
-            font-family: 'Segoe UI', Arial, sans-serif;
-            color: #fff;
-        }
-        #info {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ff6b7c66;
-            font-size: 0.8rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            z-index: 10;
-            text-align: center;
-            pointer-events: none;
-            text-shadow: 0 0 20px rgba(0,0,0,0.8);
-        }
-        #controls-hint {
-            position: fixed;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: #ff6b7c44;
-            font-size: 0.7rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            z-index: 10;
-            text-align: center;
-            pointer-events: none;
-            background: rgba(0,0,0,0.6);
-            padding: 8px 20px;
-            border-radius: 20px;
-            border: 1px solid #ff6b7c22;
-        }
-        #crosshair {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            color: #ff6b7c44;
-            font-size: 2rem;
-            z-index: 10;
-            pointer-events: none;
-            opacity: 0.5;
-            text-shadow: 0 0 10px rgba(0,0,0,0.8);
-        }
-        #inventory {
-            position: fixed;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            display: none;
-            background: rgba(0,0,0,0.7);
-            border: 2px solid #ff6b7c44;
-            border-radius: 16px;
-            padding: 10px 20px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px rgba(255,43,79,0.1);
-        }
-        #inventory.visible {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-        #inventory .item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #ff6b7c88;
-            font-size: 0.9rem;
-            letter-spacing: 1px;
-        }
-        #inventory .item img {
-            width: 40px;
-            height: 30px;
-            object-fit: contain;
-            filter: drop-shadow(0 0 15px rgba(255,43,79,0.2));
-        }
-        #inventory .item .key-hint {
-            color: #ff6b7c44;
-            font-size: 0.6rem;
-            background: rgba(255,255,255,0.05);
-            padding: 2px 8px;
-            border-radius: 4px;
-            border: 1px solid #ff6b7c22;
-        }
-
-        #loading {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #000;
+            background: #0a0a1a;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            z-index: 100;
-            color: #ff6b7c66;
-            font-size: 1.2rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            flex-direction: column;
-            gap: 20px;
+            font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+            margin: 0;
+            padding: 20px;
+            transition: transform 0.05s, filter 0.05s;
+            overflow-x: hidden;
         }
-        #loading .loader {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #ff6b7c22;
-            border-top: 3px solid #ff6b7c88;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
+        body.shaking {
+            animation: shakeWithBlur 0.5s ease-in-out;
         }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes shakeWithBlur {
+            0%, 100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
+            10% { transform: translate(-12px,8px) rotate(-2deg); filter: blur(3px); }
+            20% { transform: translate(12px,-8px) rotate(2deg); filter: blur(4px); }
+            30% { transform: translate(-8px,12px) rotate(-1.5deg); filter: blur(3px); }
+            40% { transform: translate(8px,-12px) rotate(1.5deg); filter: blur(4px); }
+            50% { transform: translate(-12px,6px) rotate(-2deg); filter: blur(5px); }
+            60% { transform: translate(12px,-6px) rotate(2deg); filter: blur(4px); }
+            70% { transform: translate(-6px,10px) rotate(-1deg); filter: blur(3px); }
+            80% { transform: translate(6px,-10px) rotate(1deg); filter: blur(3px); }
+            90% { transform: translate(-8px,4px) rotate(-0.5deg); filter: blur(2px); }
+            100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
         }
 
-        #canvas-container {
+        .main-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            width: 100%;
+            max-width: 850px;
+            transition: opacity 0.5s ease, filter 0.5s ease;
+        }
+        .main-container.game-over-mode {
+            opacity: 0.1;
+            filter: blur(8px);
+            pointer-events: none;
+        }
+
+        .logo-container {
+            width: 100%;
+            text-align: center;
+            padding: 0.2rem 0;
+            margin-bottom: -0.3rem;
+            cursor: pointer;
+            position: relative;
+        }
+        .logo-container.shaking-logo {
+            animation: logoShakeStrong 0.4s ease-in-out 3;
+        }
+        .logo-container.shaking-loop {
+            animation: logoShakeStrong 0.4s ease-in-out infinite;
+        }
+        @keyframes logoShakeStrong {
+            0%, 100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
+            10% { transform: translate(-14px,10px) rotate(-3deg); filter: blur(4px); }
+            20% { transform: translate(14px,-10px) rotate(3deg); filter: blur(5px); }
+            30% { transform: translate(-10px,14px) rotate(-2.5deg); filter: blur(4px); }
+            40% { transform: translate(10px,-14px) rotate(2.5deg); filter: blur(5px); }
+            50% { transform: translate(-14px,8px) rotate(-3deg); filter: blur(6px); }
+            60% { transform: translate(14px,-8px) rotate(3deg); filter: blur(5px); }
+            70% { transform: translate(-8px,12px) rotate(-2deg); filter: blur(4px); }
+            80% { transform: translate(8px,-12px) rotate(2deg); filter: blur(4px); }
+            90% { transform: translate(-10px,6px) rotate(-1.5deg); filter: blur(3px); }
+            100% { transform: translate(0,0) rotate(0deg); filter: blur(0px); }
+        }
+
+        .logo-text {
+            font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
+            font-size: 5rem;
+            font-weight: bold;
+            letter-spacing: 8px;
+            background: linear-gradient(180deg, #ff6b7c 0%, #ff2b4f 40%, #cc0018 70%, #880010 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            filter: drop-shadow(0 8px 25px rgba(255,43,79,0.4));
+            position: relative;
+            display: inline-block;
+            transition: transform 0.15s ease, filter 0.3s ease;
+        }
+        .logo-text:hover {
+            transform: scale(1.02);
+        }
+        .logo-text:active {
+            transform: scale(0.95);
+        }
+        .logo-text::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 10%;
+            width: 80%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #ff2b4f, #ff6b7c, #ff2b4f, transparent);
+            border-radius: 2px;
+            filter: blur(1px);
+            transition: all 0.3s ease;
+        }
+        .logo-text.switched::after {
+            background: linear-gradient(90deg, transparent, #ff6b7c, #ff2b4f, #ff6b7c, transparent);
+            width: 60%;
+        }
+
+        .logo-sub {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            font-size: 1rem;
+            color: #ff6b7c88;
+            letter-spacing: 10px;
+            margin-top: 0.2rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .logo-sub.switched {
+            color: #ff6b7c44;
+            letter-spacing: 4px;
+        }
+
+        .credits {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            font-size: 0.8rem;
+            color: #ff6b7c44;
+            letter-spacing: 2px;
+            text-align: center;
+            margin-top: -0.3rem;
+            padding: 0.2rem 0;
+            border-top: 1px solid #ff6b7c22;
+            width: 100%;
+            max-width: 500px;
+            transition: all 0.3s ease;
+        }
+        .credits.switched {
+            color: #ff6b7c66;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+        .credits span { color: #ff6b7c66; }
+        .credits.switched span { color: #ff6b7caa; }
+
+        .how-to-play-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: transparent;
+            border: 2px solid #ff6b7c66;
+            color: #ff6b7c88;
+            font-size: 1.1rem;
+            padding: 0.6rem 2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px rgba(255,43,79,0.1);
+        }
+        .how-to-play-btn:hover {
+            background: #ff6b7c22;
+            border-color: #ff6b7c;
+            box-shadow: 0 0 40px rgba(255,43,79,0.2);
+            transform: scale(1.02);
+        }
+        .how-to-play-btn.switched {
+            font-size: 1.3rem;
+            border-color: #ff6b7c88;
+            color: #ff6b7cbb;
+            animation: btnPulse 1s ease-in-out infinite alternate;
+        }
+        @keyframes btnPulse {
+            0% { box-shadow: 0 0 20px rgba(255,43,79,0.1); }
+            100% { box-shadow: 0 0 50px rgba(255,43,79,0.3); }
+        }
+
+        .top-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .multiplayer-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: linear-gradient(135deg, #6b7cff, #2838dd);
+            border: none;
+            color: #fff;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.7rem 2.5rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 0 #1a2a88, 0 8px 25px rgba(43,79,255,0.25);
+        }
+        .multiplayer-btn:hover {
+            background: linear-gradient(135deg, #7c8cff, #3848ee);
+            transform: scale(1.02);
+        }
+        .multiplayer-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #1a2a88;
+        }
+        .multiplayer-btn.active {
+            background: linear-gradient(135deg, #ff3b5c, #dd0028);
+            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.25);
+        }
+        .multiplayer-btn.active:hover {
+            background: linear-gradient(135deg, #ff4f6e, #ee0038);
+        }
+
+        .exit-mp-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: transparent;
+            border: 2px solid #ff6b7c44;
+            color: #ff6b7c66;
+            font-size: 0.9rem;
+            padding: 0.4rem 1.5rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: none;
+        }
+        .exit-mp-btn:hover {
+            border-color: #ff6b7c88;
+            color: #ff6b7caa;
+            background: #ff6b7c11;
+        }
+        .exit-mp-btn.visible {
+            display: inline-block;
+        }
+
+        /* === CORAZONES === */
+        .heart-counter {
+            background: rgba(26,26,46,0.85);
+            backdrop-filter: blur(6px);
+            border-radius: 3rem;
+            padding: 1.5rem 2.5rem 1.2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 3px #ff3b5c55 inset;
+            text-align: center;
+            width: 100%;
+            border: 2px solid #ff6b7c66;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .heart-counter .player-label {
+            font-size: 1rem;
+            color: #ff6b7caa;
+            letter-spacing: 4px;
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .hearts-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 0.2rem 0 0.3rem 0;
+            flex-wrap: wrap;
+        }
+        .heart {
+            font-size: 5rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.2s, opacity 0.2s;
+            text-shadow: 0 8px 25px rgba(255,50,80,0.7);
+            color: #ff2b4f;
+            filter: drop-shadow(0 8px 12px #00000077);
+            transform: scale(1);
+            position: relative;
+        }
+        .heart:hover {
+            transform: scale(1.12);
+            filter: drop-shadow(0 0 22px #ff3b5c);
+        }
+        .heart:active {
+            transform: scale(0.85);
+        }
+        .heart.lost {
+            cursor: default;
+            transform: scale(0.92);
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .heart.breaking {
+            animation: breakHeart 1.2s ease-out forwards;
+            pointer-events: none !important;
+        }
+        @keyframes breakHeart {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            25% { transform: scale(1.4) rotate(-15deg); }
+            50% { transform: scale(1.6) rotate(10deg) translateY(-20px); }
+            75% { transform: scale(1.8) rotate(-5deg) translateY(-40px); opacity: 0.8; }
+            100% { transform: scale(2.5) rotate(20deg) translateY(-80px); opacity: 0; }
+        }
+
+        .reset-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 0.6rem 1.8rem;
+            margin-top: 0.3rem;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #881a2a, 0 12px 30px #000000aa;
+            transition: all 0.08s linear;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: 2px solid #ff9eae;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+        }
+        .reset-btn.visible { display: block; }
+        .reset-btn:hover {
+            background: #ff4f6e;
+            transform: scale(1.03);
+            box-shadow: 0 6px 0 #881a2a, 0 15px 35px #000000dd;
+        }
+        .reset-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
+        }
+
+        .color-picker-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .color-picker-container .color-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .color-picker-container .color-btn:hover {
+            transform: scale(1.15);
+        }
+        .color-picker-container .color-btn.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        /* === MODO 2 JUGADORES === */
+        .players-container {
+            display: none;
+            gap: 2rem;
+            width: 100%;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.5rem;
+        }
+        .players-container.active {
+            display: flex;
+        }
+        .player-card {
+            flex: 1;
+            min-width: 280px;
+            background: rgba(26,26,46,0.7);
+            backdrop-filter: blur(6px);
+            border-radius: 2rem;
+            padding: 1.2rem 1.5rem 1rem;
+            border: 2px solid #ff6b7c44;
+            transition: all 0.3s ease;
+        }
+        .player-card .player-label {
+            font-size: 1.2rem;
+            color: #ff6b7caa;
+            letter-spacing: 4px;
+            text-align: center;
+            text-transform: uppercase;
+            margin-bottom: 0.3rem;
+            transition: all 0.3s ease;
+        }
+        .player-card .hearts-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+        .player-card .heart {
+            font-size: 4.5rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.2s, opacity 0.2s;
+            text-shadow: 0 8px 25px rgba(255,50,80,0.7);
+            filter: drop-shadow(0 8px 12px #00000077);
+            transform: scale(1);
+        }
+        .player-card .heart:hover {
+            transform: scale(1.12);
+            filter: drop-shadow(0 0 22px currentColor);
+        }
+        .player-card .heart:active {
+            transform: scale(0.85);
+        }
+        .player-card .heart.lost {
+            cursor: default;
+            transform: scale(0.92);
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .player-card .heart.breaking {
+            animation: breakHeart 1.2s ease-out forwards;
+            pointer-events: none !important;
+        }
+        .player-card .reset-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1rem;
+            font-weight: bold;
+            padding: 0.4rem 1.2rem;
+            margin-top: 0.3rem;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 #881a2a, 0 8px 20px #000000aa;
+            transition: all 0.08s linear;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 2px solid #ff9eae;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+        }
+        .player-card .reset-btn.visible { display: block; }
+        .player-card .reset-btn:hover {
+            background: #ff4f6e;
+            transform: scale(1.03);
+        }
+        .player-card .reset-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #881a2a;
+        }
+        .player-card .player-status {
+            text-align: center;
+            font-size: 0.9rem;
+            color: #ff6b7c66;
+            margin-top: 0.2rem;
+            letter-spacing: 2px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            transition: all 0.3s ease;
+            min-height: 1.8rem;
+        }
+        .player-card .player-status.win {
+            color: #ff6b7c;
+            font-size: 1.2rem;
+            animation: statusPulse 0.8s ease-in-out infinite alternate;
+        }
+        @keyframes statusPulse {
+            0% { opacity: 0.6; transform: scale(1); }
+            100% { opacity: 1; transform: scale(1.05); }
+        }
+        .player-card .color-picker-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .player-card .color-picker-container .color-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .player-card .color-picker-container .color-btn:hover {
+            transform: scale(1.15);
+        }
+        .player-card .color-picker-container .color-btn.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        /* === REPRODUCTOR PERSONALIZADO (SIN VHS) === */
+        .custom-player {
+            width: 100%;
+            background: rgba(26,26,46,0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 2rem;
+            padding: 1.2rem 1.5rem 1.5rem;
+            border: 2px solid #ff6b7c44;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+        }
+        .custom-player .player-container {
+            position: relative;
+            width: 100%;
+            background: #0a0a1a;
+            border-radius: 1.2rem;
+            overflow: hidden;
+            aspect-ratio: 16 / 9;
+            border: 2px solid #ff6b7c33;
+        }
+        .custom-player .player-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            display: block;
+        }
+        .custom-player .player-container .placeholder {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            color: #ff6b7c44;
+            font-size: 1.5rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            gap: 0.5rem;
+            background: #0a0a1a;
+        }
+        .custom-player .player-container .placeholder .icon {
+            font-size: 4rem;
+        }
+        .custom-player .player-container .placeholder .msg {
+            font-size: 1.1rem;
+            color: #ff6b7c66;
+            letter-spacing: 2px;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .player-controls input {
+            flex: 1;
+            min-width: 160px;
+            padding: 0.7rem 1.2rem;
+            border-radius: 60px;
+            border: 2px solid #ff6b7c33;
+            background: rgba(255,255,255,0.06);
+            color: #fff;
+            font-size: 0.9rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        .player-controls input::placeholder { color: #8888aa; }
+        .player-controls input:focus {
+            border-color: #ff3b5c;
+            background: rgba(255,255,255,0.10);
+            box-shadow: 0 0 30px #ff3b5c22;
+        }
+        .player-controls button {
+            padding: 0.7rem 1.8rem;
+            border-radius: 60px;
+            border: none;
+            background: linear-gradient(135deg, #ff3b5c, #dd0028);
+            color: #1a1a2e;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.25);
+        }
+        .player-controls button:hover {
+            background: linear-gradient(135deg, #ff4f6e, #ee0038);
+            transform: scale(1.02);
+        }
+        .player-controls button:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #881a2a;
+        }
+        .player-controls button.switched {
+            background: linear-gradient(135deg, #ff6b7c, #ff2b4f);
+            font-size: 1.1rem;
+            animation: btnPulse 1s ease-in-out infinite alternate;
+        }
+
+        /* === TUTORIAL POPUP (contenido normal) === */
+        .tutorial-popup {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 50000;
+            padding: 20px;
+        }
+        .tutorial-popup.active { display: flex; }
+        .tutorial-popup .tutorial-content {
+            background: #1a1a2e;
+            border-radius: 2.5rem;
+            padding: 2.5rem 3rem;
+            max-width: 550px;
+            width: 100%;
+            border: 2px solid #ff6b7c55;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .tutorial-popup .tutorial-content h2 {
+            color: #ff6b7c;
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+            letter-spacing: 3px;
+        }
+        .tutorial-popup .tutorial-content p {
+            color: #ffb3b3cc;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            text-align: left;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .tutorial-popup .tutorial-content .close-tutorial {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.7rem 2.5rem;
+            margin-top: 1rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.2);
+        }
+        .tutorial-popup .tutorial-content .close-tutorial:hover {
+            background: #ff4f6e;
+            transform: scale(1.02);
+        }
+        .tutorial-popup .tutorial-content .close-tutorial:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #881a2a;
+        }
+        .tutorial-popup .tutorial-content .tutorial-icon {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
         }
 
-        #exit-tutorial {
+        /* === OVERLAY VHS 3D (se abre con "Cómo jugar") === */
+        .vhs-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: none;
+            z-index: 60000;
+            overflow: hidden;
+        }
+        .vhs-overlay.active {
+            display: block;
+        }
+        .vhs-overlay #vhsCanvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        .vhs-overlay #vhsExit {
             position: fixed;
             top: 20px;
             right: 20px;
-            z-index: 50;
+            z-index: 60001;
             background: rgba(255,43,79,0.15);
             border: 2px solid #ff6b7c44;
             color: #ff6b7c88;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 30px;
             cursor: pointer;
             font-family: 'Segoe UI', Arial, sans-serif;
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             letter-spacing: 2px;
             text-transform: uppercase;
             transition: all 0.3s ease;
             backdrop-filter: blur(10px);
-            display: none;
         }
-        #exit-tutorial:hover {
+        .vhs-overlay #vhsExit:hover {
             background: rgba(255,43,79,0.25);
             border-color: #ff6b7c88;
             color: #ff6b7c;
         }
-        #exit-tutorial.visible {
-            display: block;
-        }
-
-        .floating-message {
+        .vhs-overlay #vhsCrosshair {
             position: fixed;
-            top: 30%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ff6b7c33;
+            font-size: 1.5rem;
+            z-index: 60001;
+            pointer-events: none;
+            opacity: 0.3;
+            text-shadow: 0 0 10px rgba(0,0,0,0.8);
+        }
+        .vhs-overlay #vhsInfo {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff6b7c44;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            z-index: 60001;
+            text-align: center;
+            pointer-events: none;
+            text-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        .vhs-overlay #vhsControls {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #ff6b7c33;
+            font-size: 0.6rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            z-index: 60001;
+            text-align: center;
+            pointer-events: none;
+            background: rgba(0,0,0,0.5);
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid #ff6b7c22;
+        }
+        .vhs-overlay .vhs-message {
+            position: fixed;
+            top: 35%;
             left: 50%;
             transform: translateX(-50%);
             color: #ff6b7c;
-            font-size: 1.8rem;
-            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
-            text-shadow: 0 0 40px rgba(255,43,79,0.5);
-            z-index: 20;
-            background: rgba(0,0,0,0.7);
-            padding: 16px 32px;
-            border-radius: 16px;
-            border: 2px solid #ff6b7c44;
+            font-size: 1.2rem;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            text-shadow: 0 0 40px rgba(255,43,79,0.3);
+            z-index: 60001;
+            background: rgba(0,0,0,0.6);
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: 1px solid #ff6b7c33;
             backdrop-filter: blur(10px);
             text-align: center;
-            letter-spacing: 2px;
+            letter-spacing: 1px;
             pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .vhs-overlay .vhs-message.show {
+            opacity: 1;
+        }
+
+        .game-over-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000000;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 10000;
+            animation: undertaleFadeIn 1.2s ease-out forwards;
+            overflow: hidden;
+        }
+        .game-over-overlay.show { display: flex; }
+        @keyframes undertaleFadeIn {
+            0% { opacity: 0; background: #000000; }
+            60% { opacity: 1; background: #0a0005; }
+            100% { opacity: 1; background: #0a0005; }
+        }
+
+        .game-over-overlay .go-text {
+            font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
+            font-size: 6rem;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow: 0 0 40px #ff2b4f, 0 0 80px #ff2b4f, 0 0 120px #ff2b4f;
+            animation: goTextDrop 1.2s cubic-bezier(0.22,0.61,0.36,1) forwards;
+            letter-spacing: 12px;
+            transform: translateY(-200px);
+            opacity: 0;
+        }
+        @keyframes goTextDrop {
+            0% { transform: translateY(-200px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .game-over-overlay .go-text::after {
+            content: '';
+            display: block;
+            width: 200px;
+            height: 3px;
+            margin: 10px auto 0;
+            background: linear-gradient(90deg, transparent, #ff2b4f, transparent);
+            animation: goLinePulse 2s ease-in-out infinite alternate;
+        }
+        @keyframes goLinePulse {
+            0% { opacity: 0.3; width: 100px; }
+            100% { opacity: 1; width: 300px; }
+        }
+
+        .game-over-overlay .go-sub {
+            font-family: 'Komika Axis', 'Comic Sans MS', 'Chalkboard SE', cursive;
+            font-size: 1.8rem;
+            color: #ff8888;
+            margin-top: 1.2rem;
+            text-shadow: 0 0 30px #ff2b4f55;
+            opacity: 0;
+            animation: goSubFade 0.8s ease-out 0.6s forwards, goSubPulse 2s ease-in-out infinite alternate 0.5s;
+            text-align: center;
+            line-height: 1.4;
+            padding: 0 1rem;
+        }
+        .game-over-overlay .go-sub.shaking-text {
+            animation: textShake 0.15s ease-in-out infinite;
+        }
+        @keyframes textShake {
+            0%, 100% { transform: translate(0,0) rotate(0deg); }
+            20% { transform: translate(-4px,3px) rotate(-1deg); }
+            40% { transform: translate(4px,-3px) rotate(1deg); }
+            60% { transform: translate(-3px,4px) rotate(-0.5deg); }
+            80% { transform: translate(3px,-4px) rotate(0.5deg); }
+        }
+        @keyframes goSubFade { 0% { opacity: 0; } 100% { opacity: 1; } }
+        @keyframes goSubPulse { 0% { opacity: 0.6; } 100% { opacity: 1; } }
+
+        .game-over-overlay .go-reset-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.8rem;
+            font-weight: bold;
+            padding: 0.9rem 2.8rem;
+            margin-top: 2rem;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 8px 0 #881a2a, 0 12px 30px #000000aa;
+            transition: all 0.08s linear;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: 2px solid #ff9eae;
+            transform: translateY(200px);
+            opacity: 0;
+            animation: goBtnRise 1s cubic-bezier(0.22,0.61,0.36,1) 0.4s forwards;
+        }
+        @keyframes goBtnRise {
+            0% { transform: translateY(200px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .game-over-overlay .go-reset-btn:hover {
+            background: #ff4f6e;
+            transform: scale(1.05);
+            box-shadow: 0 8px 0 #881a2a, 0 15px 35px #000000dd;
+        }
+        .game-over-overlay .go-reset-btn:active {
+            transform: translateY(6px);
+            box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
+        }
+        body.game-over-active { overflow: hidden; }
+
+        @media (max-width: 650px) {
+            .players-container { flex-direction: column; gap: 1rem; }
+            .player-card { min-width: unset; }
+            .logo-text { font-size: 3.5rem; letter-spacing: 4px; }
+            .logo-sub { font-size: 0.8rem; letter-spacing: 6px; }
+            .heart { font-size: 3.8rem; }
+            .player-card .heart { font-size: 3.5rem; }
+            .game-over-overlay .go-text { font-size: 3.5rem; letter-spacing: 6px; }
+            .game-over-overlay .go-sub { font-size: 1.2rem; }
+            .game-over-overlay .go-reset-btn { font-size: 1.3rem; padding: 0.6rem 1.8rem; }
+            .credits { font-size: 0.65rem; }
+            .how-to-play-btn { font-size: 0.9rem; padding: 0.5rem 1.5rem; }
+            .custom-player { padding: 0.8rem 1rem; }
+            .player-controls input { min-width: 120px; font-size: 0.8rem; }
+            .player-controls button { font-size: 0.8rem; padding: 0.5rem 1.2rem; }
+            .tutorial-popup .tutorial-content { padding: 1.8rem; }
+            .tutorial-popup .tutorial-content h2 { font-size: 1.6rem; }
+            .tutorial-popup .tutorial-content p { font-size: 1rem; }
+            .multiplayer-btn { font-size: 1rem; padding: 0.5rem 1.8rem; }
+            .top-buttons { gap: 0.5rem; }
+            .heart-counter { padding: 1.2rem 1.5rem 1rem; }
+            .reset-btn { font-size: 1.1rem; padding: 0.5rem 1.4rem; }
+        }
+        @media (max-width: 400px) {
+            .heart { font-size: 3rem; }
+            .player-card .heart { font-size: 2.8rem; }
+            .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
+            .game-over-overlay .go-text { font-size: 2.8rem; letter-spacing: 4px; }
         }
     </style>
 </head>
 <body>
 
-<div id="loading">
-    <div class="loader"></div>
-    <span>Cargando VHS...</span>
+<!-- GAME OVER OVERLAY -->
+<div class="game-over-overlay" id="gameOverOverlay">
+    <div class="go-text" id="goText">GAME OVER</div>
+    <div class="go-sub" id="goSubText">💀 Has perdido todos tus corazones</div>
+    <button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button>
 </div>
 
-<div id="canvas-container"></div>
-
-<div id="crosshair">+</div>
-
-<div id="inventory">
-    <div class="item">
-        <img src="VHS.png" alt="VHS">
-        <span>Cinta VHS</span>
-        <span class="key-hint">[Click TV para usar]</span>
+<!-- TUTORIAL POPUP (texto normal) -->
+<div class="tutorial-popup" id="tutorialPopup">
+    <div class="tutorial-content">
+        <div class="tutorial-icon">🎮</div>
+        <h2 id="tutorialTitle">Cómo jugar</h2>
+        <p id="tutorialText">
+            <strong>🎯 Objetivo:</strong> Los dos jugadores tienen 3 corazones. El que pierda todos sus corazones primero, pierde.<br><br>
+            <strong>❤️ Corazones:</strong> Haz clic en un corazón para perderlo. Cada jugador tiene su propio color.<br><br>
+            <strong>🎨 Colores:</strong> Cada jugador puede cambiar el color de sus corazones con los botones de abajo.<br><br>
+            <strong>🔄 Reiniciar:</strong> Si pierdes todos tus corazones, presiona "Reiniciar" para volver a empezar.<br><br>
+            <strong>🎬 YouTube:</strong> Pega el link de un video de YouTube y presiona "Cargar" para verlo.
+        </p>
+        <button class="close-tutorial" id="closeTutorialBtn">✕ Entendido</button>
     </div>
 </div>
 
-<div id="controls-hint">W A S D · Mover · Click en cinta para recoger</div>
-<div id="info">✦ VHS 3D ✦</div>
+<!-- OVERLAY VHS 3D (se abre con "Cómo jugar") -->
+<div class="vhs-overlay" id="vhsOverlay">
+    <canvas id="vhsCanvas"></canvas>
+    <div id="vhsCrosshair">+</div>
+    <div id="vhsInfo">✦ VHS ✦</div>
+    <div id="vhsControls">WASD · Mover · Click en cinta para recoger</div>
+    <div id="vhsExit">✕ Salir</div>
+    <div id="vhsMessage" class="vhs-message"></div>
+</div>
 
-<button id="exit-tutorial">✕ Salir</button>
+<div class="main-container" id="mainContainer">
+    <!-- LOGO -->
+    <div class="logo-container" id="logoContainer">
+        <div class="logo-text" id="logoText">NoTeRias</div>
+        <div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div>
+    </div>
 
-<!-- Three.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <div class="top-buttons">
+        <button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
+        <button class="multiplayer-btn" id="multiplayerBtn">🎮 2 Jugadores</button>
+        <button class="exit-mp-btn" id="exitMpBtn">🚪 Salir 2P</button>
+    </div>
+
+    <!-- CORAZONES -->
+    <div class="heart-counter" id="heartCounter">
+        <div class="player-label" id="playerLabel">👤 TÚ</div>
+        <div class="hearts-container" id="heartsContainer">
+            <span class="heart" data-index="0">❤️</span>
+            <span class="heart" data-index="1">❤️</span>
+            <span class="heart" data-index="2">❤️</span>
+        </div>
+        <div class="color-picker-container" id="colorPicker">
+            <button class="color-btn active" data-color="#ff2b4f" style="background:#ff2b4f;"></button>
+            <button class="color-btn" data-color="#4fc3f7" style="background:#4fc3f7;"></button>
+            <button class="color-btn" data-color="#66bb6a" style="background:#66bb6a;"></button>
+            <button class="color-btn" data-color="#ffa726" style="background:#ffa726;"></button>
+            <button class="color-btn" data-color="#ab47bc" style="background:#ab47bc;"></button>
+        </div>
+        <button id="resetBtn" class="reset-btn">⟳ Volver a intentar</button>
+    </div>
+
+    <!-- MODO 2 JUGADORES -->
+    <div class="players-container" id="playersContainer">
+        <div class="player-card" id="player1Card">
+            <div class="player-label" id="player1Label">👤 JUGADOR 1</div>
+            <div class="hearts-container" id="hearts1">
+                <span class="heart" data-player="1" data-index="0">❤️</span>
+                <span class="heart" data-player="1" data-index="1">❤️</span>
+                <span class="heart" data-player="1" data-index="2">❤️</span>
+            </div>
+            <div class="color-picker-container" id="colorPicker1">
+                <button class="color-btn active" data-player="1" data-color="#ff2b4f" style="background:#ff2b4f;"></button>
+                <button class="color-btn" data-player="1" data-color="#4fc3f7" style="background:#4fc3f7;"></button>
+                <button class="color-btn" data-player="1" data-color="#66bb6a" style="background:#66bb6a;"></button>
+                <button class="color-btn" data-player="1" data-color="#ffa726" style="background:#ffa726;"></button>
+                <button class="color-btn" data-player="1" data-color="#ab47bc" style="background:#ab47bc;"></button>
+            </div>
+            <button class="reset-btn" id="resetBtn1">⟳ Reiniciar</button>
+            <div class="player-status" id="status1">❤️ 3 corazones</div>
+        </div>
+        <div class="player-card" id="player2Card">
+            <div class="player-label" id="player2Label">👤 JUGADOR 2</div>
+            <div class="hearts-container" id="hearts2">
+                <span class="heart" data-player="2" data-index="0">❤️</span>
+                <span class="heart" data-player="2" data-index="1">❤️</span>
+                <span class="heart" data-player="2" data-index="2">❤️</span>
+            </div>
+            <div class="color-picker-container" id="colorPicker2">
+                <button class="color-btn active" data-player="2" data-color="#ff2b4f" style="background:#ff2b4f;"></button>
+                <button class="color-btn" data-player="2" data-color="#4fc3f7" style="background:#4fc3f7;"></button>
+                <button class="color-btn" data-player="2" data-color="#66bb6a" style="background:#66bb6a;"></button>
+                <button class="color-btn" data-player="2" data-color="#ffa726" style="background:#ffa726;"></button>
+                <button class="color-btn" data-player="2" data-color="#ab47bc" style="background:#ab47bc;"></button>
+            </div>
+            <button class="reset-btn" id="resetBtn2">⟳ Reiniciar</button>
+            <div class="player-status" id="status2">❤️ 3 corazones</div>
+        </div>
+    </div>
+
+    <!-- REPRODUCTOR PERSONALIZADO (SIN VHS) -->
+    <div class="custom-player" id="customPlayer">
+        <div class="player-container" id="playerContainer">
+            <div id="playerPlaceholder" class="placeholder">
+                <div class="icon">🎬</div>
+                <div class="msg" id="playerPlaceholderMsg">Pega la URL de YouTube</div>
+            </div>
+            <iframe id="playerIframe" style="display:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+        <div class="player-controls">
+            <input type="text" id="playerInput" placeholder="Pega la URL de YouTube...">
+            <button id="playerLoadBtn">▶ Cargar</button>
+        </div>
+    </div>
+
+    <div class="credits" id="creditsText">
+        <span>CC0</span> Raphapro900 <span>- V1.0</span>
+    </div>
+</div>
+
+<!-- AUDIOS -->
+<audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3" type="audio/mpeg"></audio>
+<audio id="winAudio" preload="auto"><source src="Win.mp3" type="audio/mpeg"></audio>
+<audio id="oofAudio" preload="auto"><source src="oof.mp3" type="audio/mpeg"></audio>
+<audio id="underAudio" preload="auto"><source src="under.mp3" type="audio/mpeg"></audio>
+<audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3" type="audio/mpeg"></audio>
+<audio id="ayAudio" preload="auto"><source src="Ay.mp3" type="audio/mpeg"></audio>
+<audio id="nooAudio" preload="auto"><source src="Noo.mp3" type="audio/mpeg"></audio>
+<audio id="wthbAudio" preload="auto"><source src="WTHB.mp3" type="audio/mpeg"></audio>
+<audio id="logoPressAudio" preload="auto" loop><source src="LogoPress.mp3" type="audio/mpeg"></audio>
+<audio id="shhAudio" preload="auto"><source src="Shh.mp3" type="audio/mpeg"></audio>
+<audio id="xddAudio" preload="auto"><source src="XDD.mp3" type="audio/mpeg"></audio>
 
 <script>
     (function() {
         // ============================================================
-        // CONFIGURACIÓN
+        // ESTADO PRINCIPAL
         // ============================================================
-        const scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x000000);
-        scene.fog = new THREE.Fog(0x000000, 10, 30);
+        let logoState = 0;
+        let isGameOver = false;
+        let isMusicPlaying = false;
+        let isMultiplayer = false;
 
-        const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 1.7, 5);
+        let hearts = [true, true, true];
+        let heartColor = '#ff2b4f';
 
-        const renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.2;
-        document.getElementById('canvas-container').appendChild(renderer.domElement);
+        const players = {
+            1: { hearts: [true, true, true], color: '#ff2b4f', won: false },
+            2: { hearts: [true, true, true], color: '#ff2b4f', won: false }
+        };
 
         // ============================================================
-        // LUCES
+        // DOM PRINCIPAL
         // ============================================================
-        const ambientLight = new THREE.AmbientLight(0x222244, 0.3);
-        scene.add(ambientLight);
+        const logoContainer = document.getElementById('logoContainer');
+        const logoText = document.getElementById('logoText');
+        const logoSub = document.getElementById('logoSub');
+        const howToPlayBtn = document.getElementById('howToPlayBtn');
+        const creditsText = document.getElementById('creditsText');
+        const goText = document.getElementById('goText');
+        const goSubText = document.getElementById('goSubText');
+        const goResetBtn = document.getElementById('goResetBtn');
+        const gameOverOverlay = document.getElementById('gameOverOverlay');
+        const mainContainer = document.getElementById('mainContainer');
+        const playersContainer = document.getElementById('playersContainer');
+        const multiplayerBtn = document.getElementById('multiplayerBtn');
+        const exitMpBtn = document.getElementById('exitMpBtn');
 
-        const pointLight = new THREE.PointLight(0xff6b7c, 1.5, 15);
-        pointLight.position.set(0, 4, 2);
-        scene.add(pointLight);
+        const heartElements = document.querySelectorAll('#heartsContainer .heart');
+        const resetBtn = document.getElementById('resetBtn');
+        const playerLabel = document.getElementById('playerLabel');
 
-        const pointLight2 = new THREE.PointLight(0x4466ff, 0.5, 10);
-        pointLight2.position.set(-3, 2, -1);
-        scene.add(pointLight2);
+        const hearts1 = document.querySelectorAll('#hearts1 .heart');
+        const hearts2 = document.querySelectorAll('#hearts2 .heart');
+        const resetBtn1 = document.getElementById('resetBtn1');
+        const resetBtn2 = document.getElementById('resetBtn2');
+        const status1 = document.getElementById('status1');
+        const status2 = document.getElementById('status2');
+        const player1Label = document.getElementById('player1Label');
+        const player2Label = document.getElementById('player2Label');
 
-        const pointLight3 = new THREE.PointLight(0x4422aa, 0.3, 8);
-        pointLight3.position.set(3, 1, -2);
-        scene.add(pointLight3);
+        const playerInput = document.getElementById('playerInput');
+        const playerLoadBtn = document.getElementById('playerLoadBtn');
+        const playerIframe = document.getElementById('playerIframe');
+        const playerPlaceholder = document.getElementById('playerPlaceholder');
+        const playerPlaceholderMsg = document.getElementById('playerPlaceholderMsg');
 
-        const tvLight = new THREE.PointLight(0x8888ff, 0.5, 8);
-        tvLight.position.set(0, 1.5, 0);
-        scene.add(tvLight);
+        const tutorialPopup = document.getElementById('tutorialPopup');
+        const closeTutorialBtn = document.getElementById('closeTutorialBtn');
+        const tutorialTitle = document.getElementById('tutorialTitle');
+        const tutorialText = document.getElementById('tutorialText');
+
+        const colorBtns = document.querySelectorAll('#colorPicker .color-btn');
+
+        // VHS OVERLAY
+        const vhsOverlay = document.getElementById('vhsOverlay');
+        const vhsExit = document.getElementById('vhsExit');
+        const vhsMessage = document.getElementById('vhsMessage');
 
         // ============================================================
-        // SUELO
+        // FUNCIONES DE AUDIO
         // ============================================================
-        const floorGeometry = new THREE.PlaneGeometry(20, 20);
-        const floorMaterial = new THREE.MeshStandardMaterial({
-            color: 0x0a0a0a,
-            roughness: 0.9,
-            metalness: 0.1,
-            side: THREE.DoubleSide
-        });
-        const floor = new THREE.Mesh(floorGeometry, floorMaterial);
-        floor.rotation.x = -Math.PI / 2;
-        floor.position.y = -0.5;
-        floor.receiveShadow = true;
-        scene.add(floor);
-
-        // ============================================================
-        // PAREDES
-        // ============================================================
-        function createWall(width, height, posX, posY, posZ, rotY = 0) {
-            const geo = new THREE.PlaneGeometry(width, height);
-            const mat = new THREE.MeshStandardMaterial({
-                color: 0x0a0a12,
-                roughness: 0.8,
-                metalness: 0.2,
-                side: THREE.DoubleSide
-            });
-            const mesh = new THREE.Mesh(geo, mat);
-            mesh.position.set(posX, posY, posZ);
-            mesh.rotation.y = rotY;
-            mesh.receiveShadow = true;
-            scene.add(mesh);
-            return mesh;
+        function playLogoPress() {
+            try { logoPressAudio.currentTime = 0; logoPressAudio.volume = 0.8; logoPressAudio.loop = true; logoPressAudio.play().catch(() => {}); } catch(e) {}
+        }
+        function stopLogoPress() {
+            try { logoPressAudio.pause(); logoPressAudio.currentTime = 0; logoPressAudio.loop = false; } catch(e) {}
+        }
+        function playShh() {
+            try { shhAudio.currentTime = 0; shhAudio.volume = 0.8; shhAudio.play().catch(() => {}); } catch(e) {}
+        }
+        function playOof() {
+            try { oofAudio.currentTime = 0; oofAudio.volume = 0.8; oofAudio.play().catch(() => {}); } catch(e) {}
+        }
+        function playUnder() {
+            try { underAudio.currentTime = 0; underAudio.volume = 0.8; underAudio.play().catch(() => {}); } catch(e) {}
+        }
+        function playRandomExclamation() {
+            const audios = [ayNoAudio, ayAudio, nooAudio, wthbAudio];
+            const audio = audios[Math.floor(Math.random() * audios.length)];
+            try { audio.currentTime = 0; audio.volume = 0.8; audio.play().catch(() => {}); } catch(e) {}
+        }
+        function playXDD() {
+            try { xddAudio.currentTime = 0; xddAudio.volume = 0.9; xddAudio.play().catch(() => {}); } catch(e) {}
+        }
+        function playGameOverMusic() {
+            try { if (isMusicPlaying) return; gameOverAudio.currentTime = 0; gameOverAudio.volume = 1.0; gameOverAudio.play().then(() => { isMusicPlaying = true; }).catch(() => {}); } catch(e) {}
+        }
+        function playWinMusic() {
+            try { if (isMusicPlaying) return; winAudio.currentTime = 0; winAudio.volume = 1.0; winAudio.play().then(() => { isMusicPlaying = true; }).catch(() => {}); } catch(e) {}
+        }
+        function stopGameOverMusic() {
+            try { if (!gameOverAudio.paused) gameOverAudio.pause(); if (!winAudio.paused) winAudio.pause(); gameOverAudio.currentTime = 0; winAudio.currentTime = 0; isMusicPlaying = false; } catch(e) {}
         }
 
-        createWall(12, 4, 0, 1.5, -6, 0);
-        createWall(12, 4, 0, 1.5, 6, Math.PI);
-        createWall(12, 4, -6, 1.5, 0, Math.PI / 2);
-        createWall(12, 4, 6, 1.5, 0, -Math.PI / 2);
-
-        // ============================================================
-        // TELEVISIÓN VHS
-        // ============================================================
-        const tvGroup = new THREE.Group();
-        tvGroup.position.set(0, 1.2, -2.5);
-
-        const tvBodyGeo = new THREE.BoxGeometry(2.2, 1.8, 0.6);
-        const tvBodyMat = new THREE.MeshStandardMaterial({
-            color: 0x1a1a2a,
-            roughness: 0.6,
-            metalness: 0.4,
-            emissive: 0x0a0a1a,
-            emissiveIntensity: 0.1
-        });
-        const tvBody = new THREE.Mesh(tvBodyGeo, tvBodyMat);
-        tvBody.position.z = 0;
-        tvBody.castShadow = true;
-        tvGroup.add(tvBody);
-
-        // Pantalla
-        const screenGeo = new THREE.PlaneGeometry(1.8, 1.35);
-        const screenMat = new THREE.MeshStandardMaterial({
-            color: 0x0a0a1a,
-            emissive: 0x111133,
-            emissiveIntensity: 0.2,
-            roughness: 0.3,
-            metalness: 0.1
-        });
-        const screen = new THREE.Mesh(screenGeo, screenMat);
-        screen.position.set(0, 0.05, 0.31);
-        tvGroup.add(screen);
-
-        // Marco
-        const frameMat = new THREE.MeshStandardMaterial({ color: 0x222244, roughness: 0.5, metalness: 0.3 });
-        const frameGeo = new THREE.BoxGeometry(1.85, 0.04, 0.05);
-        const frameTop = new THREE.Mesh(frameGeo, frameMat);
-        frameTop.position.set(0, 0.68, 0.31);
-        tvGroup.add(frameTop);
-        const frameBottom = new THREE.Mesh(frameGeo, frameMat);
-        frameBottom.position.set(0, -0.68, 0.31);
-        tvGroup.add(frameBottom);
-        const frameLeft = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.35, 0.05), frameMat);
-        frameLeft.position.set(-0.91, 0.05, 0.31);
-        tvGroup.add(frameLeft);
-        const frameRight = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.35, 0.05), frameMat);
-        frameRight.position.set(0.91, 0.05, 0.31);
-        tvGroup.add(frameRight);
-
-        // Botón de encendido
-        const powerBtnGeo = new THREE.SphereGeometry(0.05, 8, 8);
-        const powerBtnMat = new THREE.MeshStandardMaterial({
-            color: 0x44ff44,
-            emissive: 0x44ff44,
-            emissiveIntensity: 0.5
-        });
-        const powerBtn = new THREE.Mesh(powerBtnGeo, powerBtnMat);
-        powerBtn.position.set(0.5, -0.5, 0.35);
-        tvGroup.add(powerBtn);
-
-        // Base
-        const baseGeo = new THREE.BoxGeometry(1.2, 0.1, 0.4);
-        const baseMat = new THREE.MeshStandardMaterial({ color: 0x111122, roughness: 0.8 });
-        const base = new THREE.Mesh(baseGeo, baseMat);
-        base.position.set(0, -0.95, 0);
-        tvGroup.add(base);
-
-        // Patas
-        const legMat = new THREE.MeshStandardMaterial({ color: 0x222244, metalness: 0.5, roughness: 0.3 });
-        const legPositions = [[-0.4, -1.0, 0.2], [0.4, -1.0, 0.2], [-0.4, -1.0, -0.2], [0.4, -1.0, -0.2]];
-        legPositions.forEach(pos => {
-            const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.1, 6), legMat);
-            leg.position.set(pos[0], pos[1], pos[2]);
-            tvGroup.add(leg);
-        });
-
-        scene.add(tvGroup);
-
-        const tvScreen = screen;
-
-        // ============================================================
-        // REPRODUCTOR DE VIDEO DE LA TV
-        // ============================================================
-        let videoElement = null;
-        let videoTexture = null;
-        let isPlaying = false;
-        let isNoInPlaying = false;
-        let isWatching = false;
-        let hasVHS = false;
-        let currentVideo = 'screen';
-
-        function createVideoElement(src, loop = true, onEnd = null) {
-            const video = document.createElement('video');
-            video.src = src;
-            video.crossOrigin = 'anonymous';
-            video.playsInline = true;
-            video.muted = false;
-            video.loop = loop;
-            video.volume = 0.5;
-            return video;
+        function shakeScreen() {
+            document.body.classList.remove('shaking');
+            void document.body.offsetWidth;
+            document.body.classList.add('shaking');
+            setTimeout(() => { document.body.classList.remove('shaking'); }, 500);
         }
 
-        function setTVScreen(video, isLoop = true) {
-            if (videoTexture) {
-                videoTexture.dispose();
+        // ============================================================
+        // TUTORIAL (texto normal)
+        // ============================================================
+        function openTutorial() {
+            const isLaugh = logoState === 1;
+            if (isLaugh) {
+                tutorialTitle.textContent = 'Como reírse AJAJAJAJA';
+                tutorialText.innerHTML = `
+                    <strong>🎯 Objetivo:</strong> Los dos jugadores tienen 3 corazones. El que pierda todos sus corazones primero, pierde.<br><br>
+                    <strong>😂 Corazones:</strong> Haz clic en un corazón para perderlo. Cada jugador tiene su propio color.<br><br>
+                    <strong>🎨 Colores:</strong> Cada jugador puede cambiar el color de sus corazones con los botones de abajo.<br><br>
+                    <strong>🔄 Reiniciar:</strong> Si pierdes todos tus corazones, presiona "Reiniciar" para volver a empezar.<br><br>
+                    <strong>🎬 YouTube:</strong> Pega el link de un video de YouTube y presiona "JAJAJA" para verlo.<br><br>
+                    <strong>🤣 Modo Ríe:</strong> Presiona el logo "NoTeRias" para cambiarlo a "Ríe" y activar el modo de risa.
+                `;
+            } else {
+                tutorialTitle.textContent = 'Cómo jugar';
+                tutorialText.innerHTML = `
+                    <strong>🎯 Objetivo:</strong> Los dos jugadores tienen 3 corazones. El que pierda todos sus corazones primero, pierde.<br><br>
+                    <strong>❤️ Corazones:</strong> Haz clic en un corazón para perderlo. Cada jugador tiene su propio color.<br><br>
+                    <strong>🎨 Colores:</strong> Cada jugador puede cambiar el color de sus corazones con los botones de abajo.<br><br>
+                    <strong>🔄 Reiniciar:</strong> Si pierdes todos tus corazones, presiona "Reiniciar" para volver a empezar.<br><br>
+                    <strong>🎬 YouTube:</strong> Pega el link de un video de YouTube y presiona "Cargar" para verlo.
+                `;
             }
-            videoTexture = new THREE.VideoTexture(video);
-            videoTexture.minFilter = THREE.LinearFilter;
-            videoTexture.magFilter = THREE.LinearFilter;
+            tutorialPopup.classList.add('active');
+        }
 
-            tvScreen.material = new THREE.MeshStandardMaterial({
-                map: videoTexture,
-                emissive: new THREE.Color(0x4488ff),
-                emissiveIntensity: 0.3,
-                roughness: 0.2,
+        function closeTutorial() {
+            tutorialPopup.classList.remove('active');
+        }
+
+        howToPlayBtn.addEventListener('click', function() {
+            // Abrir el VHS 3D en lugar del tutorial de texto
+            openVHS();
+        });
+
+        closeTutorialBtn.addEventListener('click', closeTutorial);
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && tutorialPopup.classList.contains('active')) {
+                closeTutorial();
+            }
+        });
+
+        // ============================================================
+        // VHS 3D
+        // ============================================================
+        let vhsInitialized = false;
+        let vhsScene, vhsCamera, vhsRenderer;
+        let vhsVideoElement = null;
+        let vhsVideoTexture = null;
+        let vhsHasVHS = false;
+        let vhsIsWatching = false;
+        let vhsPlayerPos = new THREE.Vector3(0, 1.7, 5);
+        let vhsPlayerRot = 0;
+        let vhsPitch = 0;
+        let vhsTargetPitch = 0;
+        let vhsIsLocked = false;
+        let vhsMouseX = 0;
+        let vhsMouseY = 0;
+        let vhsKeys = { w: false, a: false, s: false, d: false };
+        let vhsMessageTimeout = null;
+
+        const vhsSpeed = 0.06;
+
+        function showVHSMessage(text) {
+            if (vhsMessageTimeout) clearTimeout(vhsMessageTimeout);
+            vhsMessage.textContent = text;
+            vhsMessage.classList.add('show');
+            vhsMessageTimeout = setTimeout(() => {
+                vhsMessage.classList.remove('show');
+            }, 2000);
+        }
+
+        function initVHS() {
+            if (vhsInitialized) return;
+            vhsInitialized = true;
+
+            const canvas = document.getElementById('vhsCanvas');
+            const container = document.getElementById('vhsOverlay');
+
+            // Escena
+            vhsScene = new THREE.Scene();
+            vhsScene.background = new THREE.Color(0x000000);
+            vhsScene.fog = new THREE.Fog(0x000000, 10, 30);
+
+            // Cámara
+            vhsCamera = new THREE.PerspectiveCamera(70, canvas.clientWidth / canvas.clientHeight, 0.1, 100);
+            vhsCamera.position.set(0, 1.7, 5);
+
+            // Renderer
+            vhsRenderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+            vhsRenderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            vhsRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+            vhsRenderer.shadowMap.enabled = true;
+            vhsRenderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            vhsRenderer.toneMapping = THREE.ACESFilmicToneMapping;
+            vhsRenderer.toneMappingExposure = 1.2;
+
+            // Luces
+            const ambientLight = new THREE.AmbientLight(0x222244, 0.3);
+            vhsScene.add(ambientLight);
+
+            const pointLight = new THREE.PointLight(0xff6b7c, 1.5, 15);
+            pointLight.position.set(0, 4, 2);
+            vhsScene.add(pointLight);
+
+            const pointLight2 = new THREE.PointLight(0x4466ff, 0.5, 10);
+            pointLight2.position.set(-3, 2, -1);
+            vhsScene.add(pointLight2);
+
+            const pointLight3 = new THREE.PointLight(0x4422aa, 0.3, 8);
+            pointLight3.position.set(3, 1, -2);
+            vhsScene.add(pointLight3);
+
+            const tvLight = new THREE.PointLight(0x8888ff, 0.5, 8);
+            tvLight.position.set(0, 1.5, 0);
+            vhsScene.add(tvLight);
+
+            // Suelo
+            const floorGeometry = new THREE.PlaneGeometry(20, 20);
+            const floorMaterial = new THREE.MeshStandardMaterial({
+                color: 0x0a0a0a,
+                roughness: 0.9,
                 metalness: 0.1,
                 side: THREE.DoubleSide
             });
+            const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -0.5;
+            floor.receiveShadow = true;
+            vhsScene.add(floor);
 
-            tvLight.intensity = 1.5;
-            isPlaying = true;
-        }
-
-        function playScreenLoop() {
-            if (videoElement) {
-                videoElement.pause();
-                videoElement.currentTime = 0;
-                videoElement = null;
+            // Paredes
+            function createWallVHS(width, height, posX, posY, posZ, rotY = 0) {
+                const geo = new THREE.PlaneGeometry(width, height);
+                const mat = new THREE.MeshStandardMaterial({
+                    color: 0x0a0a12,
+                    roughness: 0.8,
+                    metalness: 0.2,
+                    side: THREE.DoubleSide
+                });
+                const mesh = new THREE.Mesh(geo, mat);
+                mesh.position.set(posX, posY, posZ);
+                mesh.rotation.y = rotY;
+                mesh.receiveShadow = true;
+                vhsScene.add(mesh);
+                return mesh;
             }
+            createWallVHS(12, 4, 0, 1.5, -6, 0);
+            createWallVHS(12, 4, 0, 1.5, 6, Math.PI);
+            createWallVHS(12, 4, -6, 1.5, 0, Math.PI / 2);
+            createWallVHS(12, 4, 6, 1.5, 0, -Math.PI / 2);
 
-            currentVideo = 'screen';
-            videoElement = createVideoElement('Screen.mp4', true);
-            setTVScreen(videoElement, true);
-            videoElement.play().catch(err => {
-                console.log('Error reproduciendo Screen.mp4:', err);
+            // Televisión
+            const tvGroup = new THREE.Group();
+            tvGroup.position.set(0, 1.2, -2.5);
+
+            const tvBodyGeo = new THREE.BoxGeometry(2.2, 1.8, 0.6);
+            const tvBodyMat = new THREE.MeshStandardMaterial({
+                color: 0x1a1a2a,
+                roughness: 0.6,
+                metalness: 0.4,
+                emissive: 0x0a0a1a,
+                emissiveIntensity: 0.1
             });
-        }
+            const tvBody = new THREE.Mesh(tvBodyGeo, tvBodyMat);
+            tvBody.position.z = 0;
+            tvBody.castShadow = true;
+            tvGroup.add(tvBody);
 
-        function playNoIn() {
-            if (videoElement) {
-                videoElement.pause();
-                videoElement.currentTime = 0;
-                videoElement = null;
-            }
+            const screenGeo = new THREE.PlaneGeometry(1.8, 1.35);
+            const screenMat = new THREE.MeshStandardMaterial({
+                color: 0x0a0a1a,
+                emissive: 0x111133,
+                emissiveIntensity: 0.2,
+                roughness: 0.3,
+                metalness: 0.1
+            });
+            const screen = new THREE.Mesh(screenGeo, screenMat);
+            screen.position.set(0, 0.05, 0.31);
+            tvGroup.add(screen);
 
-            currentVideo = 'noin';
-            isNoInPlaying = true;
-            videoElement = createVideoElement('NoIn.mp4', false);
-            setTVScreen(videoElement, false);
+            const frameMat = new THREE.MeshStandardMaterial({ color: 0x222244, roughness: 0.5, metalness: 0.3 });
+            const frameGeo = new THREE.BoxGeometry(1.85, 0.04, 0.05);
+            const frameTop = new THREE.Mesh(frameGeo, frameMat);
+            frameTop.position.set(0, 0.68, 0.31);
+            tvGroup.add(frameTop);
+            const frameBottom = new THREE.Mesh(frameGeo, frameMat);
+            frameBottom.position.set(0, -0.68, 0.31);
+            tvGroup.add(frameBottom);
+            const frameLeft = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.35, 0.05), frameMat);
+            frameLeft.position.set(-0.91, 0.05, 0.31);
+            tvGroup.add(frameLeft);
+            const frameRight = new THREE.Mesh(new THREE.BoxGeometry(0.04, 1.35, 0.05), frameMat);
+            frameRight.position.set(0.91, 0.05, 0.31);
+            tvGroup.add(frameRight);
 
-            videoElement.addEventListener('ended', function onEnd() {
-                videoElement.removeEventListener('ended', onEnd);
-                isNoInPlaying = false;
-                // Volver a Screen.mp4
-                playScreenLoop();
+            const powerBtnGeo = new THREE.SphereGeometry(0.05, 8, 8);
+            const powerBtnMat = new THREE.MeshStandardMaterial({
+                color: 0x44ff44,
+                emissive: 0x44ff44,
+                emissiveIntensity: 0.5
+            });
+            const powerBtn = new THREE.Mesh(powerBtnGeo, powerBtnMat);
+            powerBtn.position.set(0.5, -0.5, 0.35);
+            tvGroup.add(powerBtn);
+
+            const baseGeo = new THREE.BoxGeometry(1.2, 0.1, 0.4);
+            const baseMat = new THREE.MeshStandardMaterial({ color: 0x111122, roughness: 0.8 });
+            const base = new THREE.Mesh(baseGeo, baseMat);
+            base.position.set(0, -0.95, 0);
+            tvGroup.add(base);
+
+            const legMat = new THREE.MeshStandardMaterial({ color: 0x222244, metalness: 0.5, roughness: 0.3 });
+            const legPositions = [[-0.4, -1.0, 0.2], [0.4, -1.0, 0.2], [-0.4, -1.0, -0.2], [0.4, -1.0, -0.2]];
+            legPositions.forEach(pos => {
+                const leg = new THREE.Mesh(new THREE.CylinderGeometry(0.03, 0.05, 0.1, 6), legMat);
+                leg.position.set(pos[0], pos[1], pos[2]);
+                tvGroup.add(leg);
             });
 
-            videoElement.play().catch(err => {
-                console.log('Error reproduciendo NoIn.mp4:', err);
-                isNoInPlaying = false;
-                playScreenLoop();
+            vhsScene.add(tvGroup);
+            const tvScreen = screen;
+
+            // Sistema de video de la TV
+            let vhsVideoElement = null;
+            let vhsVideoTexture = null;
+            let vhsIsPlaying = false;
+
+            function createVideoElement(src, loop = true) {
+                const video = document.createElement('video');
+                video.src = src;
+                video.crossOrigin = 'anonymous';
+                video.playsInline = true;
+                video.muted = false;
+                video.loop = loop;
+                video.volume = 0.5;
+                return video;
+            }
+
+            function setTVScreen(video) {
+                if (vhsVideoTexture) {
+                    vhsVideoTexture.dispose();
+                }
+                vhsVideoTexture = new THREE.VideoTexture(video);
+                vhsVideoTexture.minFilter = THREE.LinearFilter;
+                vhsVideoTexture.magFilter = THREE.LinearFilter;
+
+                tvScreen.material = new THREE.MeshStandardMaterial({
+                    map: vhsVideoTexture,
+                    emissive: new THREE.Color(0x4488ff),
+                    emissiveIntensity: 0.3,
+                    roughness: 0.2,
+                    metalness: 0.1,
+                    side: THREE.DoubleSide
+                });
+
+                tvLight.intensity = 1.5;
+                vhsIsPlaying = true;
+            }
+
+            function playScreenLoop() {
+                if (vhsVideoElement) {
+                    vhsVideoElement.pause();
+                    vhsVideoElement.currentTime = 0;
+                    vhsVideoElement = null;
+                }
+                vhsVideoElement = createVideoElement('Screen.mp4', true);
+                setTVScreen(vhsVideoElement);
+                vhsVideoElement.play().catch(() => {});
+            }
+
+            function playNoIn() {
+                if (vhsVideoElement) {
+                    vhsVideoElement.pause();
+                    vhsVideoElement.currentTime = 0;
+                    vhsVideoElement = null;
+                }
+                vhsVideoElement = createVideoElement('NoIn.mp4', false);
+                setTVScreen(vhsVideoElement);
+                vhsVideoElement.addEventListener('ended', function onEnd() {
+                    vhsVideoElement.removeEventListener('ended', onEnd);
+                    playScreenLoop();
+                });
+                vhsVideoElement.play().catch(() => { playScreenLoop(); });
+            }
+
+            function playTutorial() {
+                if (vhsVideoElement) {
+                    vhsVideoElement.pause();
+                    vhsVideoElement.currentTime = 0;
+                    vhsVideoElement = null;
+                }
+                vhsVideoElement = createVideoElement('Tutoriall.mp4', false);
+                setTVScreen(vhsVideoElement);
+                vhsVideoElement.addEventListener('ended', function onEnd() {
+                    vhsVideoElement.removeEventListener('ended', onEnd);
+                    playScreenLoop();
+                    vhsIsWatching = false;
+                    document.getElementById('vhsCrosshair').style.display = 'block';
+                });
+                vhsVideoElement.play().catch(() => { playScreenLoop(); });
+            }
+
+            setTimeout(() => { playScreenLoop(); }, 500);
+
+            // Cinta VHS en el suelo
+            const vhsGroup = new THREE.Group();
+            vhsGroup.position.set(1.5, 0.1, -1.5);
+
+            const tapeMat = new THREE.MeshStandardMaterial({ color: 0x1a1a2a, roughness: 0.7, metalness: 0.2 });
+            const tapeBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.25, 0.6), tapeMat);
+            tapeBody.castShadow = true;
+            vhsGroup.add(tapeBody);
+
+            const labelMat = new THREE.MeshStandardMaterial({ color: 0x222244, roughness: 0.5, emissive: 0x111133, emissiveIntensity: 0.1 });
+            const label = new THREE.Mesh(new THREE.PlaneGeometry(0.25, 0.1), labelMat);
+            label.position.set(0, 0.13, 0.31);
+            vhsGroup.add(label);
+
+            const windowMat = new THREE.MeshStandardMaterial({ color: 0x0a0a1a, roughness: 0.1, metalness: 0.3, emissive: 0x222244, emissiveIntensity: 0.1 });
+            const windowMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.15, 0.08), windowMat);
+            windowMesh.position.set(0, 0.0, 0.31);
+            vhsGroup.add(windowMesh);
+
+            const coilMat = new THREE.MeshStandardMaterial({ color: 0x333355, roughness: 0.3, metalness: 0.5 });
+            const coilPos = [[-0.08, 0, 0.3], [0.08, 0, 0.3]];
+            coilPos.forEach(pos => {
+                const coil = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.02, 8), coilMat);
+                coil.rotation.x = Math.PI / 2;
+                coil.position.set(pos[0], pos[1], pos[2]);
+                vhsGroup.add(coil);
             });
-        }
 
-        function playTutorial() {
-            if (videoElement) {
-                videoElement.pause();
-                videoElement.currentTime = 0;
-                videoElement = null;
-            }
+            vhsScene.add(vhsGroup);
 
-            currentVideo = 'tutorial';
-            videoElement = createVideoElement('Tutoriall.mp4', false);
-            setTVScreen(videoElement, false);
+            // Cinta en la mano
+            const handVHSGroup = new THREE.Group();
+            handVHSGroup.position.set(0.4, -0.3, -0.6);
+            handVHSGroup.scale.set(0.5, 0.5, 0.5);
+            handVHSGroup.rotation.x = 0.2;
+            handVHSGroup.rotation.z = -0.3;
+            handVHSGroup.visible = false;
 
-            videoElement.addEventListener('ended', function onEnd() {
-                videoElement.removeEventListener('ended', onEnd);
-                // Volver a Screen.mp4
-                playScreenLoop();
+            const handTapeBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.25, 0.6), tapeMat);
+            handTapeBody.castShadow = true;
+            handVHSGroup.add(handTapeBody);
+            const handLabel = new THREE.Mesh(new THREE.PlaneGeometry(0.25, 0.1), labelMat);
+            handLabel.position.set(0, 0.13, 0.31);
+            handVHSGroup.add(handLabel);
+            const handWindow = new THREE.Mesh(new THREE.PlaneGeometry(0.15, 0.08), windowMat);
+            handWindow.position.set(0, 0.0, 0.31);
+            handVHSGroup.add(handWindow);
+            const handCoilPos = [[-0.08, 0, 0.3], [0.08, 0, 0.3]];
+            handCoilPos.forEach(pos => {
+                const coil = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.02, 8), coilMat);
+                coil.rotation.x = Math.PI / 2;
+                coil.position.set(pos[0], pos[1], pos[2]);
+                handVHSGroup.add(coil);
             });
 
-            videoElement.play().catch(err => {
-                console.log('Error reproduciendo Tutoriall.mp4:', err);
-                playScreenLoop();
+            vhsCamera.add(handVHSGroup);
+            vhsScene.add(vhsCamera);
+
+            // Raycaster para interacción
+            const raycaster = new THREE.Raycaster();
+            const pointer = new THREE.Vector2();
+
+            // Eventos del VHS
+            function handleVHSClick(e) {
+                if (vhsIsWatching) return;
+
+                const rect = vhsRenderer.domElement.getBoundingClientRect();
+                pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+                pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+                raycaster.setFromCamera(pointer, vhsCamera);
+
+                const vhsIntersects = raycaster.intersectObject(vhsGroup, true);
+                if (vhsIntersects.length > 0 && !vhsHasVHS) {
+                    vhsHasVHS = true;
+                    vhsScene.remove(vhsGroup);
+                    handVHSGroup.visible = true;
+                    showVHSMessage('📼 Cinta recogida');
+                    return;
+                }
+
+                const tvIntersects = raycaster.intersectObject(tvGroup, true);
+                if (tvIntersects.length > 0) {
+                    if (vhsHasVHS) {
+                        showVHSMessage('📺 Reproduciendo...');
+                        playTutorial();
+                        vhsIsWatching = true;
+                        document.getElementById('vhsCrosshair').style.display = 'none';
+                        handVHSGroup.visible = false;
+                    } else {
+                        showVHSMessage('📺 Sin cinta');
+                        playNoIn();
+                    }
+                    return;
+                }
+            }
+
+            vhsRenderer.domElement.addEventListener('click', handleVHSClick);
+
+            // Teclas del VHS
+            document.addEventListener('keydown', (e) => {
+                const key = e.key.toLowerCase();
+                if (vhsOverlay.classList.contains('active')) {
+                    if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
+                        vhsKeys[key] = true;
+                        e.preventDefault();
+                    }
+                    if (e.key === 'Escape' && vhsIsWatching) {
+                        vhsIsWatching = false;
+                        document.getElementById('vhsCrosshair').style.display = 'block';
+                        if (vhsVideoElement) {
+                            vhsVideoElement.pause();
+                            vhsVideoElement.currentTime = 0;
+                            vhsVideoElement = null;
+                        }
+                        playScreenLoop();
+                        if (vhsHasVHS) {
+                            handVHSGroup.visible = true;
+                        }
+                    }
+                }
             });
-        }
 
-        // Iniciar con Screen.mp4 en loop
-        setTimeout(() => {
-            playScreenLoop();
-        }, 500);
+            document.addEventListener('keyup', (e) => {
+                const key = e.key.toLowerCase();
+                if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
+                    vhsKeys[key] = false;
+                    e.preventDefault();
+                }
+            });
 
-        // ============================================================
-        // CINTA VHS
-        // ============================================================
-        const vhsGroup = new THREE.Group();
-        vhsGroup.position.set(1.5, 0.1, -1.5);
+            // Mouse lock del VHS
+            vhsRenderer.domElement.addEventListener('click', () => {
+                if (!vhsIsLocked && !vhsIsWatching && vhsOverlay.classList.contains('active')) {
+                    vhsRenderer.domElement.requestPointerLock();
+                }
+            });
 
-        const tapeMat = new THREE.MeshStandardMaterial({
-            color: 0x1a1a2a,
-            roughness: 0.7,
-            metalness: 0.2
-        });
-        const tapeBody = new THREE.Mesh(new THREE.BoxGeometry(0.4, 0.25, 0.6), tapeMat);
-        tapeBody.castShadow = true;
-        vhsGroup.add(tapeBody);
+            document.addEventListener('pointerlockchange', () => {
+                vhsIsLocked = document.pointerLockElement === vhsRenderer.domElement;
+            });
 
-        const labelMat = new THREE.MeshStandardMaterial({
-            color: 0x222244,
-            roughness: 0.5,
-            emissive: 0x111133,
-            emissiveIntensity: 0.1
-        });
-        const label = new THREE.Mesh(new THREE.PlaneGeometry(0.25, 0.1), labelMat);
-        label.position.set(0, 0.13, 0.31);
-        vhsGroup.add(label);
+            document.addEventListener('mousemove', (e) => {
+                if (vhsIsLocked && !vhsIsWatching && vhsOverlay.classList.contains('active')) {
+                    vhsMouseX += e.movementX * 0.002;
+                    vhsMouseY -= e.movementY * 0.002;
+                    vhsMouseY = Math.max(-1.0, Math.min(1.0, vhsMouseY));
+                }
+            });
 
-        const windowMat = new THREE.MeshStandardMaterial({
-            color: 0x0a0a1a,
-            roughness: 0.1,
-            metalness: 0.3,
-            emissive: 0x222244,
-            emissiveIntensity: 0.1
-        });
-        const windowMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.15, 0.08), windowMat);
-        windowMesh.position.set(0, 0.0, 0.31);
-        vhsGroup.add(windowMesh);
+            // Animación del VHS
+            let vhsStartTime = Date.now();
 
-        const coilMat = new THREE.MeshStandardMaterial({
-            color: 0x333355,
-            roughness: 0.3,
-            metalness: 0.5
-        });
-        const coilPos = [[-0.08, 0, 0.3], [0.08, 0, 0.3]];
-        coilPos.forEach(pos => {
-            const coil = new THREE.Mesh(new THREE.CylinderGeometry(0.04, 0.04, 0.02, 8), coilMat);
-            coil.rotation.x = Math.PI / 2;
-            coil.position.set(pos[0], pos[1], pos[2]);
-            vhsGroup.add(coil);
-        });
+            function animateVHS() {
+                if (!vhsOverlay.classList.contains('active')) {
+                    requestAnimationFrame(animateVHS);
+                    return;
+                }
 
-        scene.add(vhsGroup);
+                requestAnimationFrame(animateVHS);
 
-        // ============================================================
-        // ESTADO DEL JUGADOR
-        // ============================================================
-        let playerPos = new THREE.Vector3(0, 1.7, 5);
-        let playerRot = 0;
-        let velocity = new THREE.Vector3(0, 0, 0);
-        const speed = 0.06;
-        const rotSpeed = 0.035;
-        let isLocked = false;
-        let mouseX = 0;
-        let mouseY = 0;
+                const now = Date.now();
+                const delta = Math.min((now - vhsStartTime) / 16.67, 3);
+                vhsStartTime = now;
 
-        // ============================================================
-        // CONTROLES DE TECLADO
-        // ============================================================
-        const keys = { w: false, a: false, s: false, d: false };
+                if (!vhsIsWatching) {
+                    if (vhsIsLocked) {
+                        vhsPlayerRot += vhsMouseX * 0.5;
+                        vhsMouseX = 0;
+                        vhsTargetPitch = vhsMouseY * 0.6;
+                    }
 
-        document.addEventListener('keydown', (e) => {
-            const key = e.key.toLowerCase();
-            if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
-                keys[key] = true;
-                e.preventDefault();
-            }
-            if (e.key === 'Escape' && isWatching) {
-                exitTutorialView();
-            }
-        });
+                    vhsPitch += (vhsTargetPitch - vhsPitch) * 0.12;
 
-        document.addEventListener('keyup', (e) => {
-            const key = e.key.toLowerCase();
-            if (key === 'w' || key === 'a' || key === 's' || key === 'd') {
-                keys[key] = false;
-                e.preventDefault();
-            }
-        });
+                    const forward = new THREE.Vector3(-Math.sin(vhsPlayerRot), 0, -Math.cos(vhsPlayerRot));
+                    const right = new THREE.Vector3(Math.cos(vhsPlayerRot), 0, -Math.sin(vhsPlayerRot));
 
-        // ============================================================
-        // MOUSE LOCK
-        // ============================================================
-        document.addEventListener('click', () => {
-            if (!isLocked && !isWatching) {
-                renderer.domElement.requestPointerLock();
-            }
-        });
+                    const moveVec = new THREE.Vector3(0, 0, 0);
+                    if (vhsKeys.w) moveVec.add(forward);
+                    if (vhsKeys.s) moveVec.sub(forward);
+                    if (vhsKeys.a) moveVec.sub(right);
+                    if (vhsKeys.d) moveVec.add(right);
 
-        document.addEventListener('pointerlockchange', () => {
-            isLocked = document.pointerLockElement === renderer.domElement;
-        });
+                    if (moveVec.length() > 0) {
+                        moveVec.normalize().multiplyScalar(vhsSpeed * delta);
+                        vhsPlayerPos.add(moveVec);
+                        vhsPlayerPos.x = Math.max(-4.5, Math.min(4.5, vhsPlayerPos.x));
+                        vhsPlayerPos.z = Math.max(-4.5, Math.min(4.5, vhsPlayerPos.z));
+                    }
 
-        document.addEventListener('mousemove', (e) => {
-            if (isLocked && !isWatching) {
-                mouseX += e.movementX * 0.002;
-                mouseY = Math.max(-0.8, Math.min(0.8, mouseY + e.movementY * 0.002));
-            }
-        });
+                    vhsCamera.position.copy(vhsPlayerPos);
+                    vhsCamera.position.y = 1.7;
 
-        // ============================================================
-        // RAYCASTER PARA INTERACCIÓN
-        // ============================================================
-        const raycaster = new THREE.Raycaster();
-        const pointer = new THREE.Vector2();
+                    const euler = new THREE.Euler(vhsPitch, vhsPlayerRot, 0, 'YXZ');
+                    vhsCamera.quaternion.setFromEuler(euler);
 
-        renderer.domElement.addEventListener('click', (e) => {
-            if (isWatching) return;
-
-            const rect = renderer.domElement.getBoundingClientRect();
-            pointer.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-            pointer.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-
-            raycaster.setFromCamera(pointer, camera);
-
-            // Click en cinta VHS
-            const vhsIntersects = raycaster.intersectObject(vhsGroup, true);
-            if (vhsIntersects.length > 0 && !hasVHS) {
-                hasVHS = true;
-                scene.remove(vhsGroup);
-                document.getElementById('inventory').classList.add('visible');
-                showMessage('📼 Cinta VHS recogida');
-                return;
-            }
-
-            // Click en TV
-            const tvIntersects = raycaster.intersectObject(tvGroup, true);
-            if (tvIntersects.length > 0) {
-                if (hasVHS) {
-                    // Tiene cinta -> reproducir Tutoriall.mp4
-                    showMessage('📺 Reproduciendo Tutorial...');
-                    playTutorial();
-                    isWatching = true;
-                    document.getElementById('exit-tutorial').classList.add('visible');
-                    document.getElementById('inventory').classList.remove('visible');
+                    if (handVHSGroup.visible) {
+                        handVHSGroup.position.x = 0.4 + Math.sin(now / 800) * 0.02;
+                        handVHSGroup.position.y = -0.3 + Math.sin(now / 600) * 0.01;
+                        handVHSGroup.rotation.z = -0.3 + Math.sin(now / 700) * 0.02;
+                    }
                 } else {
-                    // No tiene cinta -> reproducir NoIn.mp4
-                    showMessage('📺 No hay cinta insertada');
-                    playNoIn();
+                    vhsCamera.position.set(0, 1.3, -0.5);
+                    vhsCamera.lookAt(0, 0.8, -2.5);
                 }
+
+                if (!vhsHasVHS && vhsGroup.parent) {
+                    vhsGroup.rotation.y += 0.005;
+                    vhsGroup.position.y = 0.1 + Math.sin(now / 1000) * 0.02;
+                }
+
+                vhsRenderer.render(vhsScene, vhsCamera);
+            }
+
+            // Redimensionar VHS
+            function resizeVHS() {
+                const canvas = document.getElementById('vhsCanvas');
+                const container = document.getElementById('vhsOverlay');
+                const w = canvas.clientWidth;
+                const h = canvas.clientHeight;
+                if (vhsCamera) {
+                    vhsCamera.aspect = w / h;
+                    vhsCamera.updateProjectionMatrix();
+                }
+                if (vhsRenderer) {
+                    vhsRenderer.setSize(w, h);
+                }
+            }
+
+            window.addEventListener('resize', resizeVHS);
+
+            // Iniciar animación
+            animateVHS();
+
+            // Guardar referencia para cerrar
+            window.vhsResize = resizeVHS;
+        }
+
+        function openVHS() {
+            if (!vhsInitialized) {
+                initVHS();
+            }
+            vhsOverlay.classList.add('active');
+            // Forzar resize
+            if (window.vhsResize) setTimeout(window.vhsResize, 100);
+            // Solicitar lock al hacer clic
+            setTimeout(() => {
+                if (!vhsIsLocked && !vhsIsWatching) {
+                    vhsRenderer.domElement.requestPointerLock();
+                }
+            }, 500);
+        }
+
+        function closeVHS() {
+            vhsOverlay.classList.remove('active');
+            document.exitPointerLock();
+            vhsIsLocked = false;
+            // Restaurar posición de la cámara
+            vhsPlayerPos.set(0, 1.7, 5);
+            vhsPlayerRot = 0;
+            vhsPitch = 0;
+            vhsTargetPitch = 0;
+            vhsCamera.position.set(0, 1.7, 5);
+            const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+            vhsCamera.quaternion.setFromEuler(euler);
+            // Si estaba viendo el tutorial, detenerlo
+            if (vhsIsWatching) {
+                vhsIsWatching = false;
+                document.getElementById('vhsCrosshair').style.display = 'block';
+                if (vhsVideoElement) {
+                    vhsVideoElement.pause();
+                    vhsVideoElement.currentTime = 0;
+                    vhsVideoElement = null;
+                }
+                playScreenLoop();
+            }
+        }
+
+        vhsExit.addEventListener('click', closeVHS);
+
+        // ============================================================
+        // UI CORAZÓN ÚNICO
+        // ============================================================
+        function getHeartEmoji(alive, isLaughMode) {
+            if (isLaughMode) {
+                return alive ? '🤣' : '😂';
+            }
+            return alive ? '❤️' : '💔';
+        }
+
+        function updateSinglePlayerUI() {
+            const isLaughMode = logoState === 1;
+            heartElements.forEach((el, index) => {
+                const alive = hearts[index];
+                el.textContent = getHeartEmoji(alive, isLaughMode);
+                el.style.color = heartColor;
+                if (alive) {
+                    el.classList.remove('lost', 'breaking');
+                    el.style.textShadow = `0 8px 25px ${heartColor}88`;
+                    el.style.filter = `drop-shadow(0 8px 12px #00000077)`;
+                    el.style.opacity = '1';
+                } else {
+                    el.classList.add('lost');
+                    el.style.textShadow = `0 0 20px ${heartColor}44`;
+                    el.style.filter = `drop-shadow(0 0 15px ${heartColor}33)`;
+                    el.style.opacity = '0.4';
+                }
+            });
+
+            const aliveCount = hearts.filter(h => h).length;
+            if (logoState === 1) {
+                playerLabel.textContent = '👤 TÚ 🤣';
+            } else {
+                playerLabel.textContent = '👤 TÚ';
+            }
+
+            if (aliveCount === 0) {
+                resetBtn.classList.add('visible');
+            } else {
+                resetBtn.classList.remove('visible');
+            }
+        }
+
+        // ============================================================
+        // UI JUGADORES 2P
+        // ============================================================
+        function updatePlayerUI(playerId) {
+            const player = players[playerId];
+            const hearts = playerId === 1 ? hearts1 : hearts2;
+            const status = playerId === 1 ? status1 : status2;
+            const isLaughMode = logoState === 1;
+
+            hearts.forEach((el, index) => {
+                const alive = player.hearts[index];
+                el.textContent = getHeartEmoji(alive, isLaughMode);
+                el.style.color = player.color;
+                if (alive) {
+                    el.classList.remove('lost', 'breaking');
+                    el.style.textShadow = `0 8px 25px ${player.color}88`;
+                    el.style.filter = `drop-shadow(0 8px 12px #00000077)`;
+                    el.style.opacity = '1';
+                } else {
+                    el.classList.add('lost');
+                    el.style.textShadow = `0 0 20px ${player.color}44`;
+                    el.style.filter = `drop-shadow(0 0 15px ${player.color}33)`;
+                    el.style.opacity = '0.4';
+                }
+            });
+
+            const aliveCount = player.hearts.filter(h => h).length;
+            const label = playerId === 1 ? player1Label : player2Label;
+            if (logoState === 1) {
+                label.textContent = `👤 JUGADOR ${playerId} 🤣`;
+            } else {
+                label.textContent = `👤 JUGADOR ${playerId}`;
+            }
+
+            if (aliveCount === 0) {
+                if (logoState === 1) {
+                    status.textContent = '😂¡PERDISTE! AJAJAJA';
+                    status.className = 'player-status win';
+                } else {
+                    status.textContent = '💀 ¡Has perdido!';
+                    status.className = 'player-status';
+                }
+            } else {
+                status.textContent = `${'❤️'.repeat(aliveCount)} ${aliveCount} corazones`;
+                status.className = 'player-status';
+            }
+
+            const resetBtn = playerId === 1 ? resetBtn1 : resetBtn2;
+            if (aliveCount === 0) {
+                resetBtn.classList.add('visible');
+            } else {
+                resetBtn.classList.remove('visible');
+            }
+        }
+
+        function updateAllPlayers() {
+            updatePlayerUI(1);
+            updatePlayerUI(2);
+        }
+
+        // ============================================================
+        // CLICK EN CORAZÓN (ÚNICO)
+        // ============================================================
+        function handleSingleHeartClick(e) {
+            if (isGameOver || isMultiplayer) return;
+            const el = e.currentTarget;
+            const index = parseInt(el.dataset.index);
+            if (!hearts[index]) return;
+
+            hearts[index] = false;
+            updateSinglePlayerUI();
+            shakeScreen();
+            playUnder();
+
+            const aliveCount = hearts.filter(h => h).length;
+            if (aliveCount === 1) {
+                playRandomExclamation();
+            }
+            if (aliveCount === 0) {
+                playOof();
+                isGameOver = true;
+                stopLogoPress();
+                logoContainer.classList.remove('shaking-loop');
+                setTimeout(() => { playGameOverMusic(); }, 300);
+                setTimeout(() => {
+                    gameOverOverlay.classList.add('show');
+                    document.body.classList.add('game-over-active');
+                    mainContainer.classList.add('game-over-mode');
+                    goText.textContent = 'GAME OVER';
+                    goSubText.textContent = '💀 Has perdido todos tus corazones';
+                    goSubText.classList.remove('shaking-text');
+                }, 600);
+            }
+        }
+
+        // ============================================================
+        // CLICK EN CORAZÓN (2P)
+        // ============================================================
+        function handlePlayerHeartClick(e) {
+            if (isGameOver || !isMultiplayer) return;
+            const el = e.currentTarget;
+            const playerId = parseInt(el.dataset.player);
+            const index = parseInt(el.dataset.index);
+            const player = players[playerId];
+
+            if (!player.hearts[index]) return;
+
+            player.hearts[index] = false;
+            updatePlayerUI(playerId);
+            shakeScreen();
+            playUnder();
+
+            const aliveCount = player.hearts.filter(h => h).length;
+            if (aliveCount === 1) {
+                playRandomExclamation();
+            }
+            if (aliveCount === 0) {
+                playOof();
+            }
+
+            checkLoseCondition2P();
+        }
+
+        // ============================================================
+        // CONDICIÓN DE DERROTA 2P
+        // ============================================================
+        function checkLoseCondition2P() {
+            const p1Alive = players[1].hearts.filter(h => h).length;
+            const p2Alive = players[2].hearts.filter(h => h).length;
+            const isLaughMode = logoState === 1;
+
+            if (p1Alive === 0 && p2Alive > 0) {
+                resetBtn1.classList.add('visible');
+                if (isLaughMode) {
+                    status1.textContent = '😂¡PERDISTE! AJAJAJA';
+                    status1.className = 'player-status win';
+                } else {
+                    status1.textContent = '💀 ¡Has perdido!';
+                    status1.className = 'player-status';
+                }
+                if (p2Alive === 3) {
+                    if (isLaughMode) {
+                        status2.textContent = '🤣¡GANASTE! AJAJAJA';
+                        status2.className = 'player-status win';
+                    } else {
+                        status2.textContent = '🏆 ¡Has ganado!';
+                        status2.className = 'player-status win';
+                    }
+                    isGameOver = true;
+                    stopLogoPress();
+                    logoContainer.classList.remove('shaking-loop');
+                    shakeScreen();
+                    if (isLaughMode) { playWinMusic(); } else { playGameOverMusic(); }
+                }
+            }
+
+            if (p2Alive === 0 && p1Alive > 0) {
+                resetBtn2.classList.add('visible');
+                if (isLaughMode) {
+                    status2.textContent = '😂¡PERDISTE! AJAJAJA';
+                    status2.className = 'player-status win';
+                } else {
+                    status2.textContent = '💀 ¡Has perdido!';
+                    status2.className = 'player-status';
+                }
+                if (p1Alive === 3) {
+                    if (isLaughMode) {
+                        status1.textContent = '🤣¡GANASTE! AJAJAJA';
+                        status1.className = 'player-status win';
+                    } else {
+                        status1.textContent = '🏆 ¡Has ganado!';
+                        status1.className = 'player-status win';
+                    }
+                    isGameOver = true;
+                    stopLogoPress();
+                    logoContainer.classList.remove('shaking-loop');
+                    shakeScreen();
+                    if (isLaughMode) { playWinMusic(); } else { playGameOverMusic(); }
+                }
+            }
+
+            if (p1Alive === 0 && p2Alive === 0 && !isGameOver) {
+                isGameOver = true;
+                stopLogoPress();
+                logoContainer.classList.remove('shaking-loop');
+                shakeScreen();
+                if (isLaughMode) {
+                    status1.textContent = '😂¡PERDISTE! AJAJAJA';
+                    status1.className = 'player-status win';
+                    status2.textContent = '😂¡PERDISTE! AJAJAJA';
+                    status2.className = 'player-status win';
+                } else {
+                    status1.textContent = '💀 ¡Has perdido!';
+                    status1.className = 'player-status';
+                    status2.textContent = '💀 ¡Has perdido!';
+                    status2.className = 'player-status';
+                }
+                resetBtn1.classList.add('visible');
+                resetBtn2.classList.add('visible');
+                if (isLaughMode) { playWinMusic(); } else { playGameOverMusic(); }
+            }
+
+            if (isGameOver) {
+                document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'default'; });
+            } else {
+                document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
+            }
+        }
+
+        // ============================================================
+        // REINICIAR (ÚNICO)
+        // ============================================================
+        function resetSinglePlayer() {
+            hearts = [true, true, true];
+            updateSinglePlayerUI();
+            resetBtn.classList.remove('visible');
+            if (isGameOver) {
+                isGameOver = false;
+                gameOverOverlay.classList.remove('show');
+                document.body.classList.remove('game-over-active');
+                mainContainer.classList.remove('game-over-mode');
+                stopGameOverMusic();
+                isMusicPlaying = false;
+                document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
+            }
+        }
+
+        // ============================================================
+        // REINICIAR (2P)
+        // ============================================================
+        function resetPlayer(playerId) {
+            const player = players[playerId];
+            player.hearts = [true, true, true];
+            player.won = false;
+            updatePlayerUI(playerId);
+            const resetBtn = playerId === 1 ? resetBtn1 : resetBtn2;
+            resetBtn.classList.remove('visible');
+            
+            const otherId = playerId === 1 ? 2 : 1;
+            const otherPlayer = players[otherId];
+            if (otherPlayer.hearts.filter(h => h).length > 0) {
+                isGameOver = false;
+            }
+            if (players[1].hearts.filter(h => h).length > 0 && players[2].hearts.filter(h => h).length > 0) {
+                isGameOver = false;
+                status1.className = 'player-status';
+                status2.className = 'player-status';
+                updateAllPlayers();
+            }
+            document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
+            checkLoseCondition2P();
+        }
+
+        // ============================================================
+        // COLOR PICKER (ÚNICO)
+        // ============================================================
+        colorBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const color = this.dataset.color;
+                colorBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                heartColor = color;
+                updateSinglePlayerUI();
+            });
+        });
+
+        // ============================================================
+        // COLOR PICKER (2P)
+        // ============================================================
+        document.querySelectorAll('#colorPicker1 .color-btn, #colorPicker2 .color-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const playerId = parseInt(this.dataset.player);
+                const color = this.dataset.color;
+                const container = playerId === 1 ? document.getElementById('colorPicker1') : document.getElementById('colorPicker2');
+                container.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                players[playerId].color = color;
+                updatePlayerUI(playerId);
+            });
+        });
+
+        // ============================================================
+        // EVENTOS DE REINICIO
+        // ============================================================
+        resetBtn.addEventListener('click', resetSinglePlayer);
+        resetBtn1.addEventListener('click', () => resetPlayer(1));
+        resetBtn2.addEventListener('click', () => resetPlayer(2));
+
+        // ============================================================
+        // MULTIJUGADOR
+        // ============================================================
+        function activateMultiplayer() {
+            if (isMultiplayer) return;
+            isMultiplayer = true;
+            playersContainer.classList.add('active');
+            multiplayerBtn.textContent = '🎮 2 Jugadores (ACTIVO)';
+            multiplayerBtn.classList.add('active');
+            exitMpBtn.classList.add('visible');
+            
+            document.getElementById('heartCounter').style.display = 'none';
+            
+            players[1].hearts = [true, true, true];
+            players[2].hearts = [true, true, true];
+            players[1].won = false;
+            players[2].won = false;
+            isGameOver = false;
+            resetBtn1.classList.remove('visible');
+            resetBtn2.classList.remove('visible');
+            updateAllPlayers();
+            
+            document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
+            if (logoState === 1) { updateAllTexts(); }
+        }
+
+        function deactivateMultiplayer() {
+            if (!isMultiplayer) return;
+            if (confirm('¿Estás seguro de que quieres salir del modo 2 jugadores?')) {
+                isMultiplayer = false;
+                playersContainer.classList.remove('active');
+                document.getElementById('heartCounter').style.display = 'block';
+                multiplayerBtn.textContent = '🎮 2 Jugadores';
+                multiplayerBtn.classList.remove('active');
+                exitMpBtn.classList.remove('visible');
+                stopGameOverMusic();
+                isMusicPlaying = false;
+                isGameOver = false;
+                status1.className = 'player-status';
+                status2.className = 'player-status';
+                updateAllPlayers();
+                resetSinglePlayer();
+            }
+        }
+
+        multiplayerBtn.addEventListener('click', activateMultiplayer);
+        exitMpBtn.addEventListener('click', deactivateMultiplayer);
+
+        // ============================================================
+        // GAME OVER OVERLAY
+        // ============================================================
+        goResetBtn.addEventListener('click', function() {
+            if (isMultiplayer) {
+                players[1].hearts = [true, true, true];
+                players[2].hearts = [true, true, true];
+                players[1].won = false;
+                players[2].won = false;
+                resetBtn1.classList.remove('visible');
+                resetBtn2.classList.remove('visible');
+                updateAllPlayers();
+                isGameOver = false;
+                document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
+                gameOverOverlay.classList.remove('show');
+                document.body.classList.remove('game-over-active');
+                mainContainer.classList.remove('game-over-mode');
+                stopGameOverMusic();
+                isMusicPlaying = false;
+            } else {
+                resetSinglePlayer();
+            }
+        });
+
+        // ============================================================
+        // LOGO
+        // ============================================================
+        function updateAllTexts() {
+            const isLaugh = logoState === 1;
+            
+            if (isLaugh) {
+                howToPlayBtn.textContent = '📼 Como reírse AJAJAJAJA';
+                howToPlayBtn.classList.add('switched');
+            } else {
+                howToPlayBtn.textContent = '📼 Cómo jugar';
+                howToPlayBtn.classList.remove('switched');
+            }
+
+            if (isLaugh) {
+                playerPlaceholderMsg.textContent = 'PON EL LINK DEL YUTU POJKE SI AJAJAJAJA';
+                playerInput.placeholder = 'PON EL LINK DEL YUTU POJKE SI AJAJAJAJA';
+                playerLoadBtn.textContent = 'JAJAJA';
+                playerLoadBtn.classList.add('switched');
+            } else {
+                playerPlaceholderMsg.textContent = 'Pega la URL de YouTube';
+                playerInput.placeholder = 'Pega la URL de YouTube...';
+                playerLoadBtn.textContent = '▶ Cargar';
+                playerLoadBtn.classList.remove('switched');
+            }
+
+            if (isLaugh) {
+                creditsText.innerHTML = '<span>CC0</span> Raphapro900XDDDAJAJA <span>- BERSION UNO PUNTO CERO AJAJAJA</span>';
+                creditsText.classList.add('switched');
+            } else {
+                creditsText.innerHTML = '<span>CC0</span> Raphapro900 <span>- V1.0</span>';
+                creditsText.classList.remove('switched');
+            }
+
+            if (isLaugh) {
+                logoSub.textContent = '★ laugh & enjoy ★';
+                logoSub.classList.add('switched');
+            } else {
+                logoSub.textContent = '★ play & enjoy ★';
+                logoSub.classList.remove('switched');
+            }
+
+            updateSinglePlayerUI();
+            if (isMultiplayer) updateAllPlayers();
+        }
+
+        function toggleLogo() {
+            if (isGameOver) return;
+
+            logoContainer.classList.remove('shaking-logo', 'shaking-loop');
+            void logoContainer.offsetWidth;
+
+            if (logoState === 0) {
+                logoText.textContent = 'Ríe';
+                logoText.classList.add('switched');
+                logoState = 1;
+                playLogoPress();
+                logoContainer.classList.add('shaking-loop');
+                updateAllTexts();
+            } else {
+                logoText.textContent = 'NoTeRias';
+                logoText.classList.remove('switched');
+                logoState = 0;
+                stopLogoPress();
+                playShh();
+                logoContainer.classList.remove('shaking-loop');
+                logoContainer.classList.add('shaking-logo');
+                updateAllTexts();
+                setTimeout(() => {
+                    logoContainer.classList.remove('shaking-logo');
+                }, 1200);
+            }
+        }
+
+        logoContainer.addEventListener('click', toggleLogo);
+
+        // ============================================================
+        // REPRODUCTOR PERSONALIZADO
+        // ============================================================
+        function loadVideo() {
+            let url = playerInput.value.trim();
+            if (!url) {
+                playerPlaceholder.style.display = 'flex';
+                playerIframe.style.display = 'none';
                 return;
             }
+
+            let videoId = null;
+            let match = url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&?]+)/);
+            if (match) videoId = match[1];
+            match = url.match(/youtube\.com\/embed\/([^&?]+)/);
+            if (match) videoId = match[1];
+
+            if (!videoId) {
+                playerPlaceholder.style.display = 'flex';
+                playerIframe.style.display = 'none';
+                playerPlaceholderMsg.textContent = '⚠️ URL no válida. Usa youtube.com/watch?v=ID';
+                return;
+            }
+
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0`;
+            playerIframe.src = embedUrl;
+            playerIframe.style.display = 'block';
+            playerPlaceholder.style.display = 'none';
+        }
+
+        playerLoadBtn.addEventListener('click', loadVideo);
+        playerInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') loadVideo();
         });
 
         // ============================================================
-        // MENSAJES FLOTANTES
+        // INICIALIZAR
         // ============================================================
-        let messageTimeout = null;
+        function init() {
+            heartElements.forEach(el => {
+                el.removeEventListener('click', handleSingleHeartClick);
+                el.addEventListener('click', handleSingleHeartClick);
+            });
 
-        function showMessage(text) {
-            const existing = document.querySelector('.floating-message');
-            if (existing) existing.remove();
-            if (messageTimeout) clearTimeout(messageTimeout);
+            hearts1.forEach(el => {
+                el.removeEventListener('click', handlePlayerHeartClick);
+                el.addEventListener('click', handlePlayerHeartClick);
+            });
+            hearts2.forEach(el => {
+                el.removeEventListener('click', handlePlayerHeartClick);
+                el.addEventListener('click', handlePlayerHeartClick);
+            });
 
-            const div = document.createElement('div');
-            div.className = 'floating-message';
-            div.textContent = text;
-            document.body.appendChild(div);
+            updateSinglePlayerUI();
+            updateAllPlayers();
+            updateAllTexts();
 
-            messageTimeout = setTimeout(() => {
-                if (div.parentNode) div.remove();
-            }, 2500);
+            console.log('❤️ NoTeRias · Corazones con VHS 3D en "Cómo jugar"');
+            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, oof.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, XDD.mp3, Log0.png, Screen.mp4, NoIn.mp4, Tutoriall.mp4');
         }
 
-        // ============================================================
-        // SALIR DE LA VISTA DEL TUTORIAL
-        // ============================================================
-        function exitTutorialView() {
-            if (!isWatching) return;
-            isWatching = false;
-            document.getElementById('exit-tutorial').classList.remove('visible');
-
-            // Volver a Screen.mp4
-            if (videoElement) {
-                videoElement.pause();
-                videoElement.currentTime = 0;
-                videoElement = null;
-            }
-            playScreenLoop();
-
-            if (hasVHS) {
-                document.getElementById('inventory').classList.add('visible');
-            }
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
         }
 
-        document.getElementById('exit-tutorial').addEventListener('click', exitTutorialView);
-
-        // ============================================================
-        // BUCLE DE RENDERIZADO
-        // ============================================================
-        let startTime = Date.now();
-
-        function animate() {
-            requestAnimationFrame(animate);
-
-            const now = Date.now();
-            const delta = Math.min((now - startTime) / 16.67, 3);
-            startTime = now;
-
-            if (!isWatching) {
-                if (isLocked) {
-                    playerRot += mouseX * 0.5;
-                    mouseX = 0;
-                }
-
-                const forward = new THREE.Vector3(-Math.sin(playerRot), 0, -Math.cos(playerRot));
-                const right = new THREE.Vector3(Math.cos(playerRot), 0, -Math.sin(playerRot));
-
-                const moveVec = new THREE.Vector3(0, 0, 0);
-                if (keys.w) moveVec.add(forward);
-                if (keys.s) moveVec.sub(forward);
-                if (keys.a) moveVec.sub(right);
-                if (keys.d) moveVec.add(right);
-
-                if (moveVec.length() > 0) {
-                    moveVec.normalize().multiplyScalar(speed * delta);
-                    playerPos.add(moveVec);
-                    playerPos.x = Math.max(-4.5, Math.min(4.5, playerPos.x));
-                    playerPos.z = Math.max(-4.5, Math.min(4.5, playerPos.z));
-                }
-
-                let targetY = 1.7 + mouseY * 0.5;
-                targetY = Math.max(0.8, Math.min(2.8, targetY));
-
-                camera.position.copy(playerPos);
-                camera.position.y = targetY;
-
-                const euler = new THREE.Euler(0, playerRot, 0, 'YXZ');
-                camera.quaternion.setFromEuler(euler);
-            } else {
-                // Modo TV: cámara fija frente a la TV en 4:3
-                camera.position.set(0, 1.5, -0.7);
-                camera.lookAt(0, 0.8, -2.5);
-            }
-
-            // Animación de la cinta VHS en el suelo
-            if (!hasVHS && vhsGroup.parent) {
-                vhsGroup.rotation.y += 0.005;
-                vhsGroup.position.y = 0.1 + Math.sin(now / 1000) * 0.02;
-            }
-
-            renderer.render(scene, camera);
-        }
-
-        // ============================================================
-        // REDIMENSIONAR
-        // ============================================================
-        window.addEventListener('resize', () => {
-            const width = window.innerWidth;
-            const height = window.innerHeight;
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
-        });
-
-        // ============================================================
-        // INICIO
-        // ============================================================
-        setTimeout(() => {
-            document.getElementById('loading').style.display = 'none';
-        }, 800);
-
-        renderer.domElement.addEventListener('click', () => {
-            if (!isLocked && !isWatching) {
-                renderer.domElement.requestPointerLock();
-            }
-        });
-
-        animate();
-
-        console.log('📼 VHS 3D · Screen.mp4 loop, NoIn.mp4 sin cinta, Tutoriall.mp4 con cinta');
-        console.log('📁 Archivos necesarios: Screen.mp4, NoIn.mp4, Tutoriall.mp4, VHS.png');
-
+        window.resetGame = function() {
+            goResetBtn.click();
+        };
     })();
 </script>
 </body>
