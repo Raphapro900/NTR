@@ -187,6 +187,15 @@
             100% { box-shadow: 0 0 50px rgba(255,43,79,0.3); }
         }
 
+        .top-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
         .multiplayer-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             background: linear-gradient(135deg, #6b7cff, #2838dd);
@@ -201,7 +210,6 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             box-shadow: 0 4px 0 #1a2a88, 0 8px 25px rgba(43,79,255,0.25);
-            margin: 0.2rem 0;
         }
         .multiplayer-btn:hover {
             background: linear-gradient(135deg, #7c8cff, #3848ee);
@@ -242,87 +250,6 @@
             display: inline-block;
         }
 
-        .top-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
-        }
-
-        /* === TUTORIAL POPUP === */
-        .tutorial-popup {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.92);
-            backdrop-filter: blur(10px);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 50000;
-            padding: 20px;
-        }
-        .tutorial-popup.active { display: flex; }
-        .tutorial-popup .tutorial-content {
-            background: #1a1a2e;
-            border-radius: 2.5rem;
-            padding: 2.5rem 3rem;
-            max-width: 550px;
-            width: 100%;
-            border: 2px solid #ff6b7c55;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-            text-align: center;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        .tutorial-popup .tutorial-content h2 {
-            color: #ff6b7c;
-            font-size: 2rem;
-            margin-bottom: 1.2rem;
-            letter-spacing: 3px;
-        }
-        .tutorial-popup .tutorial-content p {
-            color: #ffb3b3cc;
-            font-size: 1.1rem;
-            line-height: 1.8;
-            margin-bottom: 1rem;
-            text-align: left;
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-        .tutorial-popup .tutorial-content .close-tutorial {
-            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
-            background: #ff3b5c;
-            border: none;
-            color: #1a1a2e;
-            font-size: 1.2rem;
-            font-weight: bold;
-            padding: 0.7rem 2.5rem;
-            margin-top: 1rem;
-            border-radius: 60px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.2);
-        }
-        .tutorial-popup .tutorial-content .close-tutorial:hover {
-            background: #ff4f6e;
-            transform: scale(1.02);
-        }
-        .tutorial-popup .tutorial-content .close-tutorial:active {
-            transform: translateY(4px);
-            box-shadow: 0 0px 0 #881a2a;
-        }
-        .tutorial-popup .tutorial-content .tutorial-icon {
-            font-size: 4rem;
-            margin-bottom: 0.5rem;
-        }
-
-        /* === MODO 2 JUGADORES === */
         .players-container {
             display: none;
             gap: 2rem;
@@ -439,13 +366,6 @@
             font-size: 1.2rem;
             animation: statusPulse 0.8s ease-in-out infinite alternate;
         }
-        .player-card .player-status.big-win {
-            color: #ff6b7c;
-            font-size: 1.8rem;
-            font-weight: bold;
-            animation: statusPulse 0.5s ease-in-out infinite alternate;
-            text-shadow: 0 0 30px #ff2b4f;
-        }
         @keyframes statusPulse {
             0% { opacity: 0.6; transform: scale(1); }
             100% { opacity: 1; transform: scale(1.05); }
@@ -472,6 +392,42 @@
         .color-picker-container .color-btn.active {
             border-color: #ffffff;
             box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        /* === VHS TAPE === */
+        .vhs-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            width: 100%;
+            padding: 0.5rem 0;
+        }
+        .vhs-tape {
+            width: 150px;
+            height: 100px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 8px 25px rgba(0,0,0,0.5));
+        }
+        .vhs-tape:hover {
+            transform: scale(1.05);
+            filter: drop-shadow(0 8px 35px rgba(255,43,79,0.2));
+        }
+        .vhs-tape:active {
+            transform: scale(0.95);
+        }
+        .vhs-tape img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .vhs-label {
+            color: #ff6b7c44;
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', Arial, sans-serif;
         }
 
         /* === REPRODUCTOR PERSONALIZADO === */
@@ -575,6 +531,76 @@
             background: linear-gradient(135deg, #ff6b7c, #ff2b4f);
             font-size: 1.1rem;
             animation: btnPulse 1s ease-in-out infinite alternate;
+        }
+
+        .tutorial-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.92);
+            backdrop-filter: blur(10px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 50000;
+            padding: 20px;
+        }
+        .tutorial-popup.active { display: flex; }
+        .tutorial-popup .tutorial-content {
+            background: #1a1a2e;
+            border-radius: 2.5rem;
+            padding: 2.5rem 3rem;
+            max-width: 550px;
+            width: 100%;
+            border: 2px solid #ff6b7c55;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            text-align: center;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        .tutorial-popup .tutorial-content h2 {
+            color: #ff6b7c;
+            font-size: 2rem;
+            margin-bottom: 1.2rem;
+            letter-spacing: 3px;
+        }
+        .tutorial-popup .tutorial-content p {
+            color: #ffb3b3cc;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1rem;
+            text-align: left;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+        .tutorial-popup .tutorial-content .close-tutorial {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.2rem;
+            font-weight: bold;
+            padding: 0.7rem 2.5rem;
+            margin-top: 1rem;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.2);
+        }
+        .tutorial-popup .tutorial-content .close-tutorial:hover {
+            background: #ff4f6e;
+            transform: scale(1.02);
+        }
+        .tutorial-popup .tutorial-content .close-tutorial:active {
+            transform: translateY(4px);
+            box-shadow: 0 0px 0 #881a2a;
+        }
+        .tutorial-popup .tutorial-content .tutorial-icon {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
         }
 
         .game-over-overlay {
@@ -707,11 +733,13 @@
             .tutorial-popup .tutorial-content p { font-size: 1rem; }
             .multiplayer-btn { font-size: 1rem; padding: 0.5rem 1.8rem; }
             .top-buttons { gap: 0.5rem; }
+            .vhs-tape { width: 100px; height: 70px; }
         }
         @media (max-width: 400px) {
             .player-card .heart { font-size: 2.8rem; }
             .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
             .game-over-overlay .go-text { font-size: 2.8rem; letter-spacing: 4px; }
+            .vhs-tape { width: 80px; height: 55px; }
         }
     </style>
 </head>
@@ -751,6 +779,14 @@
         <button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
         <button class="multiplayer-btn" id="multiplayerBtn">🎮 2 Jugadores</button>
         <button class="exit-mp-btn" id="exitMpBtn">🚪 Salir 2P</button>
+    </div>
+
+    <!-- VHS TAPE -->
+    <div class="vhs-container">
+        <div class="vhs-tape" id="vhsTape">
+            <img src="VHS.png" alt="VHS" id="vhsImage">
+        </div>
+        <div class="vhs-label">📼 VHS</div>
     </div>
 
     <!-- MODO 2 JUGADORES -->
@@ -818,6 +854,7 @@
 <audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3" type="audio/mpeg"></audio>
 <audio id="winAudio" preload="auto"><source src="Win.mp3" type="audio/mpeg"></audio>
 <audio id="oofAudio" preload="auto"><source src="oof.mp3" type="audio/mpeg"></audio>
+<audio id="underAudio" preload="auto"><source src="under.mp3" type="audio/mpeg"></audio>
 <audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3" type="audio/mpeg"></audio>
 <audio id="ayAudio" preload="auto"><source src="Ay.mp3" type="audio/mpeg"></audio>
 <audio id="nooAudio" preload="auto"><source src="Noo.mp3" type="audio/mpeg"></audio>
@@ -857,6 +894,7 @@
         const playersContainer = document.getElementById('playersContainer');
         const multiplayerBtn = document.getElementById('multiplayerBtn');
         const exitMpBtn = document.getElementById('exitMpBtn');
+        const vhsTape = document.getElementById('vhsTape');
 
         const hearts1 = document.querySelectorAll('#hearts1 .heart');
         const hearts2 = document.querySelectorAll('#hearts2 .heart');
@@ -881,6 +919,7 @@
 
         // AUDIOS
         const oofAudio = document.getElementById('oofAudio');
+        const underAudio = document.getElementById('underAudio');
         const ayNoAudio = document.getElementById('ayNoAudio');
         const ayAudio = document.getElementById('ayAudio');
         const nooAudio = document.getElementById('nooAudio');
@@ -905,6 +944,9 @@
         }
         function playOof() {
             try { oofAudio.currentTime = 0; oofAudio.volume = 0.8; oofAudio.play().catch(() => {}); } catch(e) {}
+        }
+        function playUnder() {
+            try { underAudio.currentTime = 0; underAudio.volume = 0.8; underAudio.play().catch(() => {}); } catch(e) {}
         }
         function playRandomExclamation() {
             const audios = [ayNoAudio, ayAudio, nooAudio, wthbAudio];
@@ -969,6 +1011,16 @@
             if (e.key === 'Escape' && tutorialPopup.classList.contains('active')) {
                 closeTutorial();
             }
+        });
+
+        // ============================================================
+        // VHS TAPE - Reproducir video de ejemplo
+        // ============================================================
+        vhsTape.addEventListener('click', function() {
+            // Cargar un video de ejemplo o mostrar mensaje
+            const url = 'https://www.youtube.com/watch?v=1n6-WD2s5Ik';
+            playerInput.value = url;
+            loadVideo();
         });
 
         // ============================================================
@@ -1053,11 +1105,18 @@
             player.hearts[index] = false;
             updatePlayerUI(playerId);
             shakeScreen();
-            playOof();
+
+            // under.mp3 al perder un corazón
+            playUnder();
 
             const aliveCount = player.hearts.filter(h => h).length;
             if (aliveCount === 1) {
                 playRandomExclamation();
+            }
+
+            // oof.mp3 solo cuando pierde TODOS los corazones
+            if (aliveCount === 0) {
+                playOof();
             }
 
             checkLoseCondition();
@@ -1092,17 +1151,14 @@
             const resetBtn = playerId === 1 ? resetBtn1 : resetBtn2;
             resetBtn.classList.remove('visible');
             
-            // Verificar si el otro jugador ya perdió para reactivar el juego
             const otherId = playerId === 1 ? 2 : 1;
             const otherPlayer = players[otherId];
             if (otherPlayer.hearts.filter(h => h).length > 0) {
                 isGameOver = false;
             }
             
-            // Si ambos están vivos, reactivar el juego
             if (players[1].hearts.filter(h => h).length > 0 && players[2].hearts.filter(h => h).length > 0) {
                 isGameOver = false;
-                // Restaurar estados
                 status1.className = 'player-status';
                 status2.className = 'player-status';
                 updateAllPlayers();
@@ -1122,7 +1178,6 @@
             const p2Alive = players[2].hearts.filter(h => h).length;
             const isLaughMode = logoState === 1;
 
-            // Actualizar estados de los jugadores
             if (p1Alive === 0 && p2Alive > 0) {
                 resetBtn1.classList.add('visible');
                 if (isLaughMode) {
@@ -1132,7 +1187,6 @@
                     status1.textContent = '💀 ¡Has perdido!';
                     status1.className = 'player-status';
                 }
-                // El otro jugador gana si tiene todos los corazones
                 if (p2Alive === 3) {
                     if (isLaughMode) {
                         status2.textContent = '🤣¡GANASTE! AJAJAJA';
@@ -1182,7 +1236,6 @@
                 }
             }
 
-            // Si ambos perdieron
             if (p1Alive === 0 && p2Alive === 0 && !isGameOver) {
                 isGameOver = true;
                 stopLogoPress();
@@ -1208,9 +1261,7 @@
                 }
             }
 
-            // Si el juego terminó, no permitir más clicks hasta reiniciar
             if (isGameOver) {
-                // Deshabilitar clicks en corazones
                 document.querySelectorAll('.heart').forEach(el => {
                     el.style.cursor = 'default';
                 });
@@ -1222,7 +1273,7 @@
         }
 
         // ============================================================
-        // MULTIJUGADOR - ACTIVAR/DESACTIVAR
+        // MULTIJUGADOR
         // ============================================================
         function activateMultiplayer() {
             if (isMultiplayer) return;
@@ -1232,7 +1283,6 @@
             multiplayerBtn.classList.add('active');
             exitMpBtn.classList.add('visible');
             
-            // Resetear corazones
             players[1].hearts = [true, true, true];
             players[2].hearts = [true, true, true];
             players[1].won = false;
@@ -1242,12 +1292,10 @@
             resetBtn2.classList.remove('visible');
             updateAllPlayers();
             
-            // Reactivar clicks
             document.querySelectorAll('.heart').forEach(el => {
                 el.style.cursor = 'pointer';
             });
             
-            // Si el logo estaba en modo "Ríe", actualizar textos
             if (logoState === 1) {
                 updateAllTexts();
             }
@@ -1264,10 +1312,8 @@
                 stopGameOverMusic();
                 isMusicPlaying = false;
                 isGameOver = false;
-                // Resetear estados visuales
                 status1.className = 'player-status';
                 status2.className = 'player-status';
-                // Restaurar texto de los status
                 updateAllPlayers();
             }
         }
@@ -1276,7 +1322,7 @@
         exitMpBtn.addEventListener('click', deactivateMultiplayer);
 
         // ============================================================
-        // GAME OVER OVERLAY (DESACTIVADO EN 2P)
+        // GAME OVER OVERLAY
         // ============================================================
         goResetBtn.addEventListener('click', function() {
             stopGameOverMusic();
@@ -1313,7 +1359,7 @@
         });
 
         // ============================================================
-        // LOGO - CAMBIO DE TEXTO
+        // LOGO
         // ============================================================
         function updateAllTexts() {
             const isLaugh = logoState === 1;
@@ -1448,7 +1494,7 @@
             updateAllTexts();
 
             console.log('❤️ NoTeRias · Modo 2 jugadores con colores');
-            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, oof.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, XDD.mp3, Log0.png');
+            console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, oof.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, XDD.mp3, Log0.png, VHS.png');
         }
 
         if (document.readyState === 'loading') {
@@ -1458,7 +1504,6 @@
         }
 
         window.resetGame = function() {
-            // Función global para resetear desde consola si es necesario
             goResetBtn.click();
         };
     })();
