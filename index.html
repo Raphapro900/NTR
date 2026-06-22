@@ -250,17 +250,137 @@
             display: inline-block;
         }
 
+        /* ===== CORAZONES (COMO ANTES) ===== */
+        .heart-counter {
+            background: rgba(26,26,46,0.85);
+            backdrop-filter: blur(6px);
+            border-radius: 3rem;
+            padding: 1.5rem 2.5rem 1.2rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 3px #ff3b5c55 inset;
+            text-align: center;
+            width: 100%;
+            border: 2px solid #ff6b7c66;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .heart-counter .player-label {
+            font-size: 1rem;
+            color: #ff6b7caa;
+            letter-spacing: 4px;
+            margin-bottom: 0.2rem;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+        .hearts-container {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 0.2rem 0 0.3rem 0;
+            flex-wrap: wrap;
+        }
+        .heart {
+            font-size: 5rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: transform 0.15s ease, filter 0.2s, opacity 0.2s;
+            text-shadow: 0 8px 25px rgba(255,50,80,0.7);
+            color: #ff2b4f;
+            filter: drop-shadow(0 8px 12px #00000077);
+            transform: scale(1);
+            position: relative;
+        }
+        .heart:hover {
+            transform: scale(1.12);
+            filter: drop-shadow(0 0 22px #ff3b5c);
+        }
+        .heart:active {
+            transform: scale(0.85);
+        }
+        .heart.lost {
+            cursor: default;
+            transform: scale(0.92);
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .heart.breaking {
+            animation: breakHeart 1.2s ease-out forwards;
+            pointer-events: none !important;
+        }
+        @keyframes breakHeart {
+            0% { transform: scale(1) rotate(0deg); opacity: 1; }
+            25% { transform: scale(1.4) rotate(-15deg); }
+            50% { transform: scale(1.6) rotate(10deg) translateY(-20px); }
+            75% { transform: scale(1.8) rotate(-5deg) translateY(-40px); opacity: 0.8; }
+            100% { transform: scale(2.5) rotate(20deg) translateY(-80px); opacity: 0; }
+        }
+
+        .reset-btn {
+            font-family: 'Komika Axis', 'Comic Sans MS', cursive;
+            background: #ff3b5c;
+            border: none;
+            color: #1a1a2e;
+            font-size: 1.4rem;
+            font-weight: bold;
+            padding: 0.6rem 1.8rem;
+            margin-top: 0.3rem;
+            border-radius: 60px;
+            cursor: pointer;
+            box-shadow: 0 6px 0 #881a2a, 0 12px 30px #000000aa;
+            transition: all 0.08s linear;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            border: 2px solid #ff9eae;
+            width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+        }
+        .reset-btn.visible { display: block; }
+        .reset-btn:hover {
+            background: #ff4f6e;
+            transform: scale(1.03);
+            box-shadow: 0 6px 0 #881a2a, 0 15px 35px #000000dd;
+        }
+        .reset-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #881a2a, 0 8px 25px #000;
+        }
+
+        .color-picker-container {
+            display: flex;
+            justify-content: center;
+            gap: 0.8rem;
+            margin-top: 0.3rem;
+            flex-wrap: wrap;
+        }
+        .color-picker-container .color-btn {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .color-picker-container .color-btn:hover {
+            transform: scale(1.15);
+        }
+        .color-picker-container .color-btn.active {
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+
+        /* === MODO 2 JUGADORES (se activa con botón) === */
         .players-container {
             display: none;
             gap: 2rem;
             width: 100%;
             flex-wrap: wrap;
             justify-content: center;
+            margin-top: 0.5rem;
         }
         .players-container.active {
             display: flex;
         }
-
         .player-card {
             flex: 1;
             min-width: 280px;
@@ -312,14 +432,6 @@
             animation: breakHeart 1.2s ease-out forwards;
             pointer-events: none !important;
         }
-        @keyframes breakHeart {
-            0% { transform: scale(1) rotate(0deg); opacity: 1; }
-            25% { transform: scale(1.4) rotate(-15deg); }
-            50% { transform: scale(1.6) rotate(10deg) translateY(-20px); }
-            75% { transform: scale(1.8) rotate(-5deg) translateY(-40px); opacity: 0.8; }
-            100% { transform: scale(2.5) rotate(20deg) translateY(-80px); opacity: 0; }
-        }
-
         .player-card .reset-btn {
             font-family: 'Komika Axis', 'Comic Sans MS', cursive;
             background: #ff3b5c;
@@ -350,7 +462,6 @@
             transform: translateY(4px);
             box-shadow: 0 0px 0 #881a2a;
         }
-
         .player-card .player-status {
             text-align: center;
             font-size: 0.9rem;
@@ -370,15 +481,14 @@
             0% { opacity: 0.6; transform: scale(1); }
             100% { opacity: 1; transform: scale(1.05); }
         }
-
-        .color-picker-container {
+        .player-card .color-picker-container {
             display: flex;
             justify-content: center;
             gap: 0.8rem;
             margin-top: 0.3rem;
             flex-wrap: wrap;
         }
-        .color-picker-container .color-btn {
+        .player-card .color-picker-container .color-btn {
             width: 32px;
             height: 32px;
             border-radius: 50%;
@@ -386,51 +496,15 @@
             cursor: pointer;
             transition: all 0.2s ease;
         }
-        .color-picker-container .color-btn:hover {
+        .player-card .color-picker-container .color-btn:hover {
             transform: scale(1.15);
         }
-        .color-picker-container .color-btn.active {
+        .player-card .color-picker-container .color-btn.active {
             border-color: #ffffff;
             box-shadow: 0 0 20px rgba(255,255,255,0.3);
         }
 
-        /* === VHS TAPE === */
-        .vhs-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-            width: 100%;
-            padding: 0.5rem 0;
-        }
-        .vhs-tape {
-            width: 150px;
-            height: 100px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            filter: drop-shadow(0 8px 25px rgba(0,0,0,0.5));
-        }
-        .vhs-tape:hover {
-            transform: scale(1.05);
-            filter: drop-shadow(0 8px 35px rgba(255,43,79,0.2));
-        }
-        .vhs-tape:active {
-            transform: scale(0.95);
-        }
-        .vhs-tape img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        .vhs-label {
-            color: #ff6b7c44;
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            font-family: 'Segoe UI', Arial, sans-serif;
-        }
-
-        /* === REPRODUCTOR PERSONALIZADO === */
+        /* === REPRODUCTOR PERSONALIZADO CON VHS === */
         .custom-player {
             width: 100%;
             background: rgba(26,26,46,0.7);
@@ -477,17 +551,54 @@
             color: #ff6b7c66;
             letter-spacing: 2px;
         }
-        .custom-player .player-controls {
+
+        .vhs-row {
             display: flex;
-            gap: 0.8rem;
-            margin-top: 0.8rem;
             align-items: center;
+            gap: 1rem;
+            margin-top: 0.8rem;
             flex-wrap: wrap;
             justify-content: center;
         }
-        .custom-player .player-controls input {
+        .vhs-tape {
+            width: 80px;
+            height: 55px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: drop-shadow(0 4px 15px rgba(0,0,0,0.4));
+            flex-shrink: 0;
+        }
+        .vhs-tape:hover {
+            transform: scale(1.08);
+            filter: drop-shadow(0 4px 25px rgba(255,43,79,0.2));
+        }
+        .vhs-tape:active {
+            transform: scale(0.95);
+        }
+        .vhs-tape img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .vhs-label {
+            color: #ff6b7c44;
+            font-size: 0.65rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        .player-controls {
+            display: flex;
+            gap: 0.8rem;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
             flex: 1;
-            min-width: 180px;
+        }
+        .player-controls input {
+            flex: 1;
+            min-width: 160px;
             padding: 0.7rem 1.2rem;
             border-radius: 60px;
             border: 2px solid #ff6b7c33;
@@ -498,13 +609,13 @@
             outline: none;
             transition: all 0.3s ease;
         }
-        .custom-player .player-controls input::placeholder { color: #8888aa; }
-        .custom-player .player-controls input:focus {
+        .player-controls input::placeholder { color: #8888aa; }
+        .player-controls input:focus {
             border-color: #ff3b5c;
             background: rgba(255,255,255,0.10);
             box-shadow: 0 0 30px #ff3b5c22;
         }
-        .custom-player .player-controls button {
+        .player-controls button {
             padding: 0.7rem 1.8rem;
             border-radius: 60px;
             border: none;
@@ -519,15 +630,15 @@
             letter-spacing: 1.5px;
             box-shadow: 0 4px 0 #881a2a, 0 8px 25px rgba(255,43,79,0.25);
         }
-        .custom-player .player-controls button:hover {
+        .player-controls button:hover {
             background: linear-gradient(135deg, #ff4f6e, #ee0038);
             transform: scale(1.02);
         }
-        .custom-player .player-controls button:active {
+        .player-controls button:active {
             transform: translateY(4px);
             box-shadow: 0 0px 0 #881a2a;
         }
-        .custom-player .player-controls button.switched {
+        .player-controls button.switched {
             background: linear-gradient(135deg, #ff6b7c, #ff2b4f);
             font-size: 1.1rem;
             animation: btnPulse 1s ease-in-out infinite alternate;
@@ -719,6 +830,7 @@
             .player-card { min-width: unset; }
             .logo-text { font-size: 3.5rem; letter-spacing: 4px; }
             .logo-sub { font-size: 0.8rem; letter-spacing: 6px; }
+            .heart { font-size: 3.8rem; }
             .player-card .heart { font-size: 3.5rem; }
             .game-over-overlay .go-text { font-size: 3.5rem; letter-spacing: 6px; }
             .game-over-overlay .go-sub { font-size: 1.2rem; }
@@ -726,20 +838,23 @@
             .credits { font-size: 0.65rem; }
             .how-to-play-btn { font-size: 0.9rem; padding: 0.5rem 1.5rem; }
             .custom-player { padding: 0.8rem 1rem; }
-            .custom-player .player-controls input { min-width: 120px; font-size: 0.8rem; }
-            .custom-player .player-controls button { font-size: 0.8rem; padding: 0.5rem 1.2rem; }
+            .player-controls input { min-width: 120px; font-size: 0.8rem; }
+            .player-controls button { font-size: 0.8rem; padding: 0.5rem 1.2rem; }
             .tutorial-popup .tutorial-content { padding: 1.8rem; }
             .tutorial-popup .tutorial-content h2 { font-size: 1.6rem; }
             .tutorial-popup .tutorial-content p { font-size: 1rem; }
             .multiplayer-btn { font-size: 1rem; padding: 0.5rem 1.8rem; }
             .top-buttons { gap: 0.5rem; }
-            .vhs-tape { width: 100px; height: 70px; }
+            .vhs-tape { width: 60px; height: 40px; }
+            .heart-counter { padding: 1.2rem 1.5rem 1rem; }
+            .reset-btn { font-size: 1.1rem; padding: 0.5rem 1.4rem; }
         }
         @media (max-width: 400px) {
+            .heart { font-size: 3rem; }
             .player-card .heart { font-size: 2.8rem; }
             .logo-text { font-size: 2.8rem; letter-spacing: 2px; }
             .game-over-overlay .go-text { font-size: 2.8rem; letter-spacing: 4px; }
-            .vhs-tape { width: 80px; height: 55px; }
+            .vhs-tape { width: 50px; height: 35px; }
         }
     </style>
 </head>
@@ -781,17 +896,26 @@
         <button class="exit-mp-btn" id="exitMpBtn">🚪 Salir 2P</button>
     </div>
 
-    <!-- VHS TAPE -->
-    <div class="vhs-container">
-        <div class="vhs-tape" id="vhsTape">
-            <img src="VHS.png" alt="VHS" id="vhsImage">
+    <!-- CORAZONES (COMO ANTES) -->
+    <div class="heart-counter" id="heartCounter">
+        <div class="player-label" id="playerLabel">👤 TÚ</div>
+        <div class="hearts-container" id="heartsContainer">
+            <span class="heart" data-index="0">❤️</span>
+            <span class="heart" data-index="1">❤️</span>
+            <span class="heart" data-index="2">❤️</span>
         </div>
-        <div class="vhs-label">📼 VHS</div>
+        <div class="color-picker-container" id="colorPicker">
+            <button class="color-btn active" data-color="#ff2b4f" style="background:#ff2b4f;"></button>
+            <button class="color-btn" data-color="#4fc3f7" style="background:#4fc3f7;"></button>
+            <button class="color-btn" data-color="#66bb6a" style="background:#66bb6a;"></button>
+            <button class="color-btn" data-color="#ffa726" style="background:#ffa726;"></button>
+            <button class="color-btn" data-color="#ab47bc" style="background:#ab47bc;"></button>
+        </div>
+        <button id="resetBtn" class="reset-btn">⟳ Volver a intentar</button>
     </div>
 
-    <!-- MODO 2 JUGADORES -->
+    <!-- MODO 2 JUGADORES (se activa con botón) -->
     <div class="players-container" id="playersContainer">
-        <!-- Jugador 1 -->
         <div class="player-card" id="player1Card">
             <div class="player-label" id="player1Label">👤 JUGADOR 1</div>
             <div class="hearts-container" id="hearts1">
@@ -809,8 +933,6 @@
             <button class="reset-btn" id="resetBtn1">⟳ Reiniciar</button>
             <div class="player-status" id="status1">❤️ 3 corazones</div>
         </div>
-
-        <!-- Jugador 2 -->
         <div class="player-card" id="player2Card">
             <div class="player-label" id="player2Label">👤 JUGADOR 2</div>
             <div class="hearts-container" id="hearts2">
@@ -830,7 +952,7 @@
         </div>
     </div>
 
-    <!-- REPRODUCTOR PERSONALIZADO -->
+    <!-- REPRODUCTOR PERSONALIZADO CON VHS -->
     <div class="custom-player" id="customPlayer">
         <div class="player-container" id="playerContainer">
             <div id="playerPlaceholder" class="placeholder">
@@ -839,9 +961,15 @@
             </div>
             <iframe id="playerIframe" style="display:none;" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
         </div>
-        <div class="player-controls">
-            <input type="text" id="playerInput" placeholder="Pega la URL de YouTube...">
-            <button id="playerLoadBtn">▶ Cargar</button>
+        <div class="vhs-row">
+            <div class="vhs-tape" id="vhsTape">
+                <img src="VHS.png" alt="VHS" id="vhsImage">
+            </div>
+            <div class="vhs-label">📼 VHS</div>
+            <div class="player-controls">
+                <input type="text" id="playerInput" placeholder="Pega la URL de YouTube...">
+                <button id="playerLoadBtn">▶ Cargar</button>
+            </div>
         </div>
     </div>
 
@@ -873,6 +1001,11 @@
         let isMusicPlaying = false;
         let isMultiplayer = false;
 
+        // Jugador único
+        let hearts = [true, true, true];
+        let heartColor = '#ff2b4f';
+
+        // Jugadores para 2P
         const players = {
             1: { hearts: [true, true, true], color: '#ff2b4f', won: false },
             2: { hearts: [true, true, true], color: '#ff2b4f', won: false }
@@ -896,6 +1029,12 @@
         const exitMpBtn = document.getElementById('exitMpBtn');
         const vhsTape = document.getElementById('vhsTape');
 
+        // Corazón único
+        const heartElements = document.querySelectorAll('#heartsContainer .heart');
+        const resetBtn = document.getElementById('resetBtn');
+        const playerLabel = document.getElementById('playerLabel');
+
+        // Jugadores 2P
         const hearts1 = document.querySelectorAll('#hearts1 .heart');
         const hearts2 = document.querySelectorAll('#hearts2 .heart');
         const resetBtn1 = document.getElementById('resetBtn1');
@@ -905,6 +1044,7 @@
         const player1Label = document.getElementById('player1Label');
         const player2Label = document.getElementById('player2Label');
 
+        // Reproductor
         const playerInput = document.getElementById('playerInput');
         const playerLoadBtn = document.getElementById('playerLoadBtn');
         const playerIframe = document.getElementById('playerIframe');
@@ -916,6 +1056,9 @@
         const closeTutorialBtn = document.getElementById('closeTutorialBtn');
         const tutorialTitle = document.getElementById('tutorialTitle');
         const tutorialText = document.getElementById('tutorialText');
+
+        // Color picker único
+        const colorBtns = document.querySelectorAll('#colorPicker .color-btn');
 
         // AUDIOS
         const oofAudio = document.getElementById('oofAudio');
@@ -1014,17 +1157,16 @@
         });
 
         // ============================================================
-        // VHS TAPE - Reproducir video de ejemplo
+        // VHS TAPE - Cargar video de ejemplo
         // ============================================================
         vhsTape.addEventListener('click', function() {
-            // Cargar un video de ejemplo o mostrar mensaje
             const url = 'https://www.youtube.com/watch?v=1n6-WD2s5Ik';
             playerInput.value = url;
             loadVideo();
         });
 
         // ============================================================
-        // UI CORAZONES
+        // UI CORAZÓN ÚNICO
         // ============================================================
         function getHeartEmoji(alive, isLaughMode) {
             if (isLaughMode) {
@@ -1033,6 +1175,42 @@
             return alive ? '❤️' : '💔';
         }
 
+        function updateSinglePlayerUI() {
+            const isLaughMode = logoState === 1;
+            heartElements.forEach((el, index) => {
+                const alive = hearts[index];
+                el.textContent = getHeartEmoji(alive, isLaughMode);
+                el.style.color = heartColor;
+                if (alive) {
+                    el.classList.remove('lost', 'breaking');
+                    el.style.textShadow = `0 8px 25px ${heartColor}88`;
+                    el.style.filter = `drop-shadow(0 8px 12px #00000077)`;
+                    el.style.opacity = '1';
+                } else {
+                    el.classList.add('lost');
+                    el.style.textShadow = `0 0 20px ${heartColor}44`;
+                    el.style.filter = `drop-shadow(0 0 15px ${heartColor}33)`;
+                    el.style.opacity = '0.4';
+                }
+            });
+
+            const aliveCount = hearts.filter(h => h).length;
+            if (logoState === 1) {
+                playerLabel.textContent = '👤 TÚ 🤣';
+            } else {
+                playerLabel.textContent = '👤 TÚ';
+            }
+
+            if (aliveCount === 0) {
+                resetBtn.classList.add('visible');
+            } else {
+                resetBtn.classList.remove('visible');
+            }
+        }
+
+        // ============================================================
+        // UI JUGADORES 2P
+        // ============================================================
         function updatePlayerUI(playerId) {
             const player = players[playerId];
             const hearts = playerId === 1 ? hearts1 : hearts2;
@@ -1091,10 +1269,46 @@
         }
 
         // ============================================================
-        // CLICK EN CORAZÓN
+        // CLICK EN CORAZÓN (ÚNICO)
         // ============================================================
-        function handleHeartClick(e) {
-            if (isGameOver) return;
+        function handleSingleHeartClick(e) {
+            if (isGameOver || isMultiplayer) return;
+            const el = e.currentTarget;
+            const index = parseInt(el.dataset.index);
+            if (!hearts[index]) return;
+
+            hearts[index] = false;
+            updateSinglePlayerUI();
+            shakeScreen();
+            playUnder();
+
+            const aliveCount = hearts.filter(h => h).length;
+            if (aliveCount === 1) {
+                playRandomExclamation();
+            }
+            if (aliveCount === 0) {
+                playOof();
+                // Game Over para un jugador
+                isGameOver = true;
+                stopLogoPress();
+                logoContainer.classList.remove('shaking-loop');
+                setTimeout(() => { playGameOverMusic(); }, 300);
+                setTimeout(() => {
+                    gameOverOverlay.classList.add('show');
+                    document.body.classList.add('game-over-active');
+                    mainContainer.classList.add('game-over-mode');
+                    goText.textContent = 'GAME OVER';
+                    goSubText.textContent = '💀 Has perdido todos tus corazones';
+                    goSubText.classList.remove('shaking-text');
+                }, 600);
+            }
+        }
+
+        // ============================================================
+        // CLICK EN CORAZÓN (2P)
+        // ============================================================
+        function handlePlayerHeartClick(e) {
+            if (isGameOver || !isMultiplayer) return;
             const el = e.currentTarget;
             const playerId = parseInt(el.dataset.player);
             const index = parseInt(el.dataset.index);
@@ -1105,75 +1319,23 @@
             player.hearts[index] = false;
             updatePlayerUI(playerId);
             shakeScreen();
-
-            // under.mp3 al perder un corazón
             playUnder();
 
             const aliveCount = player.hearts.filter(h => h).length;
             if (aliveCount === 1) {
                 playRandomExclamation();
             }
-
-            // oof.mp3 solo cuando pierde TODOS los corazones
             if (aliveCount === 0) {
                 playOof();
             }
 
-            checkLoseCondition();
+            checkLoseCondition2P();
         }
 
         // ============================================================
-        // COLOR PICKER
+        // CONDICIÓN DE DERROTA 2P
         // ============================================================
-        document.querySelectorAll('.color-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const playerId = parseInt(this.dataset.player);
-                const color = this.dataset.color;
-                const player = players[playerId];
-
-                const container = playerId === 1 ? document.getElementById('colorPicker1') : document.getElementById('colorPicker2');
-                container.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
-
-                this.classList.add('active');
-                player.color = color;
-                updatePlayerUI(playerId);
-            });
-        });
-
-        // ============================================================
-        // REINICIAR JUGADOR
-        // ============================================================
-        function resetPlayer(playerId) {
-            const player = players[playerId];
-            player.hearts = [true, true, true];
-            player.won = false;
-            updatePlayerUI(playerId);
-            const resetBtn = playerId === 1 ? resetBtn1 : resetBtn2;
-            resetBtn.classList.remove('visible');
-            
-            const otherId = playerId === 1 ? 2 : 1;
-            const otherPlayer = players[otherId];
-            if (otherPlayer.hearts.filter(h => h).length > 0) {
-                isGameOver = false;
-            }
-            
-            if (players[1].hearts.filter(h => h).length > 0 && players[2].hearts.filter(h => h).length > 0) {
-                isGameOver = false;
-                status1.className = 'player-status';
-                status2.className = 'player-status';
-                updateAllPlayers();
-            }
-            
-            checkLoseCondition();
-        }
-
-        resetBtn1.addEventListener('click', () => resetPlayer(1));
-        resetBtn2.addEventListener('click', () => resetPlayer(2));
-
-        // ============================================================
-        // CONDICIÓN DE DERROTA / VICTORIA
-        // ============================================================
-        function checkLoseCondition() {
+        function checkLoseCondition2P() {
             const p1Alive = players[1].hearts.filter(h => h).length;
             const p2Alive = players[2].hearts.filter(h => h).length;
             const isLaughMode = logoState === 1;
@@ -1199,11 +1361,7 @@
                     stopLogoPress();
                     logoContainer.classList.remove('shaking-loop');
                     shakeScreen();
-                    if (isLaughMode) {
-                        playWinMusic();
-                    } else {
-                        playGameOverMusic();
-                    }
+                    if (isLaughMode) { playWinMusic(); } else { playGameOverMusic(); }
                 }
             }
 
@@ -1228,11 +1386,7 @@
                     stopLogoPress();
                     logoContainer.classList.remove('shaking-loop');
                     shakeScreen();
-                    if (isLaughMode) {
-                        playWinMusic();
-                    } else {
-                        playGameOverMusic();
-                    }
+                    if (isLaughMode) { playWinMusic(); } else { playGameOverMusic(); }
                 }
             }
 
@@ -1254,23 +1408,94 @@
                 }
                 resetBtn1.classList.add('visible');
                 resetBtn2.classList.add('visible');
-                if (isLaughMode) {
-                    playWinMusic();
-                } else {
-                    playGameOverMusic();
-                }
+                if (isLaughMode) { playWinMusic(); } else { playGameOverMusic(); }
             }
 
             if (isGameOver) {
-                document.querySelectorAll('.heart').forEach(el => {
-                    el.style.cursor = 'default';
-                });
+                document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'default'; });
             } else {
-                document.querySelectorAll('.heart').forEach(el => {
-                    el.style.cursor = 'pointer';
-                });
+                document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
             }
         }
+
+        // ============================================================
+        // REINICIAR (ÚNICO)
+        // ============================================================
+        function resetSinglePlayer() {
+            hearts = [true, true, true];
+            updateSinglePlayerUI();
+            resetBtn.classList.remove('visible');
+            if (isGameOver) {
+                isGameOver = false;
+                gameOverOverlay.classList.remove('show');
+                document.body.classList.remove('game-over-active');
+                mainContainer.classList.remove('game-over-mode');
+                stopGameOverMusic();
+                isMusicPlaying = false;
+                document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
+            }
+        }
+
+        // ============================================================
+        // REINICIAR (2P)
+        // ============================================================
+        function resetPlayer(playerId) {
+            const player = players[playerId];
+            player.hearts = [true, true, true];
+            player.won = false;
+            updatePlayerUI(playerId);
+            const resetBtn = playerId === 1 ? resetBtn1 : resetBtn2;
+            resetBtn.classList.remove('visible');
+            
+            const otherId = playerId === 1 ? 2 : 1;
+            const otherPlayer = players[otherId];
+            if (otherPlayer.hearts.filter(h => h).length > 0) {
+                isGameOver = false;
+            }
+            if (players[1].hearts.filter(h => h).length > 0 && players[2].hearts.filter(h => h).length > 0) {
+                isGameOver = false;
+                status1.className = 'player-status';
+                status2.className = 'player-status';
+                updateAllPlayers();
+            }
+            document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
+            checkLoseCondition2P();
+        }
+
+        // ============================================================
+        // COLOR PICKER (ÚNICO)
+        // ============================================================
+        colorBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                const color = this.dataset.color;
+                colorBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                heartColor = color;
+                updateSinglePlayerUI();
+            });
+        });
+
+        // ============================================================
+        // COLOR PICKER (2P)
+        // ============================================================
+        document.querySelectorAll('#colorPicker1 .color-btn, #colorPicker2 .color-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const playerId = parseInt(this.dataset.player);
+                const color = this.dataset.color;
+                const container = playerId === 1 ? document.getElementById('colorPicker1') : document.getElementById('colorPicker2');
+                container.querySelectorAll('.color-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                players[playerId].color = color;
+                updatePlayerUI(playerId);
+            });
+        });
+
+        // ============================================================
+        // EVENTOS DE REINICIO
+        // ============================================================
+        resetBtn.addEventListener('click', resetSinglePlayer);
+        resetBtn1.addEventListener('click', () => resetPlayer(1));
+        resetBtn2.addEventListener('click', () => resetPlayer(2));
 
         // ============================================================
         // MULTIJUGADOR
@@ -1283,6 +1508,9 @@
             multiplayerBtn.classList.add('active');
             exitMpBtn.classList.add('visible');
             
+            // Ocultar corazón único
+            document.getElementById('heartCounter').style.display = 'none';
+            
             players[1].hearts = [true, true, true];
             players[2].hearts = [true, true, true];
             players[1].won = false;
@@ -1292,13 +1520,8 @@
             resetBtn2.classList.remove('visible');
             updateAllPlayers();
             
-            document.querySelectorAll('.heart').forEach(el => {
-                el.style.cursor = 'pointer';
-            });
-            
-            if (logoState === 1) {
-                updateAllTexts();
-            }
+            document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
+            if (logoState === 1) { updateAllTexts(); }
         }
 
         function deactivateMultiplayer() {
@@ -1306,6 +1529,7 @@
             if (confirm('¿Estás seguro de que quieres salir del modo 2 jugadores?')) {
                 isMultiplayer = false;
                 playersContainer.classList.remove('active');
+                document.getElementById('heartCounter').style.display = 'block';
                 multiplayerBtn.textContent = '🎮 2 Jugadores';
                 multiplayerBtn.classList.remove('active');
                 exitMpBtn.classList.remove('visible');
@@ -1315,6 +1539,7 @@
                 status1.className = 'player-status';
                 status2.className = 'player-status';
                 updateAllPlayers();
+                resetSinglePlayer();
             }
         }
 
@@ -1325,37 +1550,25 @@
         // GAME OVER OVERLAY
         // ============================================================
         goResetBtn.addEventListener('click', function() {
-            stopGameOverMusic();
-            isMusicPlaying = false;
-            isGameOver = false;
-            players[1].hearts = [true, true, true];
-            players[2].hearts = [true, true, true];
-            players[1].won = false;
-            players[2].won = false;
-            resetBtn1.classList.remove('visible');
-            resetBtn2.classList.remove('visible');
-            document.body.classList.remove('shaking');
-            document.body.classList.remove('game-over-active');
-            gameOverOverlay.classList.remove('show');
-            mainContainer.classList.remove('game-over-mode');
-            stopLogoPress();
-            logoContainer.classList.remove('shaking-loop');
-            if (logoState === 1) {
-                logoText.textContent = 'NoTeRias';
-                logoText.classList.remove('switched');
-                logoSub.textContent = '★ play & enjoy ★';
-                logoSub.classList.remove('switched');
-                logoState = 0;
-                updateAllTexts();
+            if (isMultiplayer) {
+                // Resetear ambos jugadores en 2P
+                players[1].hearts = [true, true, true];
+                players[2].hearts = [true, true, true];
+                players[1].won = false;
+                players[2].won = false;
+                resetBtn1.classList.remove('visible');
+                resetBtn2.classList.remove('visible');
+                updateAllPlayers();
+                isGameOver = false;
+                document.querySelectorAll('.heart').forEach(el => { el.style.cursor = 'pointer'; });
+                gameOverOverlay.classList.remove('show');
+                document.body.classList.remove('game-over-active');
+                mainContainer.classList.remove('game-over-mode');
+                stopGameOverMusic();
+                isMusicPlaying = false;
+            } else {
+                resetSinglePlayer();
             }
-            updateAllPlayers();
-            goText.textContent = 'GAME OVER';
-            goSubText.textContent = '💀 Has perdido todos tus corazones';
-            goSubText.classList.remove('shaking-text');
-            goSubText.classList.remove('clickable');
-            document.querySelectorAll('.heart').forEach(el => {
-                el.style.cursor = 'pointer';
-            });
         });
 
         // ============================================================
@@ -1400,7 +1613,8 @@
                 logoSub.classList.remove('switched');
             }
 
-            updateAllPlayers();
+            updateSinglePlayerUI();
+            if (isMultiplayer) updateAllPlayers();
         }
 
         function toggleLogo() {
@@ -1432,15 +1646,6 @@
         }
 
         logoContainer.addEventListener('click', toggleLogo);
-
-        // ============================================================
-        // CLICK EN DESCRIPCIÓN DEL GAME OVER
-        // ============================================================
-        goSubText.addEventListener('click', function() {
-            if (logoState === 1 && isGameOver) {
-                playXDD();
-            }
-        });
 
         // ============================================================
         // REPRODUCTOR PERSONALIZADO
@@ -1481,19 +1686,27 @@
         // INICIALIZAR
         // ============================================================
         function init() {
-            hearts1.forEach(el => {
-                el.removeEventListener('click', handleHeartClick);
-                el.addEventListener('click', handleHeartClick);
-            });
-            hearts2.forEach(el => {
-                el.removeEventListener('click', handleHeartClick);
-                el.addEventListener('click', handleHeartClick);
+            // Corazón único
+            heartElements.forEach(el => {
+                el.removeEventListener('click', handleSingleHeartClick);
+                el.addEventListener('click', handleSingleHeartClick);
             });
 
+            // Corazones 2P
+            hearts1.forEach(el => {
+                el.removeEventListener('click', handlePlayerHeartClick);
+                el.addEventListener('click', handlePlayerHeartClick);
+            });
+            hearts2.forEach(el => {
+                el.removeEventListener('click', handlePlayerHeartClick);
+                el.addEventListener('click', handlePlayerHeartClick);
+            });
+
+            updateSinglePlayerUI();
             updateAllPlayers();
             updateAllTexts();
 
-            console.log('❤️ NoTeRias · Modo 2 jugadores con colores');
+            console.log('❤️ NoTeRias · Corazones con VHS y modo 2 jugadores');
             console.log('📁 Archivos necesarios: GameOver.mp3, Win.mp3, oof.mp3, under.mp3, AyNo.mp3, Ay.mp3, Noo.mp3, WTHB.mp3, LogoPress.mp3, Shh.mp3, XDD.mp3, Log0.png, VHS.png');
         }
 
