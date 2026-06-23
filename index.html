@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NoTeRias · VHS 3D</title>
+<title>NoTeRias · Corazones</title>
 <link rel="icon" type="image/png" href="Log0.png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;user-select:none}
@@ -19,13 +19,14 @@ body.shaking{animation:shakeWithBlur .5s ease-in-out}
 .logo-text{font-size:5rem;font-weight:bold;letter-spacing:8px;background:linear-gradient(180deg,#ff6b7c 0%,#ff2b4f 40%,#cc0018 70%,#880010 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 8px 25px rgba(255,43,79,.4));position:relative;display:inline-block}
 .logo-text::after{content:'';position:absolute;bottom:-8px;left:10%;width:80%;height:4px;background:linear-gradient(90deg,transparent,#ff2b4f,#ff6b7c,#ff2b4f,transparent);border-radius:2px;filter:blur(1px);transition:all .3s}
 .logo-text.switched::after{background:linear-gradient(90deg,transparent,#ff6b7c,#ff2b4f,#ff6b7c,transparent);width:60%}
-.logo-sub{font-size:1rem;color:#ff6b7c88;letter-spacing:10px;margin-top:.2rem;text-transform:uppercase}
+.logo-sub{font-size:1rem;color:#ff6b7c88;letter-spacing:10px;margin-top:.2rem;text-transform:uppercase;transition:all .3s}
 .logo-sub.switched{color:#ff6b7c44;letter-spacing:4px}
 .top-buttons{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;width:100%}
 .how-to-play-btn,.multiplayer-btn,.exit-mp-btn{font-family:'Komika Axis',cursive;padding:.6rem 2rem;border-radius:60px;cursor:pointer;transition:all .3s;text-transform:uppercase;letter-spacing:2px}
 .how-to-play-btn{background:transparent;border:2px solid #ff6b7c66;color:#ff6b7c88;font-size:1.1rem}
 .how-to-play-btn:hover{background:#ff6b7c22;border-color:#ff6b7c}
 .how-to-play-btn.switched{font-size:1.3rem;border-color:#ff6b7c88;color:#ff6b7cbb;animation:btnPulse 1s infinite alternate}
+.how-to-play-btn.disabled{opacity:0.5;cursor:not-allowed;pointer-events:none}
 .multiplayer-btn{background:linear-gradient(135deg,#6b7cff,#2838dd);border:none;color:#fff;font-size:1.2rem;font-weight:bold;box-shadow:0 4px 0 #1a2a88,0 8px 25px rgba(43,79,255,.25)}
 .multiplayer-btn:hover{background:linear-gradient(135deg,#7c8cff,#3848ee);transform:scale(1.02)}
 .multiplayer-btn.active{background:linear-gradient(135deg,#ff3b5c,#dd0028);box-shadow:0 4px 0 #881a2a,0 8px 25px rgba(255,43,79,.25)}
@@ -33,7 +34,7 @@ body.shaking{animation:shakeWithBlur .5s ease-in-out}
 .exit-mp-btn.visible{display:inline-block}
 @keyframes btnPulse{0%{box-shadow:0 0 20px rgba(255,43,79,.1)}100%{box-shadow:0 0 50px rgba(255,43,79,.3)}}
 .heart-counter{background:rgba(26,26,46,.85);backdrop-filter:blur(6px);border-radius:3rem;padding:1.5rem 2.5rem 1.2rem;box-shadow:0 20px 40px rgba(0,0,0,.8),0 0 0 3px #ff3b5c55 inset;text-align:center;width:100%;border:2px solid #ff6b7c66}
-.player-label{font-size:1rem;color:#ff6b7caa;letter-spacing:4px;text-transform:uppercase}
+.player-label{font-size:1rem;color:#ff6b7caa;letter-spacing:4px;text-transform:uppercase;transition:all .3s}
 .hearts-container{display:flex;justify-content:center;gap:1.5rem;margin:.2rem 0 .3rem;flex-wrap:wrap}
 .heart{font-size:5rem;cursor:pointer;transition:transform .15s,filter .2s,opacity .2s;text-shadow:0 8px 25px rgba(255,50,80,.7);filter:drop-shadow(0 8px 12px #00000077)}
 .heart:hover{transform:scale(1.12);filter:drop-shadow(0 0 22px #ff3b5c)}
@@ -43,45 +44,39 @@ body.shaking{animation:shakeWithBlur .5s ease-in-out}
 .reset-btn{font-family:'Komika Axis',cursive;background:#ff3b5c;border:none;color:#1a1a2e;font-size:1.4rem;font-weight:bold;padding:.6rem 1.8rem;margin-top:.3rem;border-radius:60px;cursor:pointer;box-shadow:0 6px 0 #881a2a,0 12px 30px #000000aa;text-transform:uppercase;letter-spacing:3px;border:2px solid #ff9eae;display:none}
 .reset-btn.visible{display:block}
 .reset-btn:hover{background:#ff4f6e;transform:scale(1.03)}
-.color-picker-container{display:flex;justify-content:center;gap:.8rem;margin-top:.3rem}
+.color-picker-container{display:flex;justify-content:center;gap:.8rem;margin-top:.3rem;flex-wrap:wrap}
 .color-btn{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
 .color-btn:hover{transform:scale(1.15)}
 .color-btn.active{border-color:#fff;box-shadow:0 0 20px rgba(255,255,255,.3)}
 .players-container{display:none;gap:2rem;width:100%;flex-wrap:wrap;justify-content:center;margin-top:.5rem}
 .players-container.active{display:flex}
 .player-card{flex:1;min-width:280px;background:rgba(26,26,46,.7);backdrop-filter:blur(6px);border-radius:2rem;padding:1.2rem 1.5rem 1rem;border:2px solid #ff6b7c44}
-.player-card .player-label{font-size:1.2rem;color:#ff6b7caa;letter-spacing:4px;text-align:center;text-transform:uppercase}
+.player-card .player-label{font-size:1.2rem;color:#ff6b7caa;letter-spacing:4px;text-align:center;text-transform:uppercase;transition:all .3s}
 .player-card .hearts-container{display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap}
 .player-card .heart{font-size:4.5rem;cursor:pointer}
 .player-card .reset-btn{font-size:1rem;padding:.4rem 1.2rem;margin-top:.3rem}
-.player-card .player-status{text-align:center;font-size:.9rem;color:#ff6b7c66;margin-top:.2rem;font-family:'Segoe UI',Arial,sans-serif}
+.player-card .player-status{text-align:center;font-size:.9rem;color:#ff6b7c66;margin-top:.2rem;font-family:'Segoe UI',Arial,sans-serif;transition:all .3s}
 .player-card .player-status.win{color:#ff6b7c;font-size:1.2rem;animation:statusPulse .8s infinite alternate}
 @keyframes statusPulse{0%{opacity:.6;transform:scale(1)}100%{opacity:1;transform:scale(1.05)}}
+.player-card .color-picker-container{display:flex;justify-content:center;gap:.8rem;margin-top:.3rem;flex-wrap:wrap}
+.player-card .color-picker-container .color-btn{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
+.player-card .color-picker-container .color-btn:hover{transform:scale(1.15)}
+.player-card .color-picker-container .color-btn.active{border-color:#fff;box-shadow:0 0 20px rgba(255,255,255,.3)}
 .custom-player{width:100%;background:rgba(26,26,46,.7);backdrop-filter:blur(8px);border-radius:2rem;padding:1.2rem 1.5rem 1.5rem;border:2px solid #ff6b7c44;box-shadow:0 10px 30px rgba(0,0,0,.5)}
 .player-container{position:relative;width:100%;background:#0a0a1a;border-radius:1.2rem;overflow:hidden;aspect-ratio:16/9;border:2px solid #ff6b7c33}
 .player-container iframe{width:100%;height:100%;border:none;display:block}
 .player-container .placeholder{display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;height:100%;color:#ff6b7c44;font-size:1.5rem;font-family:'Segoe UI',Arial,sans-serif;gap:.5rem;background:#0a0a1a}
 .player-container .placeholder .icon{font-size:4rem}
-.player-container .placeholder .msg{font-size:1.1rem;color:#ff6b7c66;letter-spacing:2px}
+.player-container .placeholder .msg{font-size:1.1rem;color:#ff6b7c66;letter-spacing:2px;transition:all .3s}
 .player-controls{display:flex;gap:.8rem;margin-top:.8rem;align-items:center;flex-wrap:wrap;justify-content:center}
-.player-controls input{flex:1;min-width:160px;padding:.7rem 1.2rem;border-radius:60px;border:2px solid #ff6b7c33;background:rgba(255,255,255,.06);color:#fff;font-size:.9rem;font-family:'Segoe UI',Arial,sans-serif;outline:none}
-.player-controls input::placeholder{color:#8888aa}
+.player-controls input{flex:1;min-width:160px;padding:.7rem 1.2rem;border-radius:60px;border:2px solid #ff6b7c33;background:rgba(255,255,255,.06);color:#fff;font-size:.9rem;font-family:'Segoe UI',Arial,sans-serif;outline:none;transition:all .3s}
+.player-controls input::placeholder{color:#8888aa;transition:all .3s}
 .player-controls input:focus{border-color:#ff3b5c;background:rgba(255,255,255,.10);box-shadow:0 0 30px #ff3b5c22}
-.player-controls button{padding:.7rem 1.8rem;border-radius:60px;border:none;background:linear-gradient(135deg,#ff3b5c,#dd0028);color:#1a1a2e;font-size:.9rem;font-weight:bold;cursor:pointer;font-family:'Komika Axis',cursive;text-transform:uppercase;letter-spacing:1.5px;box-shadow:0 4px 0 #881a2a,0 8px 25px rgba(255,43,79,.25)}
+.player-controls button{padding:.7rem 1.8rem;border-radius:60px;border:none;background:linear-gradient(135deg,#ff3b5c,#dd0028);color:#1a1a2e;font-size:.9rem;font-weight:bold;cursor:pointer;font-family:'Komika Axis',cursive;text-transform:uppercase;letter-spacing:1.5px;box-shadow:0 4px 0 #881a2a,0 8px 25px rgba(255,43,79,.25);transition:all .25s}
 .player-controls button:hover{background:linear-gradient(135deg,#ff4f6e,#ee0038);transform:scale(1.02)}
 .player-controls button.switched{background:linear-gradient(135deg,#ff6b7c,#ff2b4f);font-size:1.1rem;animation:btnPulse 1s infinite alternate}
-.credits{font-size:.8rem;color:#ff6b7c44;letter-spacing:2px;text-align:center;padding:.2rem 0;border-top:1px solid #ff6b7c22;width:100%;max-width:500px}
+.credits{font-size:.8rem;color:#ff6b7c44;letter-spacing:2px;text-align:center;padding:.2rem 0;border-top:1px solid #ff6b7c22;width:100%;max-width:500px;transition:all .3s}
 .credits.switched{color:#ff6b7c66;font-size:.9rem}
-.vhs-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:none;z-index:60000;overflow:hidden}
-.vhs-overlay.active{display:block}
-.vhs-overlay #vhsCanvas{width:100%;height:100%;display:block}
-.vhs-overlay #vhsExit{position:fixed;top:20px;right:20px;z-index:60001;background:rgba(255,43,79,.15);border:2px solid #ff6b7c44;color:#ff6b7c88;padding:8px 16px;border-radius:30px;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;backdrop-filter:blur(10px)}
-.vhs-overlay #vhsExit:hover{background:rgba(255,43,79,.25);border-color:#ff6b7c88;color:#ff6b7c}
-.vhs-overlay #vhsCrosshair{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#ff6b7c33;font-size:1.5rem;z-index:60001;pointer-events:none;opacity:.3}
-.vhs-overlay #vhsInfo{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);color:#ff6b7c44;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;z-index:60001;pointer-events:none}
-.vhs-overlay #vhsControls{position:fixed;bottom:60px;left:50%;transform:translateX(-50%);color:#ff6b7c33;font-size:.6rem;letter-spacing:3px;text-transform:uppercase;z-index:60001;pointer-events:none;background:rgba(0,0,0,.5);padding:6px 16px;border-radius:20px;border:1px solid #ff6b7c22}
-.vhs-overlay .vhs-message{position:fixed;top:35%;left:50%;transform:translateX(-50%);color:#ff6b7c;font-size:1.2rem;font-family:'Segoe UI',Arial,sans-serif;z-index:60001;background:rgba(0,0,0,.6);padding:12px 24px;border-radius:12px;border:1px solid #ff6b7c33;backdrop-filter:blur(10px);text-align:center;pointer-events:none;opacity:0;transition:opacity .4s}
-.vhs-overlay .vhs-message.show{opacity:1}
 .game-over-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:none;justify-content:center;align-items:center;flex-direction:column;z-index:10000;animation:undertaleFadeIn 1.2s forwards}
 .game-over-overlay.show{display:flex}
 @keyframes undertaleFadeIn{0%{opacity:0}60%{opacity:1;background:#0a0005}100%{opacity:1;background:#0a0005}}
@@ -104,7 +99,6 @@ body.game-over-active{overflow:hidden}
 <body>
 
 <div class="game-over-overlay" id="gameOverOverlay"><div class="go-text" id="goText">GAME OVER</div><div class="go-sub" id="goSubText">💀 Has perdido todos tus corazones</div><button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button></div>
-<div class="vhs-overlay" id="vhsOverlay"><canvas id="vhsCanvas"></canvas><div id="vhsCrosshair">+</div><div id="vhsInfo">✦ VHS ✦</div><div id="vhsControls">WASD · Click en cinta para recoger</div><div id="vhsExit">✕ Salir</div><div class="vhs-message" id="vhsMessage"></div></div>
 
 <div class="main-container" id="mainContainer">
 <div class="logo-container" id="logoContainer"><div class="logo-text" id="logoText">NoTeRias</div><div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div></div>
@@ -119,15 +113,25 @@ body.game-over-active{overflow:hidden}
 <div class="credits" id="creditsText"><span>CC0</span> Raphapro900 <span>- V1.0</span></div>
 </div>
 
-<audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3"></audio><audio id="winAudio" preload="auto"><source src="Win.mp3"></audio><audio id="oofAudio" preload="auto"><source src="oof.mp3"></audio><audio id="underAudio" preload="auto"><source src="under.mp3"></audio><audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3"></audio><audio id="ayAudio" preload="auto"><source src="Ay.mp3"></audio><audio id="nooAudio" preload="auto"><source src="Noo.mp3"></audio><audio id="wthbAudio" preload="auto"><source src="WTHB.mp3"></audio><audio id="logoPressAudio" preload="auto" loop><source src="LogoPress.mp3"></audio><audio id="shhAudio" preload="auto"><source src="Shh.mp3"></audio><audio id="xddAudio" preload="auto"><source src="XDD.mp3"></audio>
+<audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3"></audio>
+<audio id="winAudio" preload="auto"><source src="Win.mp3"></audio>
+<audio id="oofAudio" preload="auto"><source src="oof.mp3"></audio>
+<audio id="underAudio" preload="auto"><source src="under.mp3"></audio>
+<audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3"></audio>
+<audio id="ayAudio" preload="auto"><source src="Ay.mp3"></audio>
+<audio id="nooAudio" preload="auto"><source src="Noo.mp3"></audio>
+<audio id="wthbAudio" preload="auto"><source src="WTHB.mp3"></audio>
+<audio id="logoPressAudio" preload="auto" loop><source src="LogoPress.mp3"></audio>
+<audio id="shhAudio" preload="auto"><source src="Shh.mp3"></audio>
+<audio id="xddAudio" preload="auto"><source src="XDD.mp3"></audio>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 (function(){
 // ======================== ESTADO ========================
 let logoState=0,isGameOver=!1,isMusicPlaying=!1,isMultiplayer=!1;
 let hearts=[!0,!0,!0],heartColor='#ff2b4f';
 const players={1:{hearts:[!0,!0,!0],color:'#ff2b4f',won:!1},2:{hearts:[!0,!0,!0],color:'#ff2b4f',won:!1}};
+
 // ======================== DOM ========================
 const L=document.getElementById('logoContainer'),LT=document.getElementById('logoText'),LS=document.getElementById('logoSub');
 const HTP=document.getElementById('howToPlayBtn'),MP=document.getElementById('multiplayerBtn'),EMP=document.getElementById('exitMpBtn');
@@ -135,9 +139,9 @@ const HC=document.getElementById('heartCounter'),HE=document.querySelectorAll('#
 const H1=document.querySelectorAll('#hearts1 .heart'),H2=document.querySelectorAll('#hearts2 .heart'),R1=document.getElementById('resetBtn1'),R2=document.getElementById('resetBtn2'),S1=document.getElementById('status1'),S2=document.getElementById('status2'),P1L=document.getElementById('player1Label'),P2L=document.getElementById('player2Label');
 const PI=document.getElementById('playerInput'),PLB=document.getElementById('playerLoadBtn'),PIF=document.getElementById('playerIframe'),PP=document.getElementById('playerPlaceholder'),PPM=document.getElementById('playerPlaceholderMsg');
 const CB=document.querySelectorAll('#colorPicker .color-btn'),PC=document.getElementById('playersContainer');
-const VO=document.getElementById('vhsOverlay'),VE=document.getElementById('vhsExit'),VM=document.getElementById('vhsMessage'),VC=document.getElementById('vhsCanvas');
 const GOT=document.getElementById('goText'),GOS=document.getElementById('goSubText'),GOR=document.getElementById('goResetBtn'),GOO=document.getElementById('gameOverOverlay'),MC=document.getElementById('mainContainer');
 const CT=document.getElementById('creditsText');
+
 // ======================== AUDIOS ========================
 const GA=document.getElementById('gameOverAudio'),WA=document.getElementById('winAudio'),OA=document.getElementById('oofAudio'),UA=document.getElementById('underAudio'),LPA=document.getElementById('logoPressAudio'),SHA=document.getElementById('shhAudio'),XDA=document.getElementById('xddAudio');
 function pLP(){try{LPA.currentTime=0;LPA.volume=.8;LPA.loop=!0;LPA.play()}catch(e){}}
@@ -152,9 +156,11 @@ function pWIN(){try{if(isMusicPlaying)return;WA.currentTime=0;WA.volume=1;WA.pla
 function sGAM(){try{GA.pause();GA.currentTime=0;WA.pause();WA.currentTime=0;isMusicPlaying=!1}catch(e){}}
 function shake(){document.body.classList.remove('shaking');void document.body.offsetWidth;document.body.classList.add('shaking');setTimeout(()=>document.body.classList.remove('shaking'),500)}
 function gE(alive,laugh){return laugh?alive?'🤣':'😂':alive?'❤️':'💔'}
+
 function updateSingle(){const l=logoState===1;HE.forEach((e,i)=>{const a=hearts[i];e.textContent=gE(a,l);e.style.color=heartColor;if(a){e.classList.remove('lost','breaking');e.style.textShadow=`0 8px 25px ${heartColor}88`;e.style.filter='drop-shadow(0 8px 12px #00000077)';e.style.opacity='1'}else{e.classList.add('lost');e.style.textShadow=`0 0 20px ${heartColor}44`;e.style.filter=`drop-shadow(0 0 15px ${heartColor}33)`;e.style.opacity='.4'}});const a=hearts.filter(h=>h).length;PL.textContent=logoState===1?'👤 TÚ 🤣':'👤 TÚ';a===0?RB.classList.add('visible'):RB.classList.remove('visible')}
 function updateP(id){const p=players[id],h=id===1?H1:H2,s=id===1?S1:S2,l=logoState===1;h.forEach((e,i)=>{const a=p.hearts[i];e.textContent=gE(a,l);e.style.color=p.color;if(a){e.classList.remove('lost','breaking');e.style.textShadow=`0 8px 25px ${p.color}88`;e.style.filter='drop-shadow(0 8px 12px #00000077)';e.style.opacity='1'}else{e.classList.add('lost');e.style.textShadow=`0 0 20px ${p.color}44`;e.style.filter=`drop-shadow(0 0 15px ${p.color}33)`;e.style.opacity='.4'}});const a=p.hearts.filter(h=>h).length;const lbl=id===1?P1L:P2L;lbl.textContent=logoState===1?`👤 JUGADOR ${id} 🤣`:`👤 JUGADOR ${id}`;if(a===0){s.textContent=logoState===1?'😂¡PERDISTE! AJAJAJA':'💀 ¡Has perdido!';s.className='player-status win'}else{s.textContent=`${'❤️'.repeat(a)} ${a} corazones`;s.className='player-status'}const rb=id===1?R1:R2;a===0?rb.classList.add('visible'):rb.classList.remove('visible')}
 function updateAll(){updateP(1);updateP(2)}
+
 function handleHeart(e){if(isGameOver||isMultiplayer)return;const el=e.currentTarget;const i=parseInt(el.dataset.index);if(!hearts[i])return;hearts[i]=!1;updateSingle();shake();pUN();const a=hearts.filter(h=>h).length;if(a===1)pRAN();if(a===0){pOF();isGameOver=!0;sLP();L.classList.remove('shaking-loop');setTimeout(pGAM,300);setTimeout(()=>{GOO.classList.add('show');document.body.classList.add('game-over-active');MC.classList.add('game-over-mode');GOT.textContent='GAME OVER';GOS.textContent='💀 Has perdido todos tus corazones';GOS.classList.remove('shaking-text')},600)}}
 function handlePHeart(e){if(isGameOver||!isMultiplayer)return;const el=e.currentTarget;const pid=parseInt(el.dataset.player);const i=parseInt(el.dataset.index);const p=players[pid];if(!p.hearts[i])return;p.hearts[i]=!1;updateP(pid);shake();pUN();const a=p.hearts.filter(h=>h).length;if(a===1)pRAN();if(a===0)pOF();check2P()}
 function check2P(){const p1=players[1].hearts.filter(h=>h).length,p2=players[2].hearts.filter(h=>h).length,l=logoState===1;if(p1===0&&p2>0){R1.classList.add('visible');S1.textContent=l?'😂¡PERDISTE! AJAJAJA':'💀 ¡Has perdido!';S1.className='player-status win';if(p2===3){S2.textContent=l?'🤣¡GANASTE! AJAJAJA':'🏆 ¡Has ganado!';S2.className='player-status win';isGameOver=!0;sLP();L.classList.remove('shaking-loop');shake();l?pWIN():pGAM()}}if(p2===0&&p1>0){R2.classList.add('visible');S2.textContent=l?'😂¡PERDISTE! AJAJAJA':'💀 ¡Has perdido!';S2.className='player-status win';if(p1===3){S1.textContent=l?'🤣¡GANASTE! AJAJAJA':'🏆 ¡Has ganado!';S1.className='player-status win';isGameOver=!0;sLP();L.classList.remove('shaking-loop');shake();l?pWIN():pGAM()}}if(p1===0&&p2===0&&!isGameOver){isGameOver=!0;sLP();L.classList.remove('shaking-loop');shake();if(l){S1.textContent='😂¡PERDISTE! AJAJAJA';S1.className='player-status win';S2.textContent='😂¡PERDISTE! AJAJAJA';S2.className='player-status win'}else{S1.textContent='💀 ¡Has perdido!';S1.className='player-status';S2.textContent='💀 ¡Has perdido!';S2.className='player-status'}R1.classList.add('visible');R2.classList.add('visible');l?pWIN():pGAM()}}
@@ -172,17 +178,14 @@ L.addEventListener('click',toggleLogo);
 PLB.addEventListener('click',function(){let url=PI.value.trim();if(!url){PP.style.display='flex';PIF.style.display='none';return}let vid=null;let m=url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&?]+)/);if(m)vid=m[1];m=url.match(/youtube\.com\/embed\/([^&?]+)/);if(m)vid=m[1];if(!vid){PP.style.display='flex';PIF.style.display='none';PPM.textContent='⚠️ URL no válida';return}PIF.src=`https://www.youtube.com/embed/${vid}?autoplay=1&rel=0`;PIF.style.display='block';PP.style.display='none'});
 PI.addEventListener('keypress',e=>{if(e.key==='Enter')PLB.click()});
 HE.forEach(e=>{e.addEventListener('click',handleHeart)});H1.forEach(e=>{e.addEventListener('click',handlePHeart)});H2.forEach(e=>{e.addEventListener('click',handlePHeart)});
-// ======================== VHS 3D ========================
-let vInit=!1,vScene,vCamera,vRenderer,vVideo=null,vHasVHS=!1,vWatching=!1,vPos=new THREE.Vector3(0,1.7,5),vRot=0,vPitch=0,vTargetPitch=0,vLocked=!1,vMouseX=0,vMouseY=0,vKeys={w:!1,a:!1,s:!1,d:!1};
-function showVHSMsg(t){VM.textContent=t;VM.classList.add('show');clearTimeout(VM._t);VM._t=setTimeout(()=>VM.classList.remove('show'),2000)}
-function initVHS(){if(vInit)return;vInit=!0;const canvas=VC;vScene=new THREE.Scene();vScene.background=new THREE.Color(0);vScene.fog=new THREE.Fog(0,10,30);vCamera=new THREE.PerspectiveCamera(70,canvas.clientWidth/canvas.clientHeight,.1,100);vCamera.position.set(0,1.7,5);vRenderer=new THREE.WebGLRenderer({canvas,antialias:!0});vRenderer.setSize(canvas.clientWidth,canvas.clientHeight);vRenderer.setPixelRatio(Math.min(window.devicePixelRatio,2));vRenderer.shadowMap.enabled=!0;vRenderer.shadowMap.type=THREE.PCFSoftShadowMap;vRenderer.toneMapping=THREE.ACESFilmicToneMapping;vRenderer.toneMappingExposure=1.2;const am=new THREE.AmbientLight(0x222244,.3);vScene.add(am);const pl=new THREE.PointLight(0xff6b7c,1.5,15);pl.position.set(0,4,2);vScene.add(pl);const pl2=new THREE.PointLight(0x4466ff,.5,10);pl2.position.set(-3,2,-1);vScene.add(pl2);const pl3=new THREE.PointLight(0x4422aa,.3,8);pl3.position.set(3,1,-2);vScene.add(pl3);const tvLight=new THREE.PointLight(0x8888ff,.5,8);tvLight.position.set(0,1.5,0);vScene.add(tvLight);const floor=new THREE.Mesh(new THREE.PlaneGeometry(20,20),new THREE.MeshStandardMaterial({color:0x0a0a0a,roughness:.9,metalness:.1,side:THREE.DoubleSide}));floor.rotation.x=-Math.PI/2;floor.position.y=-.5;floor.receiveShadow=!0;vScene.add(floor);const walls=[[12,4,0,1.5,-6,0],[12,4,0,1.5,6,Math.PI],[12,4,-6,1.5,0,Math.PI/2],[12,4,6,1.5,0,-Math.PI/2]];walls.forEach(w=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w[0],w[1]),new THREE.MeshStandardMaterial({color:0x0a0a12,roughness:.8,metalness:.2,side:THREE.DoubleSide}));m.position.set(w[2],w[3],w[4]);m.rotation.y=w[5];m.receiveShadow=!0;vScene.add(m)});const tvG=new THREE.Group();tvG.position.set(0,1.2,-2.5);const tvB=new THREE.Mesh(new THREE.BoxGeometry(2.2,1.8,.6),new THREE.MeshStandardMaterial({color:0x1a1a2a,roughness:.6,metalness:.4,emissive:0x0a0a1a,emissiveIntensity:.1}));tvB.position.z=0;tvB.castShadow=!0;tvG.add(tvB);const scr=new THREE.Mesh(new THREE.PlaneGeometry(1.8,1.35),new THREE.MeshStandardMaterial({color:0x0a0a1a,emissive:0x111133,emissiveIntensity:.2,roughness:.3,metalness:.1}));scr.position.set(0,.05,.31);tvG.add(scr);const fM=new THREE.MeshStandardMaterial({color:0x222244,roughness:.5,metalness:.3});const fG=new THREE.BoxGeometry(1.85,.04,.05);const fT=new THREE.Mesh(fG,fM);fT.position.set(0,.68,.31);tvG.add(fT);const fB=new THREE.Mesh(fG,fM);fB.position.set(0,-.68,.31);tvG.add(fB);const fL=new THREE.Mesh(new THREE.BoxGeometry(.04,1.35,.05),fM);fL.position.set(-.91,.05,.31);tvG.add(fL);const fR=new THREE.Mesh(new THREE.BoxGeometry(.04,1.35,.05),fM);fR.position.set(.91,.05,.31);tvG.add(fR);const pBtn=new THREE.Mesh(new THREE.SphereGeometry(.05,8,8),new THREE.MeshStandardMaterial({color:0x44ff44,emissive:0x44ff44,emissiveIntensity:.5}));pBtn.position.set(.5,-.5,.35);tvG.add(pBtn);const base=new THREE.Mesh(new THREE.BoxGeometry(1.2,.1,.4),new THREE.MeshStandardMaterial({color:0x111122,roughness:.8}));base.position.set(0,-.95,0);tvG.add(base);const lMat=new THREE.MeshStandardMaterial({color:0x222244,metalness:.5,roughness:.3});[[-.4,-1,.2],[.4,-1,.2],[-.4,-1,-.2],[.4,-1,-.2]].forEach(p=>{const l=new THREE.Mesh(new THREE.CylinderGeometry(.03,.05,.1,6),lMat);l.position.set(p[0],p[1],p[2]);tvG.add(l)});vScene.add(tvG);const tvScreen=scr;let vVideoEl=null,vVideoTex=null;function createVid(s,l=!0){const v=document.createElement('video');v.src=s;v.crossOrigin='anonymous';v.playsInline=!0;v.muted=!1;v.loop=l;v.volume=.5;return v}function setTV(v){if(vVideoTex){vVideoTex.dispose()}vVideoTex=new THREE.VideoTexture(v);vVideoTex.minFilter=THREE.LinearFilter;vVideoTex.magFilter=THREE.LinearFilter;tvScreen.material=new THREE.MeshStandardMaterial({map:vVideoTex,emissive:new THREE.Color(0x4488ff),emissiveIntensity:.3,roughness:.2,metalness:.1,side:THREE.DoubleSide});tvLight.intensity=1.5}function playScreen(){if(vVideoEl){vVideoEl.pause();vVideoEl.currentTime=0;vVideoEl=null}vVideoEl=createVid('Screen.mp4',!0);setTV(vVideoEl);vVideoEl.play().catch(()=>{})}function playNoIn(){if(vVideoEl){vVideoEl.pause();vVideoEl.currentTime=0;vVideoEl=null}vVideoEl=createVid('NoIn.mp4',!1);setTV(vVideoEl);vVideoEl.addEventListener('ended',function onEnd(){vVideoEl.removeEventListener('ended',onEnd);playScreen()});vVideoEl.play().catch(()=>{playScreen()})}function playTutorial(){if(vVideoEl){vVideoEl.pause();vVideoEl.currentTime=0;vVideoEl=null}vVideoEl=createVid('Tutoriall.mp4',!1);setTV(vVideoEl);vVideoEl.addEventListener('ended',function onEnd(){vVideoEl.removeEventListener('ended',onEnd);playScreen();vWatching=!1;document.getElementById('vhsCrosshair').style.display='block'});vVideoEl.play().catch(()=>{playScreen()})}setTimeout(playScreen,500);const tapeMat=new THREE.MeshStandardMaterial({color:0x1a1a2a,roughness:.7,metalness:.2});const vhsG=new THREE.Group();vhsG.position.set(1.5,.1,-1.5);const tBody=new THREE.Mesh(new THREE.BoxGeometry(.4,.25,.6),tapeMat);tBody.castShadow=!0;vhsG.add(tBody);const texL=new THREE.TextureLoader().load('VHS.png');const lMat2=new THREE.MeshStandardMaterial({map:texL,roughness:.5,metalness:.2,side:THREE.DoubleSide});const lbl=new THREE.Mesh(new THREE.PlaneGeometry(.3,.15),lMat2);lbl.position.set(0,.13,.31);vhsG.add(lbl);vScene.add(vhsG);const handG=new THREE.Group();handG.scale.set(.35,.35,.35);handG.position.set(.4,-.3,-.6);handG.rotation.x=.2;handG.rotation.z=-.3;handG.visible=!1;const hBody=new THREE.Mesh(new THREE.BoxGeometry(.4,.25,.6),tapeMat);hBody.castShadow=!0;handG.add(hBody);const hLbl=new THREE.Mesh(new THREE.PlaneGeometry(.3,.15),lMat2);hLbl.position.set(0,.13,.31);handG.add(hLbl);vCamera.add(handG);vScene.add(vCamera);document.addEventListener('keydown',e=>{const k=e.key.toLowerCase();if(VO.classList.contains('active')){if(k==='w'||k==='a'||k==='s'||k==='d'){vKeys[k]=!0;e.preventDefault()}if(e.key==='Escape'&&vWatching){vWatching=!1;document.getElementById('vhsCrosshair').style.display='block';if(vVideoEl){vVideoEl.pause();vVideoEl.currentTime=0;vVideoEl=null}playScreen();if(vHasVHS)handG.visible=!0}}});document.addEventListener('keyup',e=>{const k=e.key.toLowerCase();if(k==='w'||k==='a'||k==='s'||k==='d'){vKeys[k]=!1;e.preventDefault()}});vRenderer.domElement.addEventListener('click',()=>{if(!vLocked&&!vWatching&&VO.classList.contains('active')){vRenderer.domElement.requestPointerLock()}});document.addEventListener('pointerlockchange',()=>{vLocked=document.pointerLockElement===vRenderer.domElement});document.addEventListener('mousemove',e=>{if(vLocked&&!vWatching&&VO.classList.contains('active')){vMouseX+=e.movementX*.002;vMouseY-=e.movementY*.002;vMouseY=Math.max(-.8,Math.min(.8,vMouseY))}});const ray=new THREE.Raycaster();const ptr=new THREE.Vector2();vRenderer.domElement.addEventListener('click',e=>{if(vWatching)return;const rect=vRenderer.domElement.getBoundingClientRect();ptr.x=((e.clientX-rect.left)/rect.width)*2-1;ptr.y=-((e.clientY-rect.top)/rect.height)*2+1;ray.setFromCamera(ptr,vCamera);const vi=ray.intersectObject(vhsG,!0);if(vi.length>0&&!vHasVHS){vHasVHS=!0;vScene.remove(vhsG);handG.visible=!0;showVHSMsg('📼 Cinta VHS recogida');return}const ti=ray.intersectObject(tvG,!0);if(ti.length>0){if(vHasVHS){showVHSMsg('📺 Reproduciendo...');playTutorial();vWatching=!0;document.getElementById('vhsCrosshair').style.display='none';handG.visible=!1}else{showVHSMsg('📺 Sin cinta');playNoIn()}}});let vStart=Date.now();function animateVHS(){if(!VO.classList.contains('active')){requestAnimationFrame(animateVHS);return}requestAnimationFrame(animateVHS);const now=Date.now();const delta=Math.min((now-vStart)/16.67,3);vStart=now;if(!vWatching){if(vLocked){vRot+=vMouseX*.5;vMouseX=0;vTargetPitch=vMouseY*.6}vPitch+=(vTargetPitch-vPitch)*.12;const fwd=new THREE.Vector3(-Math.sin(vRot),0,-Math.cos(vRot));const rgt=new THREE.Vector3(Math.cos(vRot),0,-Math.sin(vRot));const mv=new THREE.Vector3(0,0,0);if(vKeys.w)mv.add(fwd);if(vKeys.s)mv.sub(fwd);if(vKeys.a)mv.sub(rgt);if(vKeys.d)mv.add(rgt);if(mv.length()>0){mv.normalize().multiplyScalar(.06*delta);vPos.add(mv);vPos.x=Math.max(-4.5,Math.min(4.5,vPos.x));vPos.z=Math.max(-4.5,Math.min(4.5,vPos.z))}vCamera.position.copy(vPos);vCamera.position.y=1.7;const eul=new THREE.Euler(vPitch,vRot,0,'YXZ');vCamera.quaternion.setFromEuler(eul);if(handG.visible){handG.position.x=.4+Math.sin(now/800)*.02;handG.position.y=-.3+Math.sin(now/600)*.01;handG.rotation.z=-.3+Math.sin(now/700)*.02}}else{vCamera.position.set(0,1.3,-.5);vCamera.lookAt(0,.8,-2.5)}if(!vHasVHS&&vhsG.parent){vhsG.rotation.y+=.005;vhsG.position.y=.1+Math.sin(now/1000)*.02}vRenderer.render(vScene,vCamera)}function resizeVHS(){const canvas=VC;const w=canvas.clientWidth,h=canvas.clientHeight;if(vCamera){vCamera.aspect=w/h;vCamera.updateProjectionMatrix()}if(vRenderer){vRenderer.setSize(w,h)}}window.addEventListener('resize',resizeVHS);animateVHS();window.vhsResize=resizeVHS}
-function openVHS(){if(!vInit){initVHS()}VO.classList.add('active');if(window.vhsResize)setTimeout(window.vhsResize,100);setTimeout(()=>{if(!vLocked&&!vWatching){vRenderer.domElement.requestPointerLock()}},500)}
-function closeVHS(){VO.classList.remove('active');document.exitPointerLock();vLocked=!1;vPos.set(0,1.7,5);vRot=0;vPitch=0;vTargetPitch=0;if(vCamera){vCamera.position.set(0,1.7,5);const e=new THREE.Euler(0,0,0,'YXZ');vCamera.quaternion.setFromEuler(e)}if(vWatching){vWatching=!1;document.getElementById('vhsCrosshair').style.display='block';if(vVideoEl){vVideoEl.pause();vVideoEl.currentTime=0;vVideoEl=null}playScreen()}}
-VE.addEventListener('click',closeVHS);
-HTP.addEventListener('click',function(){openVHS()});
+
+// ======================== BOTÓN CÓMO JUGAR DESACTIVADO ========================
+HTP.classList.add('disabled');
+HTP.title = 'Próximamente';
+
 // ======================== INICIO ========================
 updateSingle();updateAll();updateAllTexts();
-console.log('❤️ NoTeRias · VHS 3D');
+console.log('❤️ NoTeRias · Corazones (VHS desactivado)');
 })();
 </script>
 </body>
