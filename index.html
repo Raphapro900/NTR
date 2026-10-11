@@ -1,212 +1,154 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>NoTeRias · Corazones</title>
-  <link rel="icon" type="image/png" href="Log0.png">
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;user-select:none}
-    html, body { height: 100%; width: 100%; }
-    body{background:#0a0a1a;min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:'Komika Axis','Comic Sans MS',cursive;margin:0;padding:20px;overflow-x:hidden}
-    body.shaking{animation:shakeWithBlur .5s ease-in-out}
-    @keyframes shakeWithBlur{0%,100%{transform:translate(0,0)rotate(0);filter:blur(0)}10%{transform:translate(-12px,8px)rotate(-2deg);filter:blur(3px)}20%{transform:translate(12px,-8px)rotate(2deg);filter:blur(4px)}30%{transform:translate(-8px,12px)rotate(-1.5deg);filter:blur(3px)}40%{transform:translate(8px,-12px)rotate(1.5deg);filter:blur(4px)}50%{transform:translate(-12px,6px)rotate(-2deg);filter:blur(5px)}60%{transform:translate(12px,-6px)rotate(2deg);filter:blur(4px)}70%{transform:translate(-6px,10px)rotate(-1deg);filter:blur(3px)}80%{transform:translate(6px,-10px)rotate(1deg);filter:blur(3px)}90%{transform:translate(-8px,4px)rotate(-.5deg);filter:blur(2px)}100%{transform:translate(0,0)rotate(0);filter:blur(0)}}
-    
-    #introScreen {
-      position: fixed;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      background: #000;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: opacity .6s ease, visibility .6s ease;
-    }
-    #introScreen.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-    #introVideo {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      background: #000;
-      filter: brightness(0.9) contrast(1.1);
-    }
-    #clickOverlay {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.48);
-      cursor: pointer;
-      color: white;
-      font-size: clamp(22px, 3vw, 34px);
-      text-align: center;
-      user-select: none;
-    }
-    #clickOverlay span {
-      background: rgba(255,255,255,0.12);
-      padding: 18px 32px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,0.25);
-      backdrop-filter: blur(6px);
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
-    }
-
-    .main-container{display:flex;flex-direction:column;align-items:center;gap:1rem;width:100%;max-width:850px;transition:opacity .5s,filter .5s}
-    .main-container.game-over-mode{opacity:.1;filter:blur(8px);pointer-events:none}
-    .logo-container{width:100%;text-align:center;padding:.2rem 0;cursor:pointer;position:relative}
-    .logo-container.shaking-logo{animation:logoShakeStrong .4s ease-in-out 3}
-    .logo-container.shaking-loop{animation:logoShakeStrong .4s ease-in-out infinite}
-    @keyframes logoShakeStrong{0%,100%{transform:translate(0,0)rotate(0);filter:blur(0)}10%{transform:translate(-14px,10px)rotate(-3deg);filter:blur(4px)}20%{transform:translate(14px,-10px)rotate(3deg);filter:blur(5px)}30%{transform:translate(-10px,14px)rotate(-2.5deg);filter:blur(4px)}40%{transform:translate(10px,-14px)rotate(2.5deg);filter:blur(5px)}50%{transform:translate(-14px,8px)rotate(-3deg);filter:blur(6px)}60%{transform:translate(14px,-8px)rotate(3deg);filter:blur(5px)}70%{transform:translate(-8px,12px)rotate(-2deg);filter:blur(4px)}80%{transform:translate(8px,-12px)rotate(2deg);filter:blur(4px)}90%{transform:translate(-10px,6px)rotate(-1.5deg);filter:blur(3px)}100%{transform:translate(0,0)rotate(0);filter:blur(0)}}
-    .logo-text{font-size:5rem;font-weight:bold;letter-spacing:8px;background:linear-gradient(180deg,#ff6b7c 0%,#ff2b4f 40%,#cc0018 70%,#880010 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 8px 25px rgba(255,43,79,.4));position:relative;display:inline-block}
-    .logo-text::after{content:'';position:absolute;bottom:-8px;left:10%;width:80%;height:4px;background:linear-gradient(90deg,transparent,#ff2b4f,#ff6b7c,#ff2b4f,transparent);border-radius:2px;filter:blur(1px);transition:all .3s}
-    .logo-text.switched::after{background:linear-gradient(90deg,transparent,#ff6b7c,#ff2b4f,#ff6b7c,transparent);width:60%}
-    .logo-sub{font-size:1rem;color:#ff6b7c88;letter-spacing:10px;margin-top:.2rem;text-transform:uppercase;transition:all .3s}
-    .logo-sub.switched{color:#ff6b7c44;letter-spacing:4px}
-    .top-buttons{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;width:100%}
-    .how-to-play-btn,.multiplayer-btn,.exit-mp-btn{font-family:'Komika Axis',cursive;padding:.6rem 2rem;border-radius:60px;cursor:pointer;transition:all .3s;text-transform:uppercase;letter-spacing:2px}
-    .how-to-play-btn{background:transparent;border:2px solid #ff6b7c66;color:#ff6b7c88;font-size:1.1rem}
-    .how-to-play-btn:hover{background:#ff6b7c22;border-color:#ff6b7c}
-    .how-to-play-btn.switched{font-size:1.3rem;border-color:#ff6b7c88;color:#ff6b7cbb;animation:btnPulse 1s infinite alternate}
-    .how-to-play-btn.disabled{opacity:0.5;cursor:not-allowed;pointer-events:none}
-    .multiplayer-btn{background:linear-gradient(135deg,#6b7cff,#2838dd);border:none;color:#fff;font-size:1.2rem;font-weight:bold;box-shadow:0 4px 0 #1a2a88,0 8px 25px rgba(43,79,255,.25)}
-    .multiplayer-btn:hover{background:linear-gradient(135deg,#7c8cff,#3848ee);transform:scale(1.02)}
-    .multiplayer-btn.active{background:linear-gradient(135deg,#ff3b5c,#dd0028);box-shadow:0 4px 0 #881a2a,0 8px 25px rgba(255,43,79,.25)}
-    .exit-mp-btn{background:transparent;border:2px solid #ff6b7c44;color:#ff6b7c66;font-size:.9rem;display:none}
-    .exit-mp-btn.visible{display:inline-block}
-    @keyframes btnPulse{0%{box-shadow:0 0 20px rgba(255,43,79,.1)}100%{box-shadow:0 0 50px rgba(255,43,79,.3)}}
-    .heart-counter{background:rgba(26,26,46,.85);backdrop-filter:blur(6px);border-radius:3rem;padding:1.5rem 2.5rem 1.2rem;box-shadow:0 20px 40px rgba(0,0,0,.8),0 0 0 3px #ff3b5c55 inset;text-align:center;width:100%;border:2px solid #ff6b7c66}
-    .player-label{font-size:1rem;color:#ff6b7caa;letter-spacing:4px;text-transform:uppercase;transition:all .3s}
-    .hearts-container{display:flex;justify-content:center;gap:1.5rem;margin:.2rem 0 .3rem;flex-wrap:wrap}
-    .heart{font-size:5rem;cursor:pointer;transition:transform .15s,filter .2s,opacity .2s;text-shadow:0 8px 25px rgba(255,50,80,.7);filter:drop-shadow(0 8px 12px #00000077)}
-    .heart:hover{transform:scale(1.12);filter:drop-shadow(0 0 22px #ff3b5c)}
-    .heart.lost{transform:scale(.92);pointer-events:none;opacity:.4}
-    .heart.breaking{animation:breakHeart 1.2s forwards;pointer-events:none!important}
-    @keyframes breakHeart{0%{transform:scale(1)rotate(0);opacity:1}25%{transform:scale(1.4)rotate(-15deg)}50%{transform:scale(1.6)rotate(10deg)translateY(-20px)}75%{transform:scale(1.8)rotate(-5deg)translateY(-40px);opacity:.8}100%{transform:scale(2.5)rotate(20deg)translateY(-80px);opacity:0}}
-    .reset-btn{font-family:'Komika Axis',cursive;background:#ff3b5c;border:none;color:#1a1a2e;font-size:1.4rem;font-weight:bold;padding:.6rem 1.8rem;margin-top:.3rem;border-radius:60px;cursor:pointer;box-shadow:0 6px 0 #881a2a,0 12px 30px #000000aa;text-transform:uppercase;letter-spacing:3px;border:2px solid #ff9eae;display:none}
-    .reset-btn.visible{display:block}
-    .reset-btn:hover{background:#ff4f6e;transform:scale(1.03)}
-    .color-picker-container{display:flex;justify-content:center;gap:.8rem;margin-top:.3rem;flex-wrap:wrap}
-    .color-btn{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
-    .color-btn:hover{transform:scale(1.15)}
-    .color-btn.active{border-color:#fff;box-shadow:0 0 20px rgba(255,255,255,.3)}
-    .players-container{display:none;gap:2rem;width:100%;flex-wrap:wrap;justify-content:center;margin-top:.5rem}
-    .players-container.active{display:flex}
-    .player-card{flex:1;min-width:280px;background:rgba(26,26,46,.7);backdrop-filter:blur(6px);border-radius:2rem;padding:1.2rem 1.5rem 1rem;border:2px solid #ff6b7c44}
-    .player-card .player-label{font-size:1.2rem;color:#ff6b7caa;letter-spacing:4px;text-align:center;text-transform:uppercase;transition:all .3s}
-    .player-card .hearts-container{display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap}
-    .player-card .heart{font-size:4.5rem;cursor:pointer}
-    .player-card .reset-btn{font-size:1rem;padding:.4rem 1.2rem;margin-top:.3rem}
-    .player-card .player-status{text-align:center;font-size:.9rem;color:#ff6b7c66;margin-top:.2rem;font-family:'Segoe UI',Arial,sans-serif;transition:all .3s}
-    .player-card .player-status.win{color:#ff6b7c;font-size:1.2rem;animation:statusPulse .8s infinite alternate}
-    @keyframes statusPulse{0%{opacity:.6;transform:scale(1)}100%{opacity:1;transform:scale(1.05)}}
-    .player-card .color-picker-container{display:flex;justify-content:center;gap:.8rem;margin-top:.3rem;flex-wrap:wrap}
-    .player-card .color-picker-container .color-btn{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
-    .player-card .color-picker-container .color-btn:hover{transform:scale(1.15)}
-    .player-card .color-picker-container .color-btn.active{border-color:#fff;box-shadow:0 0 20px rgba(255,255,255,.3)}
-    .custom-player{width:100%;background:rgba(26,26,46,.7);backdrop-filter:blur(8px);border-radius:2rem;padding:1.2rem 1.5rem 1.5rem;border:2px solid #ff6b7c44;box-shadow:0 10px 30px rgba(0,0,0,.5)}
-    .player-container{position:relative;width:100%;background:#0a0a1a;border-radius:1.2rem;overflow:hidden;aspect-ratio:16/9;border:2px solid #ff6b7c33}
-    .player-container iframe{width:100%;height:100%;border:none;display:block}
-    .player-container .placeholder{display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;height:100%;color:#ff6b7c44;font-size:1.5rem;font-family:'Segoe UI',Arial,sans-serif;gap:.5rem;background:#0a0a1a}
-    .player-container .placeholder .icon{font-size:4rem}
-    .player-container .placeholder .msg{font-size:1.1rem;color:#ff6b7c66;letter-spacing:2px;transition:all .3s}
-    .player-controls{display:flex;gap:.8rem;margin-top:.8rem;align-items:center;flex-wrap:wrap;justify-content:center}
-    .player-controls input{flex:1;min-width:160px;padding:.7rem 1.2rem;border-radius:60px;border:2px solid #ff6b7c33;background:rgba(255,255,255,.06);color:#fff;font-size:.9rem;font-family:'Segoe UI',Arial,sans-serif;outline:none;transition:all .3s}
-    .player-controls input::placeholder{color:#8888aa;transition:all .3s}
-    .player-controls input:focus{border-color:#ff3b5c;background:rgba(255,255,255,.10);box-shadow:0 0 30px #ff3b5c22}
-    .player-controls button{padding:.7rem 1.8rem;border-radius:60px;border:none;background:linear-gradient(135deg,#ff3b5c,#dd0028);color:#1a1a2e;font-size:.9rem;font-weight:bold;cursor:pointer;font-family:'Komika Axis',cursive;text-transform:uppercase;letter-spacing:1.5px;box-shadow:0 4px 0 #881a2a,0 8px 25px rgba(255,43,79,.25);transition:all .25s}
-    .player-controls button:hover{background:linear-gradient(135deg,#ff4f6e,#ee0038);transform:scale(1.02)}
-    .player-controls button.switched{background:linear-gradient(135deg,#ff6b7c,#ff2b4f);font-size:1.1rem;animation:btnPulse 1s infinite alternate}
-    .credits{font-size:.8rem;color:#ff6b7c44;letter-spacing:2px;text-align:center;padding:.2rem 0;border-top:1px solid #ff6b7c22;width:100%;max-width:500px;transition:all .3s}
-    .credits.switched{color:#ff6b7c66;font-size:.9rem}
-    .game-over-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:none;justify-content:center;align-items:center;flex-direction:column;z-index:10000;animation:undertaleFadeIn 1.2s forwards}
-    .game-over-overlay.show{display:flex}
-    @keyframes undertaleFadeIn{0%{opacity:0}60%{opacity:1;background:#0a0005}100%{opacity:1;background:#0a0005}}
-    .go-text{font-size:6rem;font-weight:bold;color:#fff;text-shadow:0 0 40px #ff2b4f,0 0 80px #ff2b4f,0 0 120px #ff2b4f;animation:goTextDrop 1.2s cubic-bezier(.22,.61,.36,1) forwards;letter-spacing:12px;transform:translateY(-200px);opacity:0}
-    @keyframes goTextDrop{0%{transform:translateY(-200px);opacity:0}100%{transform:translateY(0);opacity:1}}
-    .go-text::after{content:'';display:block;width:200px;height:3px;margin:10px auto 0;background:linear-gradient(90deg,transparent,#ff2b4f,transparent);animation:goLinePulse 2s infinite alternate}
-    @keyframes goLinePulse{0%{opacity:.3;width:100px}100%{opacity:1;width:300px}}
-    .go-sub{font-size:1.8rem;color:#ff8888;margin-top:1.2rem;text-shadow:0 0 30px #ff2b4f55;opacity:0;animation:goSubFade .8s .6s forwards,goSubPulse 2s .5s infinite alternate;text-align:center;padding:0 1rem;cursor:pointer}
-    .go-sub.shaking-text{animation:textShake .15s infinite}
-    @keyframes textShake{0%,100%{transform:translate(0,0)}20%{transform:translate(-4px,3px)rotate(-1deg)}40%{transform:translate(4px,-3px)rotate(1deg)}60%{transform:translate(-3px,4px)rotate(-.5deg)}80%{transform:translate(3px,-4px)rotate(.5deg)}}
-    @keyframes goSubFade{0%{opacity:0}100%{opacity:1}}
-    @keyframes goSubPulse{0%{opacity:.6}100%{opacity:1}}
-    .go-reset-btn{font-family:'Komika Axis',cursive;background:#ff3b5c;border:none;color:#1a1a2e;font-size:1.8rem;font-weight:bold;padding:.9rem 2.8rem;margin-top:2rem;border-radius:60px;cursor:pointer;box-shadow:0 8px 0 #881a2a,0 12px 30px #000000aa;text-transform:uppercase;letter-spacing:3px;border:2px solid #ff9eae;transform:translateY(200px);opacity:0;animation:goBtnRise 1s cubic-bezier(.22,.61,.36,1) .4s forwards}
-    @keyframes goBtnRise{0%{transform:translateY(200px);opacity:0}100%{transform:translateY(0);opacity:1}}
-    .go-reset-btn:hover{background:#ff4f6e;transform:scale(1.05)}
-    body.game-over-active{overflow:hidden}
-    @media(max-width:650px){.players-container{flex-direction:column}.logo-text{font-size:3.5rem;letter-spacing:4px}.heart{font-size:3.8rem}.game-over-overlay .go-text{font-size:3.5rem;letter-spacing:6px}.player-card .heart{font-size:3.5rem}}
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NoTeRias · Corazones</title>
+<link rel="icon" type="image/png" href="Log0.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;user-select:none}
+html,body{height:100%;width:100%}
+body{background:#0a0a1a;min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:'Komika Axis','Comic Sans MS',cursive;margin:0;padding:20px;overflow-x:hidden;overflow-y:auto;overscroll-behavior-y:contain}
+body.shaking{animation:shakeWithBlur .5s ease-in-out}
+@keyframes shakeWithBlur{0%,100%{transform:translate(0,0)rotate(0);filter:blur(0)}10%{transform:translate(-12px,8px)rotate(-2deg);filter:blur(3px)}20%{transform:translate(12px,-8px)rotate(2deg);filter:blur(4px)}30%{transform:translate(-8px,12px)rotate(-1.5deg);filter:blur(3px)}40%{transform:translate(8px,-12px)rotate(1.5deg);filter:blur(4px)}50%{transform:translate(-12px,6px)rotate(-2deg);filter:blur(5px)}60%{transform:translate(12px,-6px)rotate(2deg);filter:blur(4px)}70%{transform:translate(-6px,10px)rotate(-1deg);filter:blur(3px)}80%{transform:translate(6px,-10px)rotate(1deg);filter:blur(3px)}90%{transform:translate(-8px,4px)rotate(-.5deg);filter:blur(2px)}100%{transform:translate(0,0)rotate(0);filter:blur(0)}}
+#introScreen{position:fixed;inset:0;width:100%;height:100%;background:#000;z-index:9999;display:flex;align-items:center;justify-content:center;transition:opacity .6s ease,visibility .6s ease}
+#introScreen.hidden{opacity:0;visibility:hidden;pointer-events:none}
+#introVideo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;background:#000;filter:brightness(.9) contrast(1.1)}
+#clickOverlay{position:relative;z-index:2;display:flex;justify-content:center;align-items:center;width:100%;height:100%;background:rgba(0,0,0,.48);cursor:pointer;color:#fff;font-size:clamp(22px,3vw,34px);text-align:center;user-select:none}
+#clickOverlay span{background:rgba(255,255,255,.12);padding:18px 32px;border-radius:14px;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px);box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.main-container{display:flex;flex-direction:column;align-items:center;gap:1rem;width:100%;max-width:850px;transition:opacity .5s,filter .5s}
+.main-container.game-over-mode{opacity:.1;filter:blur(8px);pointer-events:none}
+.logo-container{width:100%;text-align:center;padding:.2rem 0;cursor:pointer;position:relative}
+.logo-container.shaking-logo{animation:logoShakeStrong .4s ease-in-out 3}
+.logo-container.shaking-loop{animation:logoShakeStrong .4s ease-in-out infinite}
+@keyframes logoShakeStrong{0%,100%{transform:translate(0,0)rotate(0);filter:blur(0)}10%{transform:translate(-14px,10px)rotate(-3deg);filter:blur(4px)}20%{transform:translate(14px,-10px)rotate(3deg);filter:blur(5px)}30%{transform:translate(-10px,14px)rotate(-2.5deg);filter:blur(4px)}40%{transform:translate(10px,-14px)rotate(2.5deg);filter:blur(5px)}50%{transform:translate(-14px,8px)rotate(-3deg);filter:blur(6px)}60%{transform:translate(14px,-8px)rotate(3deg);filter:blur(5px)}70%{transform:translate(-8px,12px)rotate(-2deg);filter:blur(4px)}80%{transform:translate(8px,-12px)rotate(2deg);filter:blur(4px)}90%{transform:translate(-10px,6px)rotate(-1.5deg);filter:blur(3px)}100%{transform:translate(0,0)rotate(0);filter:blur(0)}}
+.logo-text{font-size:5rem;font-weight:bold;letter-spacing:8px;background:linear-gradient(180deg,#ff6b7c 0%,#ff2b4f 40%,#cc0018 70%,#880010 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 8px 25px rgba(255,43,79,.4));position:relative;display:inline-block}
+.logo-text::after{content:'';position:absolute;bottom:-8px;left:10%;width:80%;height:4px;background:linear-gradient(90deg,transparent,#ff2b4f,#ff6b7c,#ff2b4f,transparent);border-radius:2px;filter:blur(1px);transition:all .3s}
+.logo-text.switched::after{background:linear-gradient(90deg,transparent,#ff6b7c,#ff2b4f,#ff6b7c,transparent);width:60%}
+.logo-sub{font-size:1rem;color:#ff6b7c88;letter-spacing:10px;margin-top:.2rem;text-transform:uppercase;transition:all .3s}
+.logo-sub.switched{color:#ff6b7c44;letter-spacing:4px}
+.top-buttons{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;width:100%}
+.how-to-play-btn,.multiplayer-btn,.exit-mp-btn{font-family:'Komika Axis',cursive;padding:.6rem 2rem;border-radius:60px;cursor:pointer;transition:all .3s;text-transform:uppercase;letter-spacing:2px}
+.how-to-play-btn{background:transparent;border:2px solid #ff6b7c66;color:#ff6b7c88;font-size:1.1rem}
+.how-to-play-btn:hover{background:#ff6b7c22;border-color:#ff6b7c}
+.how-to-play-btn.switched{font-size:1.3rem;border-color:#ff6b7c88;color:#ff6b7cbb;animation:btnPulse 1s infinite alternate}
+.how-to-play-btn.disabled{opacity:0.5;cursor:not-allowed;pointer-events:none}
+.multiplayer-btn{background:linear-gradient(135deg,#6b7cff,#2838dd);border:none;color:#fff;font-size:1.2rem;font-weight:bold;box-shadow:0 4px 0 #1a2a88,0 8px 25px rgba(43,79,255,.25)}
+.multiplayer-btn:hover{background:linear-gradient(135deg,#7c8cff,#3848ee);transform:scale(1.02)}
+.multiplayer-btn.active{background:linear-gradient(135deg,#ff3b5c,#dd0028);box-shadow:0 4px 0 #881a2a,0 8px 25px rgba(255,43,79,.25)}
+.exit-mp-btn{background:transparent;border:2px solid #ff6b7c44;color:#ff6b7c66;font-size:.9rem;display:none}
+.exit-mp-btn.visible{display:inline-block}
+@keyframes btnPulse{0%{box-shadow:0 0 20px rgba(255,43,79,.1)}100%{box-shadow:0 0 50px rgba(255,43,79,.3)}}
+.heart-counter{background:rgba(26,26,46,.85);backdrop-filter:blur(6px);border-radius:3rem;padding:1.5rem 2.5rem 1.2rem;box-shadow:0 20px 40px rgba(0,0,0,.8),0 0 0 3px #ff3b5c55 inset;text-align:center;width:100%;border:2px solid #ff6b7c66}
+.player-label{font-size:1rem;color:#ff6b7caa;letter-spacing:4px;text-transform:uppercase;transition:all .3s}
+.hearts-container{display:flex;justify-content:center;gap:1.5rem;margin:.2rem 0 .3rem;flex-wrap:wrap}
+.heart{font-size:5rem;cursor:pointer;transition:transform .15s,filter .2s,opacity .2s;text-shadow:0 8px 25px rgba(255,50,80,.7);filter:drop-shadow(0 8px 12px #00000077)}
+.heart:hover{transform:scale(1.12);filter:drop-shadow(0 0 22px #ff3b5c)}
+.heart.lost{transform:scale(.92);pointer-events:none;opacity:.4}
+.heart.breaking{animation:breakHeart 1.2s forwards;pointer-events:none!important}
+@keyframes breakHeart{0%{transform:scale(1)rotate(0);opacity:1}25%{transform:scale(1.4)rotate(-15deg)}50%{transform:scale(1.6)rotate(10deg)translateY(-20px)}75%{transform:scale(1.8)rotate(-5deg)translateY(-40px);opacity:.8}100%{transform:scale(2.5)rotate(20deg)translateY(-80px);opacity:0}}
+.reset-btn{font-family:'Komika Axis',cursive;background:#ff3b5c;border:none;color:#1a1a2e;font-size:1.4rem;font-weight:bold;padding:.6rem 1.8rem;margin-top:.3rem;border-radius:60px;cursor:pointer;box-shadow:0 6px 0 #881a2a,0 12px 30px #000000aa;text-transform:uppercase;letter-spacing:3px;border:2px solid #ff9eae;display:none}
+.reset-btn.visible{display:block}
+.reset-btn:hover{background:#ff4f6e;transform:scale(1.03)}
+.color-picker-container{display:flex;justify-content:center;gap:.8rem;margin-top:.3rem;flex-wrap:wrap}
+.color-btn{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
+.color-btn:hover{transform:scale(1.15)}
+.color-btn.active{border-color:#fff;box-shadow:0 0 20px rgba(255,255,255,.3)}
+.players-container{display:none;gap:2rem;width:100%;flex-wrap:wrap;justify-content:center;margin-top:.5rem}
+.players-container.active{display:flex}
+.player-card{flex:1;min-width:280px;background:rgba(26,26,46,.7);backdrop-filter:blur(6px);border-radius:2rem;padding:1.2rem 1.5rem 1rem;border:2px solid #ff6b7c44}
+.player-card .player-label{font-size:1.2rem;color:#ff6b7caa;letter-spacing:4px;text-align:center;text-transform:uppercase;transition:all .3s}
+.player-card .hearts-container{display:flex;justify-content:center;gap:1.2rem;flex-wrap:wrap}
+.player-card .heart{font-size:4.5rem;cursor:pointer}
+.player-card .reset-btn{font-size:1rem;padding:.4rem 1.2rem;margin-top:.3rem}
+.player-card .player-status{text-align:center;font-size:.9rem;color:#ff6b7c66;margin-top:.2rem;font-family:'Segoe UI',Arial,sans-serif;transition:all .3s}
+.player-card .player-status.win{color:#ff6b7c;font-size:1.2rem;animation:statusPulse .8s infinite alternate}
+@keyframes statusPulse{0%{opacity:.6;transform:scale(1)}100%{opacity:1;transform:scale(1.05)}}
+.player-card .color-picker-container{display:flex;justify-content:center;gap:.8rem;margin-top:.3rem;flex-wrap:wrap}
+.player-card .color-picker-container .color-btn{width:32px;height:32px;border-radius:50%;border:2px solid transparent;cursor:pointer;transition:all .2s}
+.player-card .color-picker-container .color-btn:hover{transform:scale(1.15)}
+.player-card .color-picker-container .color-btn.active{border-color:#fff;box-shadow:0 0 20px rgba(255,255,255,.3)}
+.custom-player{width:100%;background:rgba(26,26,46,.7);backdrop-filter:blur(8px);border-radius:2rem;padding:1.2rem 1.5rem 1.5rem;border:2px solid #ff6b7c44;box-shadow:0 10px 30px rgba(0,0,0,.5)}
+.player-container{position:relative;width:100%;background:#0a0a1a;border-radius:1.2rem;overflow:hidden;aspect-ratio:16/9;border:2px solid #ff6b7c33}
+.player-container iframe{width:100%;height:100%;border:none;display:block}
+.player-container .placeholder{display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;height:100%;color:#ff6b7c44;font-size:1.5rem;font-family:'Segoe UI',Arial,sans-serif;gap:.5rem;background:#0a0a1a}
+.player-container .placeholder .icon{font-size:4rem}
+.player-container .placeholder .msg{font-size:1.1rem;color:#ff6b7c66;letter-spacing:2px;transition:all .3s}
+.player-controls{display:flex;gap:.8rem;margin-top:.8rem;align-items:center;flex-wrap:wrap;justify-content:center}
+.player-controls input{flex:1;min-width:160px;padding:.7rem 1.2rem;border-radius:60px;border:2px solid #ff6b7c33;background:rgba(255,255,255,.06);color:#fff;font-size:.9rem;font-family:'Segoe UI',Arial,sans-serif;outline:none;transition:all .3s}
+.player-controls input::placeholder{color:#8888aa;transition:all .3s}
+.player-controls input:focus{border-color:#ff3b5c;background:rgba(255,255,255,.10);box-shadow:0 0 30px #ff3b5c22}
+.player-controls button{padding:.7rem 1.8rem;border-radius:60px;border:none;background:linear-gradient(135deg,#ff3b5c,#dd0028);color:#1a1a2e;font-size:.9rem;font-weight:bold;cursor:pointer;font-family:'Komika Axis',cursive;text-transform:uppercase;letter-spacing:1.5px;box-shadow:0 4px 0 #881a2a,0 8px 25px rgba(255,43,79,.25);transition:all .25s}
+.player-controls button:hover{background:linear-gradient(135deg,#ff4f6e,#ee0038);transform:scale(1.02)}
+.player-controls button.switched{background:linear-gradient(135deg,#ff6b7c,#ff2b4f);font-size:1.1rem;animation:btnPulse 1s infinite alternate}
+.credits{font-size:.8rem;color:#ff6b7c44;letter-spacing:2px;text-align:center;padding:.2rem 0;border-top:1px solid #ff6b7c22;width:100%;max-width:500px;transition:all .3s}
+.credits.switched{color:#ff6b7c66;font-size:.9rem}
+.game-over-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:none;justify-content:center;align-items:center;flex-direction:column;z-index:10000;animation:undertaleFadeIn 1.2s forwards}
+.game-over-overlay.show{display:flex}
+@keyframes undertaleFadeIn{0%{opacity:0}60%{opacity:1;background:#0a0005}100%{opacity:1;background:#0a0005}}
+.go-text{font-size:6rem;font-weight:bold;color:#fff;text-shadow:0 0 40px #ff2b4f,0 0 80px #ff2b4f,0 0 120px #ff2b4f;animation:goTextDrop 1.2s cubic-bezier(.22,.61,.36,1) forwards;letter-spacing:12px;transform:translateY(-200px);opacity:0}
+@keyframes goTextDrop{0%{transform:translateY(-200px);opacity:0}100%{transform:translateY(0);opacity:1}}
+.go-text::after{content:'';display:block;width:200px;height:3px;margin:10px auto 0;background:linear-gradient(90deg,transparent,#ff2b4f,transparent);animation:goLinePulse 2s infinite alternate}
+@keyframes goLinePulse{0%{opacity:.3;width:100px}100%{opacity:1;width:300px}}
+.go-sub{font-size:1.8rem;color:#ff8888;margin-top:1.2rem;text-shadow:0 0 30px #ff2b4f55;opacity:0;animation:goSubFade .8s .6s forwards,goSubPulse 2s .5s infinite alternate;text-align:center;padding:0 1rem;cursor:pointer}
+.go-sub.shaking-text{animation:textShake .15s infinite}
+@keyframes textShake{0%,100%{transform:translate(0,0)}20%{transform:translate(-4px,3px)rotate(-1deg)}40%{transform:translate(4px,-3px)rotate(1deg)}60%{transform:translate(-3px,4px)rotate(-.5deg)}80%{transform:translate(3px,-4px)rotate(.5deg)}}
+@keyframes goSubFade{0%{opacity:0}100%{opacity:1}}
+@keyframes goSubPulse{0%{opacity:.6}100%{opacity:1}}
+.go-reset-btn{font-family:'Komika Axis',cursive;background:#ff3b5c;border:none;color:#1a1a2e;font-size:1.8rem;font-weight:bold;padding:.9rem 2.8rem;margin-top:2rem;border-radius:60px;cursor:pointer;box-shadow:0 8px 0 #881a2a,0 12px 30px #000000aa;text-transform:uppercase;letter-spacing:3px;border:2px solid #ff9eae;transform:translateY(200px);opacity:0;animation:goBtnRise 1s cubic-bezier(.22,.61,.36,1) .4s forwards}
+@keyframes goBtnRise{0%{transform:translateY(200px);opacity:0}100%{transform:translateY(0);opacity:1}}
+.go-reset-btn:hover{background:#ff4f6e;transform:scale(1.05)}
+body.game-over-active{overflow:hidden}
+@media(max-width:650px){.players-container{flex-direction:column}.logo-text{font-size:3.5rem;letter-spacing:4px}.heart{font-size:3.8rem}.game-over-overlay .go-text{font-size:3.5rem;letter-spacing:6px}.player-card .heart{font-size:3.5rem}}
+</style>
 </head>
 <body>
-  <div id="introScreen">
-    <video id="introVideo" src="intro.mp4" playsinline></video>
-    <div id="clickOverlay">
-      <span>▶ Haz clic para empezar</span>
-    </div>
-  </div>
+<div id="introScreen">
+  <video id="introVideo" src="intro.mp4" playsinline></video>
+  <div id="clickOverlay"><span>▶ Haz clic para empezar</span></div>
+</div>
 
-  <div class="game-over-overlay" id="gameOverOverlay"><div class="go-text" id="goText">GAME OVER</div><div class="go-sub" id="goSubText">💀 Has perdido todos tus corazones</div><button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button></div>
+<div class="game-over-overlay" id="gameOverOverlay"><div class="go-text" id="goText">GAME OVER</div><div class="go-sub" id="goSubText">💀 Has perdido todos tus corazones</div><button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button></div>
 
-  <div class="main-container" id="mainContainer">
-    <div class="logo-container" id="logoContainer"><div class="logo-text" id="logoText">NoTeRias</div><div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div></div>
-    <div class="top-buttons">
-      <button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
-      <button class="multiplayer-btn" id="multiplayerBtn">🎮 2 Jugadores</button>
-      <button class="exit-mp-btn" id="exitMpBtn">🚪 Salir 2P</button>
-    </div>
-    <div class="heart-counter" id="heartCounter"><div class="player-label" id="playerLabel">👤 TÚ</div><div class="hearts-container" id="heartsContainer"><span class="heart" data-index="0">❤️</span><span class="heart" data-index="1">❤️</span><span class="heart" data-index="2">❤️</span></div><div class="color-picker-container" id="colorPicker"><button class="color-btn active" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-color="#4fc3f7" style="background:#4fc3f7"></button><button class="color-btn" data-color="#66bb6a" style="background:#66bb6a"></button><button class="color-btn" data-color="#ffa726" style="background:#ffa726"></button><button class="color-btn" data-color="#ab47bc" style="background:#ab47bc"></button></div><button class="reset-btn" id="resetBtn">⟳ Reiniciar</button></div>
-    <div class="players-container" id="playersContainer"><div class="player-card" id="player1Card"><div class="player-label" id="player1Label">👤 JUGADOR 1</div><div class="hearts-container" id="hearts1"><span class="heart" data-player="1" data-index="0">❤️</span><span class="heart" data-player="1" data-index="1">❤️</span><span class="heart" data-player="1" data-index="2">❤️</span></div><div class="color-picker-container" id="colorPicker1"><button class="color-btn active" data-player="1" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-player="1" data-color="#4fc3f7" style="background:#4fc3f7"></button><button class="color-btn" data-player="1" data-color="#66bb6a" style="background:#66bb6a"></button><button class="color-btn" data-player="1" data-color="#ffa726" style="background:#ffa726"></button><button class="color-btn" data-player="1" data-color="#ab47bc" style="background:#ab47bc"></button></div><button class="reset-btn" id="resetBtn1">⟳ Reiniciar</button><div class="player-status" id="status1">❤️ 3 corazones</div></div><div class="player-card" id="player2Card"><div class="player-label" id="player2Label">👤 JUGADOR 2</div><div class="hearts-container" id="hearts2"><span class="heart" data-player="2" data-index="0">❤️</span><span class="heart" data-player="2" data-index="1">❤️</span><span class="heart" data-player="2" data-index="2">❤️</span></div><div class="color-picker-container" id="colorPicker2"><button class="color-btn active" data-player="2" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-player="2" data-color="#4fc3f7" style="background:#4fc3f7"></button><button class="color-btn" data-player="2" data-color="#66bb6a" style="background:#66bb6a"></button><button class="color-btn" data-player="2" data-color="#ffa726" style="background:#ffa726"></button><button class="color-btn" data-player="2" data-color="#ab47bc" style="background:#ab47bc"></button></div><button class="reset-btn" id="resetBtn2">⟳ Reiniciar</button><div class="player-status" id="status2">❤️ 3 corazones</div></div></div>
-    <div class="custom-player" id="customPlayer"><div class="player-container" id="playerContainer"><div id="playerPlaceholder" class="placeholder"><div class="icon">🎬</div><div class="msg" id="playerPlaceholderMsg">Pega la URL de YouTube</div></div><iframe id="playerIframe" style="display:none" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="player-controls"><input type="text" id="playerInput" placeholder="Pega la URL de YouTube..."><button id="playerLoadBtn">▶ Cargar</button></div></div>
-    <div class="credits" id="creditsText"><span>CC0</span> Raphapro900 <span>- V1.0</span></div>
-  </div>
+<div class="main-container" id="mainContainer">
+<div class="logo-container" id="logoContainer"><div class="logo-text" id="logoText">NoTeRias</div><div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div></div>
+<div class="top-buttons">
+<button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
+<button class="multiplayer-btn" id="multiplayerBtn">🎮 2 Jugadores</button>
+<button class="exit-mp-btn" id="exitMpBtn">🚪 Salir 2P</button>
+</div>
+<div class="heart-counter" id="heartCounter"><div class="player-label" id="playerLabel">👤 TÚ</div><div class="hearts-container" id="heartsContainer"><span class="heart" data-index="0">❤️</span><span class="heart" data-index="1">❤️</span><span class="heart" data-index="2">❤️</span></div><div class="color-picker-container" id="colorPicker"><button class="color-btn active" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-color="#4fc3f7" style="background:#4fc3f7"></button><button class="color-btn" data-color="#66bb6a" style="background:#66bb6a"></button><button class="color-btn" data-color="#ffa726" style="background:#ffa726"></button><button class="color-btn" data-color="#ab47bc" style="background:#ab47bc"></button></div><button class="reset-btn" id="resetBtn">⟳ Reiniciar</button></div>
+<div class="players-container" id="playersContainer"><div class="player-card" id="player1Card"><div class="player-label" id="player1Label">👤 JUGADOR 1</div><div class="hearts-container" id="hearts1"><span class="heart" data-player="1" data-index="0">❤️</span><span class="heart" data-player="1" data-index="1">❤️</span><span class="heart" data-player="1" data-index="2">❤️</span></div><div class="color-picker-container" id="colorPicker1"><button class="color-btn active" data-player="1" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-player="1" data-color="#4fc3f7" style="background:#4fc3f7"></button><button class="color-btn" data-player="1" data-color="#66bb6a" style="background:#66bb6a"></button><button class="color-btn" data-player="1" data-color="#ffa726" style="background:#ffa726"></button><button class="color-btn" data-player="1" data-color="#ab47bc" style="background:#ab47bc"></button></div><button class="reset-btn" id="resetBtn1">⟳ Reiniciar</button><div class="player-status" id="status1">❤️ 3 corazones</div></div><div class="player-card" id="player2Card"><div class="player-label" id="player2Label">👤 JUGADOR 2</div><div class="hearts-container" id="hearts2"><span class="heart" data-player="2" data-index="0">❤️</span><span class="heart" data-player="2" data-index="1">❤️</span><span class="heart" data-player="2" data-index="2">❤️</span></div><div class="color-picker-container" id="colorPicker2"><button class="color-btn active" data-player="2" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-player="2" data-color="#4fc3f7" style="background:#4fc3f7"></button><button class="color-btn" data-player="2" data-color="#66bb6a" style="background:#66bb6a"></button><button class="color-btn" data-player="2" data-color="#ffa726" style="background:#ffa726"></button><button class="color-btn" data-player="2" data-color="#ab47bc" style="background:#ab47bc"></button></div><button class="reset-btn" id="resetBtn2">⟳ Reiniciar</button><div class="player-status" id="status2">❤️ 3 corazones</div></div></div>
+<div class="custom-player" id="customPlayer"><div class="player-container" id="playerContainer"><div id="playerPlaceholder" class="placeholder"><div class="icon">🎬</div><div class="msg" id="playerPlaceholderMsg">Pega la URL de YouTube</div></div><iframe id="playerIframe" style="display:none" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div><div class="player-controls"><input type="text" id="playerInput" placeholder="Pega la URL de YouTube..."><button id="playerLoadBtn">▶ Cargar</button></div></div>
+<div class="credits" id="creditsText"><span>CC0</span> Raphapro900 <span>- V1.0</span></div>
+</div>
 
-  <audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3"></audio>
-  <audio id="winAudio" preload="auto"><source src="Win.mp3"></audio>
-  <audio id="oofAudio" preload="auto"><source src="oof.mp3"></audio>
-  <audio id="underAudio" preload="auto"><source src="under.mp3"></audio>
-  <audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3"></audio>
-  <audio id="ayAudio" preload="auto"><source src="Ay.mp3"></audio>
-  <audio id="nooAudio" preload="auto"><source src="Noo.mp3"></audio>
-  <audio id="wthbAudio" preload="auto"><source src="WTHB.mp3"></audio>
-  <audio id="logoPressAudio" preload="auto" loop><source src="LogoPress.mp3"></audio>
-  <audio id="shhAudio" preload="auto"><source src="Shh.mp3"></audio>
-  <audio id="xddAudio" preload="auto"><source src="XDD.mp3"></audio>
+<audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3"></audio>
+<audio id="winAudio" preload="auto"><source src="Win.mp3"></audio>
+<audio id="oofAudio" preload="auto"><source src="oof.mp3"></audio>
+<audio id="underAudio" preload="auto"><source src="under.mp3"></audio>
+<audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3"></audio>
+<audio id="ayAudio" preload="auto"><source src="Ay.mp3"></audio>
+<audio id="nooAudio" preload="auto"><source src="Noo.mp3"></audio>
+<audio id="wthbAudio" preload="auto"><source src="WTHB.mp3"></audio>
+<audio id="logoPressAudio" preload="auto" loop><source src="LogoPress.mp3"></audio>
+<audio id="shhAudio" preload="auto"><source src="Shh.mp3"></audio>
+<audio id="xddAudio" preload="auto"><source src="XDD.mp3"></audio>
 
-  <script>
-    (function(){
-      const introScreen = document.getElementById('introScreen');
-      const introVideo = document.getElementById('introVideo');
-      const clickOverlay = document.getElementById('clickOverlay');
-
-      const startIntro = async () => {
-        clickOverlay.style.display = 'none';
-        introVideo.muted = false;
-        introVideo.currentTime = 0;
-        try {
-          await introVideo.play();
-        } catch (err) {
-          console.log('Error al reproducir intro:', err);
-        }
-        setTimeout(() => {
-          introScreen.classList.add('hidden');
-        }, 2600);
-      };
-
-      clickOverlay.addEventListener('click', startIntro);
-      introVideo.addEventListener('ended', () => {
-        introScreen.classList.add('hidden');
-      });
+<script>
+(function(){
+const introScreen=document.getElementById('introScreen');
+const introVideo=document.getElementById('introVideo');
+const clickOverlay=document.getElementById('clickOverlay');
+const startIntro=async()=>{
+ clickOverlay.style.display='none';
+ introVideo.muted=false;
+ introVideo.currentTime=0;
+ try{await introVideo.play()}catch(e){console.log('Error al reproducir intro:',e)}
+ setTimeout(()=>introScreen.classList.add('hidden'),2600);
+};
+clickOverlay.addEventListener('click',startIntro);
+introVideo.addEventListener('ended',()=>introScreen.classList.add('hidden'));
 
 // ======================== ESTADO ========================
 let logoState=0,isGameOver=!1,isMusicPlaying=!1,isMultiplayer=!1;
@@ -242,9 +184,9 @@ function updateSingle(){const l=logoState===1;HE.forEach((e,i)=>{const a=hearts[
 function updateP(id){const p=players[id],h=id===1?H1:H2,s=id===1?S1:S2,l=logoState===1;h.forEach((e,i)=>{const a=p.hearts[i];e.textContent=gE(a,l);e.style.color=p.color;if(a){e.classList.remove('lost','breaking');e.style.textShadow=`0 8px 25px ${p.color}88`;e.style.filter='drop-shadow(0 8px 12px #00000077)';e.style.opacity='1'}else{e.classList.add('lost');e.style.textShadow=`0 0 20px ${p.color}44`;e.style.filter=`drop-shadow(0 0 15px ${p.color}33)`;e.style.opacity='.4'}});const a=p.hearts.filter(h=>h).length;const lbl=id===1?P1L:P2L;lbl.textContent=logoState===1?`👤 JUGADOR ${id} 🤣`:`👤 JUGADOR ${id}`;if(a===0){s.textContent=logoState===1?'😂¡PERDISTE! AJAJAJA':'💀 ¡Has perdido!';s.className='player-status win'}else{s.textContent=`${'❤️'.repeat(a)} ${a} corazones`;s.className='player-status'}const rb=id===1?R1:R2;a===0?rb.classList.add('visible'):rb.classList.remove('visible')}
 function updateAll(){updateP(1);updateP(2)}
 
-function handleHeart(e){if(isGameOver||isMultiplayer)return;const el=e.currentTarget;const i=parseInt(el.dataset.index);if(!hearts[i])return;hearts[i]=!1;updateSingle();shake();pUN();const a=hearts.filter(h=>h).length;if(a===1){pRAN()}else if(a===0){pOF()}}
-function handlePHeart(e){if(isGameOver||!isMultiplayer)return;const el=e.currentTarget;const pid=parseInt(el.dataset.player);const i=parseInt(el.dataset.index);const p=players[pid];if(!p.hearts[i])return;p.hearts[i]=!1;updateP(pid);shake();pUN();const a=p.hearts.filter(h=>h).length;if(a===1){pRAN()}else if(a===0){pOF()};check2P()}
-function check2P(){const p1=players[1].hearts.filter(h=>h).length,p2=players[2].hearts.filter(h=>h).length,l=logoState===1;if(p1===0&&p2>0){R1.classList.add('visible');S1.textContent=l?'😂¡PERDISTE! AJAJAJA':'💀 ¡Has perdido!';S1.className='player-status win';if(p2===3){S2.textContent=l?'🤣¡GANASTE! AJAJAJA':'🏆 ¡Has ganado!';S2.className='player-status win';isGameOver=!0;sLP();L.classList.remove('shaking-loop');shake();l?pWIN():pGAM()}}if(p2===0&&p1>0){R2.classList.add('visible');S2.textContent=l?'😂¡PERDISTE! AJAJAJA':'💀 ¡Has perdido!';S2.className='player-status win';if(p1===3){S1.textContent=l?'🤣¡GANASTE! AJAJAJA':'🏆 ¡Has ganado!';S1.className='player-status win';isGameOver=!0;sLP();L.classList.remove('shaking-loop');shake();l?pWIN():pGAM()}}if(p1===0&&p2===0&&!isGameOver){isGameOver=!0;sLP();L.classList.remove('shaking-loop');shake();if(l){S1.textContent='😂¡PERDISTE! AJAJAJA';S1.className='player-status win';S2.textContent='😂¡PERDISTE! AJAJAJA';S2.className='player-status win'}else{S1.textContent='💀 ¡Has perdido!';S1.className='player-status';S2.textContent='💀 ¡Has perdido!';S2.className='player-status'}R1.classList.add('visible');R2.classList.add('visible');l?pWIN():pGAM()}}
+function handleHeart(e){if(isGameOver||isMultiplayer)return;const el=e.currentTarget;const i=parseInt(el.dataset.index);if(!hearts[i])return;const before=hearts.filter(Boolean).length;hearts[i]=!1;updateSingle();shake();pUN();const after=hearts.filter(Boolean).length;if(after===1){pRAN()}if(after===0){pOF();isGameOver=!0;sLP();L.classList.remove('shaking-loop');setTimeout(()=>{GOO.classList.add('show');document.body.classList.add('game-over-active');MC.classList.add('game-over-mode');GOT.textContent='GAME OVER';GOS.textContent='💀 Has perdido todos tus corazones';GOS.classList.remove('shaking-text');pGAM()},500)}}
+function handlePHeart(e){if(isGameOver||!isMultiplayer)return;const el=e.currentTarget;const pid=parseInt(el.dataset.player);const i=parseInt(el.dataset.index);const p=players[pid];if(!p.hearts[i])return;const before=p.hearts.filter(Boolean).length;p.hearts[i]=!1;updateP(pid);shake();pUN();const after=p.hearts.filter(Boolean).length;if(after===1){pRAN()}if(after===0){pOF()}check2P()}
+function check2P(){const p1=players[1].hearts.filter(h=>h).length,p2=players[2].hearts.filter(h=>h).length,l=logoState===1;if(p1===0&&p2>0){R1.classList.add('visible');S1.textContent=l?'😂¡PERDISTE! AJAJAJA':'💀 ¡Has perdido!';S1.className='player-status win'}if(p2===0&&p1>0){R2.classList.add('visible');S2.textContent=l?'😂¡PERDISTE! AJAJAJA':'💀 ¡Has perdido!';S2.className='player-status win'}if(p1===0&&p2===0&&!isGameOver){isGameOver=!0;sLP();L.classList.remove('shaking-loop');shake();S1.textContent='💀 ¡Has perdido!';S1.className='player-status win';S2.textContent='💀 ¡Has perdido!';S2.className='player-status win';R1.classList.add('visible');R2.classList.add('visible');pGAM()}}
 function resetSingle(){hearts=[!0,!0,!0];updateSingle();RB.classList.remove('visible');if(isGameOver){isGameOver=!1;GOO.classList.remove('show');document.body.classList.remove('game-over-active');MC.classList.remove('game-over-mode');sGAM();isMusicPlaying=!1;document.querySelectorAll('.heart').forEach(e=>e.style.cursor='pointer')}}
 function resetP(id){const p=players[id];p.hearts=[!0,!0,!0];p.won=!1;updateP(id);const rb=id===1?R1:R2;rb.classList.remove('visible');const oid=id===1?2:1;if(players[oid].hearts.filter(h=>h).length>0)isGameOver=!1;if(players[1].hearts.filter(h=>h).length>0&&players[2].hearts.filter(h=>h).length>0){isGameOver=!1;S1.className='player-status';S2.className='player-status';updateAll()}document.querySelectorAll('.heart').forEach(e=>e.style.cursor='pointer');check2P()}
 CB.forEach(b=>{b.addEventListener('click',function(){const c=this.dataset.color;CB.forEach(b=>b.classList.remove('active'));this.classList.add('active');heartColor=c;updateSingle()})});
@@ -259,15 +201,10 @@ L.addEventListener('click',toggleLogo);
 PLB.addEventListener('click',function(){let url=PI.value.trim();if(!url){PP.style.display='flex';PIF.style.display='none';return}let vid=null;let m=url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&?]+)/);if(m)vid=m[1];m=url.match(/youtube\.com\/embed\/([^&?]+)/);if(m)vid=m[1];if(!vid){PP.style.display='flex';PIF.style.display='none';PPM.textContent='⚠️ URL no válida';return}PIF.src=`https://www.youtube.com/embed/${vid}?autoplay=1&rel=0`;PIF.style.display='block';PP.style.display='none'});
 PI.addEventListener('keypress',e=>{if(e.key==='Enter')PLB.click()});
 HE.forEach(e=>{e.addEventListener('click',handleHeart)});H1.forEach(e=>{e.addEventListener('click',handlePHeart)});H2.forEach(e=>{e.addEventListener('click',handlePHeart)});
-
-// ======================== BOTÓN CÓMO JUGAR DESACTIVADO ========================
-HTP.classList.add('disabled');
-HTP.title = 'Próximamente';
-
-// ======================== INICIO ========================
+HTP.classList.add('disabled');HTP.title='Próximamente';
 updateSingle();updateAll();updateAllTexts();
 console.log('❤️ NoTeRias · Corazones (VHS desactivado)');
-    })();
-  </script>
+})();
+</script>
 </body>
 </html>
