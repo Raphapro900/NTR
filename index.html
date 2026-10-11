@@ -7,9 +7,68 @@
   <link rel="icon" type="image/png" href="Log0.png">
   <style>
     *{margin:0;padding:0;box-sizing:border-box;user-select:none}
-    body{background:#0a0a1a;min-height:100vh;display:flex;justify-content:center;align-items:center;font-family:'Komika Axis','Comic Sans MS',cursive;margin:0;padding:20px;overflow-x:hidden}
+    html, body { height: 100%; }
+    body {
+      background:#0a0a1a;
+      min-height:100vh;
+      display:flex;justify-content:center;align-items:center;
+      font-family:'Komika Axis','Comic Sans MS',cursive;
+      margin:0;padding:20px;overflow-x:hidden;
+      color:#fff;
+    }
     body.shaking{animation:shakeWithBlur .5s ease-in-out}
     @keyframes shakeWithBlur{0%,100%{transform:translate(0,0)rotate(0);filter:blur(0)}10%{transform:translate(-12px,8px)rotate(-2deg);filter:blur(3px)}20%{transform:translate(12px,-8px)rotate(2deg);filter:blur(3px)}30%{transform:translate(-10px,-12px)rotate(1deg);filter:blur(2px)}40%{transform:translate(8px,10px)rotate(-1.5deg);filter:blur(3px)}50%{transform:translate(-6px,-8px)rotate(.5deg);filter:blur(2px)}60%{transform:translate(12px,6px)rotate(-2deg);filter:blur(3px)}70%{transform:translate(-8px,4px)rotate(1deg);filter:blur(2px)}80%{transform:translate(6px,-10px)rotate(-1deg);filter:blur(3px)}90%{transform:translate(-4px,8px)rotate(.5deg);filter:blur(2px)}}
+
+    #introScreen {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity .6s ease, visibility .6s ease;
+    }
+    #introScreen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+    #introVideo {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      background: #000;
+      filter: brightness(0.9) contrast(1.1);
+    }
+    #clickOverlay {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.48);
+      cursor: pointer;
+      color: white;
+      font-size: clamp(22px, 3vw, 34px);
+      text-align: center;
+      user-select: none;
+    }
+    #clickOverlay span {
+      background: rgba(255,255,255,0.12);
+      padding: 18px 32px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.25);
+      backdrop-filter: blur(6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+
     .main-container{display:flex;flex-direction:column;align-items:center;gap:1rem;width:100%;max-width:850px;transition:opacity .5s,filter .5s}
     .main-container.game-over-mode{opacity:.1;filter:blur(8px);pointer-events:none}
     .logo-container{width:100%;text-align:center;padding:.2rem 0;cursor:pointer;position:relative}
@@ -97,96 +156,125 @@
   </style>
 </head>
 <body>
+  <div id="introScreen">
+    <video id="introVideo" src="intro.mp4" playsinline></video>
+    <div id="clickOverlay">
+      <span>▶ Haz clic para empezar</span>
+    </div>
+  </div>
 
-<div class="game-over-overlay" id="gameOverOverlay"><div class="go-text" id="goText">GAME OVER</div><div class="go-sub" id="goSubText">💀 Has perdido todos tus corazones</div><button class="go-reset-btn" id="goResetBtn">🔄 Intentar de nuevo</button></div>
+  <div class="game-over-overlay" id="gameOverOverlay"><div class="go-text" id="goText">GAME OVER</div><div class="go-sub" id="goSubText">💀 Has perdido todos tus corazones</div><button class="go-reset-btn" id="goResetBtn">🔄 Intentar de nuevo</button></div>
 
-<div class="main-container" id="mainContainer">
-<div class="logo-container" id="logoContainer"><div class="logo-text" id="logoText">NoTeRias</div><div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div></div>
-<div class="top-buttons">
-<button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
-<button class="multiplayer-btn" id="multiplayerBtn">🎮 2 Jugadores</button>
-<button class="exit-mp-btn" id="exitMpBtn">🚪 Salir 2P</button>
-</div>
-<div class="heart-counter" id="heartCounter"><div class="player-label" id="playerLabel">👤 TÚ</div><div class="hearts-container" id="heartsContainer"><span class="heart" data-index="0">❤️</span><span class="heart" data-index="1">❤️</span><span class="heart" data-index="2">❤️</span></div><button class="reset-btn" id="resetBtn">🔄 Reintentar</button><div class="color-picker-container" id="colorPicker"><button class="color-btn" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-color="#ff6b00" style="background:#ff6b00"></button><button class="color-btn" data-color="#ffd700" style="background:#ffd700"></button><button class="color-btn" data-color="#00ff88" style="background:#00ff88"></button><button class="color-btn" data-color="#00d4ff" style="background:#00d4ff"></button><button class="color-btn" data-color="#7b68ee" style="background:#7b68ee"></button></div></div>
-<div class="players-container" id="playersContainer"><div class="player-card" id="player1Card"><div class="player-label" id="player1Label">👤 JUGADOR 1</div><div class="hearts-container" id="hearts1"><span class="heart" data-player="1" data-index="0">❤️</span><span class="heart" data-player="1" data-index="1">❤️</span><span class="heart" data-player="1" data-index="2">❤️</span></div><button class="reset-btn" id="resetBtn1">🔄 Reintentar</button><div class="player-status" id="player1Status"></div><div class="color-picker-container" id="colorPicker1"><button class="color-btn" data-player="1" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-player="1" data-color="#ff6b00" style="background:#ff6b00"></button><button class="color-btn" data-player="1" data-color="#ffd700" style="background:#ffd700"></button><button class="color-btn" data-player="1" data-color="#00ff88" style="background:#00ff88"></button><button class="color-btn" data-player="1" data-color="#00d4ff" style="background:#00d4ff"></button><button class="color-btn" data-player="1" data-color="#7b68ee" style="background:#7b68ee"></button></div></div><div class="player-card" id="player2Card"><div class="player-label" id="player2Label">👤 JUGADOR 2</div><div class="hearts-container" id="hearts2"><span class="heart" data-player="2" data-index="0">❤️</span><span class="heart" data-player="2" data-index="1">❤️</span><span class="heart" data-player="2" data-index="2">❤️</span></div><button class="reset-btn" id="resetBtn2">🔄 Reintentar</button><div class="player-status" id="player2Status"></div><div class="color-picker-container" id="colorPicker2"><button class="color-btn" data-player="2" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-player="2" data-color="#ff6b00" style="background:#ff6b00"></button><button class="color-btn" data-player="2" data-color="#ffd700" style="background:#ffd700"></button><button class="color-btn" data-player="2" data-color="#00ff88" style="background:#00ff88"></button><button class="color-btn" data-player="2" data-color="#00d4ff" style="background:#00d4ff"></button><button class="color-btn" data-player="2" data-color="#7b68ee" style="background:#7b68ee"></button></div></div></div>
-<div class="custom-player" id="customPlayer"><div class="player-container" id="playerContainer"><div id="playerPlaceholder" class="placeholder"><div class="icon">🎬</div><div class="msg" id="placeholderMsg">Pega un enlace de YouTube</div></div><iframe id="playerIframe" style="display:none;"></iframe></div><div class="player-controls"><input type="text" id="playerInput" placeholder="https://youtube.com/watch?v=..."><button id="playerLoadBtn">▶ Cargar</button></div></div>
-<div class="credits" id="creditsText"><span>CC0</span> Raphapro900 <span>- V1.0</span></div>
-</div>
+  <div class="main-container" id="mainContainer">
+    <div class="logo-container" id="logoContainer"><div class="logo-text" id="logoText">NoTeRias</div><div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div></div>
+    <div class="top-buttons">
+      <button class="how-to-play-btn" id="howToPlayBtn">📼 Cómo jugar</button>
+      <button class="multiplayer-btn" id="multiplayerBtn">🎮 2 Jugadores</button>
+      <button class="exit-mp-btn" id="exitMpBtn">🚪 Salir 2P</button>
+    </div>
+    <div class="heart-counter" id="heartCounter"><div class="player-label" id="playerLabel">👤 TÚ</div><div class="hearts-container" id="heartsContainer"><span class="heart" data-index="0">❤️</span><span class="heart" data-index="1">❤️</span><span class="heart" data-index="2">❤️</span></div><button class="reset-btn" id="resetBtn">🔄 Reintentar</button><div class="color-picker-container" id="colorPicker"><button class="color-btn" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-color="#ff6b00" style="background:#ff6b00"></button><button class="color-btn" data-color="#ffd700" style="background:#ffd700"></button><button class="color-btn" data-color="#00ff88" style="background:#00ff88"></button><button class="color-btn" data-color="#00d4ff" style="background:#00d4ff"></button><button class="color-btn" data-color="#7b68ee" style="background:#7b68ee"></button></div></div>
+    <div class="players-container" id="playersContainer"><div class="player-card" id="player1Card"><div class="player-label" id="player1Label">👤 JUGADOR 1</div><div class="hearts-container" id="hearts1"><span class="heart" data-player="1" data-index="0">❤️</span><span class="heart" data-player="1" data-index="1">❤️</span><span class="heart" data-player="1" data-index="2">❤️</span></div><button class="reset-btn" id="resetBtn1">🔄 Reintentar</button><div class="player-status" id="player1Status"></div><div class="color-picker-container" id="colorPicker1"><button class="color-btn" data-player="1" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-player="1" data-color="#ff6b00" style="background:#ff6b00"></button><button class="color-btn" data-player="1" data-color="#ffd700" style="background:#ffd700"></button><button class="color-btn" data-player="1" data-color="#00ff88" style="background:#00ff88"></button><button class="color-btn" data-player="1" data-color="#00d4ff" style="background:#00d4ff"></button><button class="color-btn" data-player="1" data-color="#7b68ee" style="background:#7b68ee"></button></div></div><div class="player-card" id="player2Card"><div class="player-label" id="player2Label">👤 JUGADOR 2</div><div class="hearts-container" id="hearts2"><span class="heart" data-player="2" data-index="0">❤️</span><span class="heart" data-player="2" data-index="1">❤️</span><span class="heart" data-player="2" data-index="2">❤️</span></div><button class="reset-btn" id="resetBtn2">🔄 Reintentar</button><div class="player-status" id="player2Status"></div><div class="color-picker-container" id="colorPicker2"><button class="color-btn" data-player="2" data-color="#ff2b4f" style="background:#ff2b4f"></button><button class="color-btn" data-player="2" data-color="#ff6b00" style="background:#ff6b00"></button><button class="color-btn" data-player="2" data-color="#ffd700" style="background:#ffd700"></button><button class="color-btn" data-player="2" data-color="#00ff88" style="background:#00ff88"></button><button class="color-btn" data-player="2" data-color="#00d4ff" style="background:#00d4ff"></button><button class="color-btn" data-player="2" data-color="#7b68ee" style="background:#7b68ee"></button></div></div></div>
+    <div class="custom-player" id="customPlayer"><div class="player-container" id="playerContainer"><div id="playerPlaceholder" class="placeholder"><div class="icon">🎬</div><div class="msg" id="placeholderMsg">Pega un enlace de YouTube</div></div><iframe id="playerIframe" style="display:none;"></iframe></div><div class="player-controls"><input type="text" id="playerInput" placeholder="https://youtube.com/watch?v=..."><button id="playerLoadBtn">▶ Cargar</button></div></div>
+    <div class="credits" id="creditsText"><span>CC0</span> Raphapro900 <span>- V1.0</span></div>
+  </div>
 
-<audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3"></audio>
-<audio id="winAudio" preload="auto"><source src="Win.mp3"></audio>
-<audio id="oofAudio" preload="auto"><source src="oof.mp3"></audio>
-<audio id="underAudio" preload="auto"><source src="under.mp3"></audio>
-<audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3"></audio>
-<audio id="ayAudio" preload="auto"><source src="Ay.mp3"></audio>
-<audio id="nooAudio" preload="auto"><source src="Noo.mp3"></audio>
-<audio id="wthbAudio" preload="auto"><source src="WTHB.mp3"></audio>
-<audio id="logoPressAudio" preload="auto" loop><source src="LogoPress.mp3"></audio>
-<audio id="shhAudio" preload="auto"><source src="Shh.mp3"></audio>
-<audio id="xddAudio" preload="auto"><source src="XDD.mp3"></audio>
+  <audio id="gameOverAudio" preload="auto"><source src="GameOver.mp3"></audio>
+  <audio id="winAudio" preload="auto"><source src="Win.mp3"></audio>
+  <audio id="oofAudio" preload="auto"><source src="oof.mp3"></audio>
+  <audio id="underAudio" preload="auto"><source src="under.mp3"></audio>
+  <audio id="ayNoAudio" preload="auto"><source src="AyNo.mp3"></audio>
+  <audio id="ayAudio" preload="auto"><source src="Ay.mp3"></audio>
+  <audio id="nooAudio" preload="auto"><source src="Noo.mp3"></audio>
+  <audio id="wthbAudio" preload="auto"><source src="WTHB.mp3"></audio>
+  <audio id="logoPressAudio" preload="auto" loop><source src="LogoPress.mp3"></audio>
+  <audio id="shhAudio" preload="auto"><source src="Shh.mp3"></audio>
+  <audio id="xddAudio" preload="auto"><source src="XDD.mp3"></audio>
 
-<script>
-(function(){
-// ======================== ESTADO ========================
-let logoState=0,isGameOver=!1,isMusicPlaying=!1,isMultiplayer=!1;
-let hearts=[!0,!0,!0],heartColor='#ff2b4f';
-const players={1:{hearts:[!0,!0,!0],color:'#ff2b4f',won:!1},2:{hearts:[!0,!0,!0],color:'#ff2b4f',won:!1}};
+  <script>
+    (function(){
+      const introScreen = document.getElementById('introScreen');
+      const introVideo = document.getElementById('introVideo');
+      const clickOverlay = document.getElementById('clickOverlay');
 
-// ======================== DOM ========================
-const L=document.getElementById('logoContainer'),LT=document.getElementById('logoText'),LS=document.getElementById('logoSub');
-const HTP=document.getElementById('howToPlayBtn'),MP=document.getElementById('multiplayerBtn'),EMP=document.getElementById('exitMpBtn');
-const HC=document.getElementById('heartCounter'),HE=document.querySelectorAll('#heartsContainer .heart'),RB=document.getElementById('resetBtn'),PL=document.getElementById('playerLabel');
-const H1=document.querySelectorAll('#hearts1 .heart'),H2=document.querySelectorAll('#hearts2 .heart'),R1=document.getElementById('resetBtn1'),R2=document.getElementById('resetBtn2'),S1=document.getElementById('player1Status'),S2=document.getElementById('player2Status');
-const PI=document.getElementById('playerInput'),PLB=document.getElementById('playerLoadBtn'),PIF=document.getElementById('playerIframe'),PP=document.getElementById('playerPlaceholder'),PPM=document.getElementById('placeholderMsg');
-const CB=document.querySelectorAll('#colorPicker .color-btn'),PC=document.getElementById('playersContainer');
-const GOT=document.getElementById('goText'),GOS=document.getElementById('goSubText'),GOR=document.getElementById('goResetBtn'),GOO=document.getElementById('gameOverOverlay'),MC=document.getElementById('mainContainer');
-const CT=document.getElementById('creditsText');
+      const startIntro = async () => {
+        clickOverlay.style.display = 'none';
+        introVideo.muted = false;
+        introVideo.currentTime = 0;
+        try {
+          await introVideo.play();
+        } catch (err) {
+          console.log('Error al reproducir intro:', err);
+        }
+        setTimeout(() => {
+          introScreen.classList.add('hidden');
+        }, 2600);
+      };
 
-// ======================== AUDIOS ========================
-const GA=document.getElementById('gameOverAudio'),WA=document.getElementById('winAudio'),OA=document.getElementById('oofAudio'),UA=document.getElementById('underAudio'),LPA=document.getElementById('logoPressAudio'),SHA=document.getElementById('shhAudio'),XDA=document.getElementById('xddAudio');
-function pLP(){try{LPA.currentTime=0;LPA.volume=.8;LPA.loop=!0;LPA.play()}catch(e){}}
-function sLP(){try{LPA.pause();LPA.currentTime=0;LPA.loop=!1}catch(e){}}
-function pSH(){try{SHA.currentTime=0;SHA.volume=.8;SHA.play()}catch(e){}}
-function pOF(){try{OA.currentTime=0;OA.volume=.8;OA.play()}catch(e){}}
-function pUN(){try{UA.currentTime=0;UA.volume=.8;UA.play()}catch(e){}}
-function pRAN(){const a=[document.getElementById('ayNoAudio'),document.getElementById('ayAudio'),document.getElementById('nooAudio'),document.getElementById('wthbAudio')];const e=a[Math.floor(Math.random()*a.length)];try{e.currentTime=0;e.volume=.8;e.play()}catch(n){}}
-function pXD(){try{XDA.currentTime=0;XDA.volume=.9;XDA.play()}catch(e){}}
-function pGAM(){try{if(isMusicPlaying)return;GA.currentTime=0;GA.volume=1;GA.play().then(()=>isMusicPlaying=!0)}catch(e){}}
-function pWIN(){try{if(isMusicPlaying)return;WA.currentTime=0;WA.volume=1;WA.play().then(()=>isMusicPlaying=!0)}catch(e){}}
-function sGAM(){try{GA.pause();GA.currentTime=0;WA.pause();WA.currentTime=0;isMusicPlaying=!1}catch(e){}}
-function shake(){document.body.classList.remove('shaking');void document.body.offsetWidth;document.body.classList.add('shaking');setTimeout(()=>document.body.classList.remove('shaking'),500)}
-function gE(alive,laugh){return laugh?alive?'🤣':'😂':alive?'❤️':'💔'}
+      clickOverlay.addEventListener('click', startIntro);
+      introVideo.addEventListener('ended', () => {
+        introScreen.classList.add('hidden');
+      });
 
-function updateSingle(){const l=logoState===1;HE.forEach((e,i)=>{const a=hearts[i];e.textContent=gE(a,l);e.style.color=heartColor;if(a){e.classList.remove('lost','breaking');e.style.textShadow=`0 8px 25px rgba(255,50,80,.7)`}else{e.classList.add('lost');e.style.textShadow='none'}})}
-function updateP(id){const p=players[id],h=id===1?H1:H2,s=id===1?S1:S2,l=logoState===1;h.forEach((e,i)=>{const a=p.hearts[i];e.textContent=gE(a,l);e.style.color=p.color;if(a){e.classList.remove('lost','breaking');e.style.textShadow=`0 8px 25px rgba(255,50,80,.7)`}else{e.classList.add('lost');e.style.textShadow='none'}});s.textContent=p.won?l?'😂¡GANASTE!':'✨ ¡GANASTE!':'';s.classList.toggle('win',p.won)}
-function updateAll(){updateP(1);updateP(2)}
+      // ======================== ESTADO ========================
+      let logoState=0,isGameOver=!1,isMusicPlaying=!1,isMultiplayer=!1;
+      let hearts=[!0,!0,!0],heartColor='#ff2b4f';
+      const players={1:{hearts:[!0,!0,!0],color:'#ff2b4f',won:!1},2:{hearts:[!0,!0,!0],color:'#ff2b4f',won:!1}};
 
-function handleHeart(e){if(isGameOver||isMultiplayer)return;const el=e.currentTarget;const i=parseInt(el.dataset.index);if(!hearts[i])return;hearts[i]=!1;updateSingle();shake();pUN();const a=hearts.filter(h=>h).length;a===0&&(isGameOver=!0,GOO.classList.add('show'),MC.classList.add('game-over-mode'),document.body.classList.add('game-over-active'),pGAM(),GOS.classList.toggle('shaking-text',logoState===1))}
-function handlePHeart(e){if(isGameOver||!isMultiplayer)return;const el=e.currentTarget;const pid=parseInt(el.dataset.player);const i=parseInt(el.dataset.index);const p=players[pid];if(!p.hearts[i])return;p.hearts[i]=!1;updateP(pid);shake();pUN();check2P()}
-function check2P(){const p1=players[1].hearts.filter(h=>h).length,p2=players[2].hearts.filter(h=>h).length,l=logoState===1;if(p1===0&&p2>0){R1.classList.add('visible');S1.textContent=l?'😂¡PERDISTE!':'💔 ¡PERDISTE!';S1.classList.add('win');players[2].won=!0;S2.textContent=l?'😂¡GANASTE!':'✨ ¡GANASTE!';S2.classList.add('win')}else if(p2===0&&p1>0){R2.classList.add('visible');S2.textContent=l?'😂¡PERDISTE!':'💔 ¡PERDISTE!';S2.classList.add('win');players[1].won=!0;S1.textContent=l?'😂¡GANASTE!':'✨ ¡GANASTE!';S1.classList.add('win')}}
-function resetSingle(){hearts=[!0,!0,!0];updateSingle();RB.classList.remove('visible');if(isGameOver){isGameOver=!1;GOO.classList.remove('show');document.body.classList.remove('game-over-active');MC.classList.remove('game-over-mode');sGAM()}}
-function resetP(id){const p=players[id];p.hearts=[!0,!0,!0];p.won=!1;updateP(id);const rb=id===1?R1:R2;rb.classList.remove('visible');const oid=id===1?2:1;if(players[oid].hearts.filter(h=>h).length===0){players[oid].hearts=[!0,!0,!0];players[oid].won=!1;updateP(oid);(id===1?R2:R1).classList.remove('visible')}}
-CB.forEach(b=>{b.addEventListener('click',function(){const c=this.dataset.color;CB.forEach(b=>b.classList.remove('active'));this.classList.add('active');heartColor=c;updateSingle()})});
-document.querySelectorAll('#colorPicker1 .color-btn,#colorPicker2 .color-btn').forEach(b=>{b.addEventListener('click',function(){const pid=parseInt(this.dataset.player);const c=this.dataset.color;document.querySelectorAll(`#colorPicker${pid} .color-btn`).forEach(b=>b.classList.remove('active'));this.classList.add('active');players[pid].color=c;updateP(pid)})});
-RB.addEventListener('click',resetSingle);R1.addEventListener('click',()=>resetP(1));R2.addEventListener('click',()=>resetP(2));
-MP.addEventListener('click',function(){if(isMultiplayer)return;isMultiplayer=!0;PC.classList.add('active');MP.textContent='🎮 2 Jugadores (ACTIVO)';MP.classList.add('active');EMP.classList.add('visible');document.querySelectorAll('#colorPicker1 .color-btn')[0].classList.add('active');document.querySelectorAll('#colorPicker2 .color-btn')[0].classList.add('active');HTP.classList.add('disabled')});
-EMP.addEventListener('click',function(){if(!isMultiplayer)return;if(confirm('¿Estás seguro de que quieres salir del modo 2 jugadores?')){isMultiplayer=!1;PC.classList.remove('active');HC.style.display='flex';MP.textContent='🎮 2 Jugadores';MP.classList.remove('active');EMP.classList.remove('visible');HTP.classList.remove('disabled')}});
-GOR.addEventListener('click',function(){if(isMultiplayer){players[1].hearts=[!0,!0,!0];players[2].hearts=[!0,!0,!0];players[1].won=!1;players[2].won=!1;R1.classList.remove('visible');R2.classList.remove('visible');S1.textContent='';S2.textContent='';S1.classList.remove('win');S2.classList.remove('win');updateAll()}else{resetSingle()}isGameOver=!1;GOO.classList.remove('show');document.body.classList.remove('game-over-active');MC.classList.remove('game-over-mode');sGAM()});
-function updateAllTexts(){const l=logoState===1;HTP.textContent=l?'📼 Como reírse AJAJAJAJA':'📼 Cómo jugar';l?HTP.classList.add('switched'):HTP.classList.remove('switched');PPM.textContent=l?'Mira esto ajajaj':'Pega un enlace de YouTube';CT.textContent=l?'😂 Es irónico':'CC0 Raphapro900 - V1.0';CT.classList.toggle('switched',l)}
-function toggleLogo(){if(isGameOver)return;L.classList.remove('shaking-logo','shaking-loop');void L.offsetWidth;if(logoState===0){LT.textContent='Ríe';LT.classList.add('switched');logoState=1;pLP();L.classList.add('shaking-loop');updateAllTexts();updateSingle();updateAll()}else{LT.textContent='NoTeRias';LT.classList.remove('switched');logoState=0;sLP();L.classList.remove('shaking-loop');updateAllTexts();updateSingle();updateAll()}}
-L.addEventListener('click',toggleLogo);
-PLB.addEventListener('click',function(){let url=PI.value.trim();if(!url){PP.style.display='flex';PIF.style.display='none';return}let vid=null;let m=url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&\n?#]+)/);if(m&&m[1]){vid=m[1];PIF.src=`https://www.youtube.com/embed/${vid}`;PP.style.display='none';PIF.style.display='block'}else{alert('❌ Enlace de YouTube no válido');PP.style.display='flex';PIF.style.display='none'}});
-PI.addEventListener('keypress',e=>{if(e.key==='Enter')PLB.click()});
-HE.forEach(e=>{e.addEventListener('click',handleHeart)});H1.forEach(e=>{e.addEventListener('click',handlePHeart)});H2.forEach(e=>{e.addEventListener('click',handlePHeart)});
+      // ======================== DOM ========================
+      const L=document.getElementById('logoContainer'),LT=document.getElementById('logoText'),LS=document.getElementById('logoSub');
+      const HTP=document.getElementById('howToPlayBtn'),MP=document.getElementById('multiplayerBtn'),EMP=document.getElementById('exitMpBtn');
+      const HC=document.getElementById('heartCounter'),HE=document.querySelectorAll('#heartsContainer .heart'),RB=document.getElementById('resetBtn'),PL=document.getElementById('playerLabel');
+      const H1=document.querySelectorAll('#hearts1 .heart'),H2=document.querySelectorAll('#hearts2 .heart'),R1=document.getElementById('resetBtn1'),R2=document.getElementById('resetBtn2'),S1=document.getElementById('player1Status'),S2=document.getElementById('player2Status');
+      const PI=document.getElementById('playerInput'),PLB=document.getElementById('playerLoadBtn'),PIF=document.getElementById('playerIframe'),PP=document.getElementById('playerPlaceholder'),PPM=document.getElementById('placeholderMsg');
+      const CB=document.querySelectorAll('#colorPicker .color-btn'),PC=document.getElementById('playersContainer');
+      const GOT=document.getElementById('goText'),GOS=document.getElementById('goSubText'),GOR=document.getElementById('goResetBtn'),GOO=document.getElementById('gameOverOverlay'),MC=document.getElementById('mainContainer');
+      const CT=document.getElementById('creditsText');
 
-// ======================== BOTÓN CÓMO JUGAR DESACTIVADO ========================
-HTP.classList.add('disabled');
-HTP.title = 'Próximamente';
+      // ======================== AUDIOS ========================
+      const GA=document.getElementById('gameOverAudio'),WA=document.getElementById('winAudio'),OA=document.getElementById('oofAudio'),UA=document.getElementById('underAudio'),LPA=document.getElementById('logoPressAudio'),SHA=document.getElementById('shhAudio'),XDA=document.getElementById('xddAudio');
+      function pLP(){try{LPA.currentTime=0;LPA.volume=.8;LPA.loop=!0;LPA.play()}catch(e){}}
+      function sLP(){try{LPA.pause();LPA.currentTime=0;LPA.loop=!1}catch(e){}}
+      function pSH(){try{SHA.currentTime=0;SHA.volume=.8;SHA.play()}catch(e){}}
+      function pOF(){try{OA.currentTime=0;OA.volume=.8;OA.play()}catch(e){}}
+      function pUN(){try{UA.currentTime=0;UA.volume=.8;UA.play()}catch(e){}}
+      function pRAN(){const a=[document.getElementById('ayNoAudio'),document.getElementById('ayAudio'),document.getElementById('nooAudio'),document.getElementById('wthbAudio')];const e=a[Math.floor(Math.random()*a.length)];try{e.currentTime=0;e.volume=.8;e.play()}catch(n){}}
+      function pXD(){try{XDA.currentTime=0;XDA.volume=.9;XDA.play()}catch(e){}}
+      function pGAM(){try{if(isMusicPlaying)return;GA.currentTime=0;GA.volume=1;GA.play().then(()=>isMusicPlaying=!0)}catch(e){}}
+      function pWIN(){try{if(isMusicPlaying)return;WA.currentTime=0;WA.volume=1;WA.play().then(()=>isMusicPlaying=!0)}catch(e){}}
+      function sGAM(){try{GA.pause();GA.currentTime=0;WA.pause();WA.currentTime=0;isMusicPlaying=!1}catch(e){}}
+      function shake(){document.body.classList.remove('shaking');void document.body.offsetWidth;document.body.classList.add('shaking');setTimeout(()=>document.body.classList.remove('shaking'),500)}
+      function gE(alive,laugh){return laugh?alive?'🤣':'😂':alive?'❤️':'💔'}
 
-// ======================== INICIO ========================
-updateSingle();updateAll();updateAllTexts();
-console.log('❤️ NoTeRias · Corazones (VHS desactivado)');
-})();
-</script>
+      function updateSingle(){const l=logoState===1;HE.forEach((e,i)=>{const a=hearts[i];e.textContent=gE(a,l);e.style.color=heartColor;if(a){e.classList.remove('lost','breaking');e.style.textShadow=`0 8px 25px rgba(255,50,80,.7)`}else{e.classList.add('lost');e.style.textShadow='none'}})}
+      function updateP(id){const p=players[id],h=id===1?H1:H2,s=id===1?S1:S2,l=logoState===1;h.forEach((e,i)=>{const a=p.hearts[i];e.textContent=gE(a,l);e.style.color=p.color;if(a){e.classList.remove('lost','breaking');e.style.textShadow=`0 8px 25px rgba(255,50,80,.7)`}else{e.classList.add('lost');e.style.textShadow='none'}});s.textContent=p.won?l?'😂¡GANASTE!':'✨ ¡GANASTE!':'';s.classList.toggle('win',p.won)}
+      function updateAll(){updateP(1);updateP(2)}
+
+      function handleHeart(e){if(isGameOver||isMultiplayer)return;const el=e.currentTarget;const i=parseInt(el.dataset.index);if(!hearts[i])return;hearts[i]=!1;updateSingle();shake();pUN();const a=hearts.filter(h=>h).length;a===0&&(isGameOver=!0,GOO.classList.add('show'),MC.classList.add('game-over-mode'),document.body.classList.add('game-over-active'),pGAM(),GOS.classList.toggle('shaking-text',logoState===1))}
+      function handlePHeart(e){if(isGameOver||!isMultiplayer)return;const el=e.currentTarget;const pid=parseInt(el.dataset.player);const i=parseInt(el.dataset.index);const p=players[pid];if(!p.hearts[i])return;p.hearts[i]=!1;updateP(pid);shake();pUN();check2P()}
+      function check2P(){const p1=players[1].hearts.filter(h=>h).length,p2=players[2].hearts.filter(h=>h).length,l=logoState===1;if(p1===0&&p2>0){R1.classList.add('visible');S1.textContent=l?'😂¡PERDISTE!':'💔 ¡PERDISTE!';S1.classList.add('win');players[2].won=!0;S2.textContent=l?'😂¡GANASTE!':'✨ ¡GANASTE!';S2.classList.add('win')}else if(p2===0&&p1>0){R2.classList.add('visible');S2.textContent=l?'😂¡PERDISTE!':'💔 ¡PERDISTE!';S2.classList.add('win');players[1].won=!0;S1.textContent=l?'😂¡GANASTE!':'✨ ¡GANASTE!';S1.classList.add('win')}}
+      function resetSingle(){hearts=[!0,!0,!0];updateSingle();RB.classList.remove('visible');if(isGameOver){isGameOver=!1;GOO.classList.remove('show');document.body.classList.remove('game-over-active');MC.classList.remove('game-over-mode');sGAM()}}
+      function resetP(id){const p=players[id];p.hearts=[!0,!0,!0];p.won=!1;updateP(id);const rb=id===1?R1:R2;rb.classList.remove('visible');const oid=id===1?2:1;if(players[oid].hearts.filter(h=>h).length===0){players[oid].hearts=[!0,!0,!0];players[oid].won=!1;updateP(oid);(id===1?R2:R1).classList.remove('visible')}}
+      CB.forEach(b=>{b.addEventListener('click',function(){const c=this.dataset.color;CB.forEach(b=>b.classList.remove('active'));this.classList.add('active');heartColor=c;updateSingle()})});
+      document.querySelectorAll('#colorPicker1 .color-btn,#colorPicker2 .color-btn').forEach(b=>{b.addEventListener('click',function(){const pid=parseInt(this.dataset.player);const c=this.dataset.color;document.querySelectorAll(`#colorPicker${pid} .color-btn`).forEach(b=>b.classList.remove('active'));this.classList.add('active');players[pid].color=c;updateP(pid)})});
+      RB.addEventListener('click',resetSingle);R1.addEventListener('click',()=>resetP(1));R2.addEventListener('click',()=>resetP(2));
+      MP.addEventListener('click',function(){if(isMultiplayer)return;isMultiplayer=!0;PC.classList.add('active');MP.textContent='🎮 2 Jugadores (ACTIVO)';MP.classList.add('active');EMP.classList.add('visible');document.querySelectorAll('#colorPicker1 .color-btn')[0].classList.add('active');document.querySelectorAll('#colorPicker2 .color-btn')[0].classList.add('active');HTP.classList.add('disabled')});
+      EMP.addEventListener('click',function(){if(!isMultiplayer)return;if(confirm('¿Estás seguro de que quieres salir del modo 2 jugadores?')){isMultiplayer=!1;PC.classList.remove('active');HC.style.display='flex';MP.textContent='🎮 2 Jugadores';MP.classList.remove('active');EMP.classList.remove('visible');HTP.classList.remove('disabled')}});
+      GOR.addEventListener('click',function(){if(isMultiplayer){players[1].hearts=[!0,!0,!0];players[2].hearts=[!0,!0,!0];players[1].won=!1;players[2].won=!1;R1.classList.remove('visible');R2.classList.remove('visible');S1.textContent='';S2.textContent='';S1.classList.remove('win');S2.classList.remove('win');updateAll()}else{resetSingle()}isGameOver=!1;GOO.classList.remove('show');document.body.classList.remove('game-over-active');MC.classList.remove('game-over-mode');sGAM()});
+      function updateAllTexts(){const l=logoState===1;HTP.textContent=l?'📼 Como reírse AJAJAJAJA':'📼 Cómo jugar';l?HTP.classList.add('switched'):HTP.classList.remove('switched');PPM.textContent=l?'Mira esto ajajaj':'Pega un enlace de YouTube';CT.textContent=l?'😂 Es irónico':'CC0 Raphapro900 - V1.0';CT.classList.toggle('switched',l)}
+      function toggleLogo(){if(isGameOver)return;L.classList.remove('shaking-logo','shaking-loop');void L.offsetWidth;if(logoState===0){LT.textContent='Ríe';LT.classList.add('switched');logoState=1;pLP();L.classList.add('shaking-loop');updateAllTexts();updateSingle();updateAll()}else{LT.textContent='NoTeRias';LT.classList.remove('switched');logoState=0;sLP();L.classList.remove('shaking-loop');updateAllTexts();updateSingle();updateAll()}}
+      L.addEventListener('click',toggleLogo);
+      PLB.addEventListener('click',function(){let url=PI.value.trim();if(!url){PP.style.display='flex';PIF.style.display='none';return}let vid=null;let m=url.match(/(?:youtu\.be\/|youtube\.com\/watch\?v=)([^&\n?#]+)/);if(m&&m[1]){vid=m[1];PIF.src=`https://www.youtube.com/embed/${vid}`;PP.style.display='none';PIF.style.display='block'}else{alert('❌ Enlace de YouTube no válido');PP.style.display='flex';PIF.style.display='none'}});
+      PI.addEventListener('keypress',e=>{if(e.key==='Enter')PLB.click()});
+      HE.forEach(e=>{e.addEventListener('click',handleHeart)});H1.forEach(e=>{e.addEventListener('click',handlePHeart)});H2.forEach(e=>{e.addEventListener('click',handlePHeart)});
+
+      // ======================== BOTÓN CÓMO JUGAR DESACTIVADO ========================
+      HTP.classList.add('disabled');
+      HTP.title = 'Próximamente';
+
+      // ======================== INICIO ========================
+      updateSingle();updateAll();updateAllTexts();
+      console.log('❤️ NoTeRias · Corazones (VHS desactivado)');
+    })();
+  </script>
 </body>
 </html>
