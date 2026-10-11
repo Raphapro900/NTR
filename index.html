@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NoTeRias · Corazones</title>
+<title>NoTeRias · Corazones + VHS 3D</title>
 <link rel="icon" type="image/png" href="Log0.png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;user-select:none}
@@ -26,7 +26,6 @@ body.shaking{animation:shakeWithBlur .5s ease-in-out}
 .how-to-play-btn{background:transparent;border:2px solid #ff6b7c66;color:#ff6b7c88;font-size:1.1rem}
 .how-to-play-btn:hover{background:#ff6b7c22;border-color:#ff6b7c}
 .how-to-play-btn.switched{font-size:1.3rem;border-color:#ff6b7c88;color:#ff6b7cbb;animation:btnPulse 1s infinite alternate}
-.how-to-play-btn.disabled{opacity:0.5;cursor:not-allowed;pointer-events:none}
 .multiplayer-btn{background:linear-gradient(135deg,#6b7cff,#2838dd);border:none;color:#fff;font-size:1.2rem;font-weight:bold;box-shadow:0 4px 0 #1a2a88,0 8px 25px rgba(43,79,255,.25)}
 .multiplayer-btn:hover{background:linear-gradient(135deg,#7c8cff,#3848ee);transform:scale(1.02)}
 .multiplayer-btn.active{background:linear-gradient(135deg,#ff3b5c,#dd0028);box-shadow:0 4px 0 #881a2a,0 8px 25px rgba(255,43,79,.25)}
@@ -77,6 +76,12 @@ body.shaking{animation:shakeWithBlur .5s ease-in-out}
 .player-controls button.switched{background:linear-gradient(135deg,#ff6b7c,#ff2b4f);font-size:1.1rem;animation:btnPulse 1s infinite alternate}
 .credits{font-size:.8rem;color:#ff6b7c44;letter-spacing:2px;text-align:center;padding:.2rem 0;border-top:1px solid #ff6b7c22;width:100%;max-width:500px;transition:all .3s}
 .credits.switched{color:#ff6b7c66;font-size:.9rem}
+.vhs-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:none;z-index:60000;overflow:hidden}
+.vhs-overlay.active{display:block}
+.vhs-overlay #vhsCanvas{width:100%;height:100%;display:block}
+.vhs-overlay #vhsExit{position:fixed;top:20px;right:20px;z-index:60001;background:rgba(255,43,79,.15);border:2px solid #ff6b7c44;color:#ff6b7c88;padding:8px 16px;border-radius:30px;cursor:pointer;font-family:'Segoe UI',Arial,sans-serif;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;backdrop-filter:blur(10px);transition:all .3s}
+.vhs-overlay #vhsExit:hover{background:rgba(255,43,79,.25);border-color:#ff6b7c88;color:#ff6b7c}
+.vhs-overlay #vhsCrosshair{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);color:#ff6b7c33;font-size:1.5rem;z-index:60001;pointer-events:none;opacity:.3}
 .game-over-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;display:none;justify-content:center;align-items:center;flex-direction:column;z-index:10000;animation:undertaleFadeIn 1.2s forwards}
 .game-over-overlay.show{display:flex}
 @keyframes undertaleFadeIn{0%{opacity:0}60%{opacity:1;background:#0a0005}100%{opacity:1;background:#0a0005}}
@@ -93,12 +98,26 @@ body.shaking{animation:shakeWithBlur .5s ease-in-out}
 @keyframes goBtnRise{0%{transform:translateY(200px);opacity:0}100%{transform:translateY(0);opacity:1}}
 .go-reset-btn:hover{background:#ff4f6e;transform:scale(1.05)}
 body.game-over-active{overflow:hidden}
+.intro-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:99999;display:flex;justify-content:center;align-items:center;overflow:hidden}
+.intro-overlay video{position:fixed;top:0;left:0;width:100%;height:100%;object-fit:cover;background:#000}
+.intro-overlay .click-layer{position:fixed;top:0;left:0;width:100%;height:100%;z-index:10;background:rgba(0,0,0,.55);display:flex;justify-content:center;align-items:center;cursor:pointer;color:#fff;font-size:28px;text-align:center;font-family:'Komika Axis','Comic Sans MS',cursive}
+.intro-overlay .click-layer span{background:rgba(255,255,255,.12);padding:18px 32px;border-radius:14px;border:1px solid rgba(255,255,255,.25);backdrop-filter:blur(6px)}
+.intro-overlay.hidden{display:none}
 @media(max-width:650px){.players-container{flex-direction:column}.logo-text{font-size:3.5rem;letter-spacing:4px}.heart{font-size:3.8rem}.game-over-overlay .go-text{font-size:3.5rem;letter-spacing:6px}.player-card .heart{font-size:3.5rem}}
 </style>
 </head>
 <body>
 
+<!-- INTRO OVERLAY -->
+<div class="intro-overlay" id="introOverlay">
+    <video id="introVideo" src="intro.mp4" playsinline></video>
+    <div class="click-layer" id="clickOverlay">
+        <span>▶ Haz clic para empezar</span>
+    </div>
+</div>
+
 <div class="game-over-overlay" id="gameOverOverlay"><div class="go-text" id="goText">GAME OVER</div><div class="go-sub" id="goSubText">💀 Has perdido todos tus corazones</div><button class="go-reset-btn" id="goResetBtn">⟳ Volver a intentar</button></div>
+<div class="vhs-overlay" id="vhsOverlay"><canvas id="vhsCanvas"></canvas><div id="vhsCrosshair">+</div><div id="vhsExit">✕ Salir</div></div>
 
 <div class="main-container" id="mainContainer">
 <div class="logo-container" id="logoContainer"><div class="logo-text" id="logoText">NoTeRias</div><div class="logo-sub" id="logoSub">★ play &amp; enjoy ★</div></div>
@@ -125,8 +144,30 @@ body.game-over-active{overflow:hidden}
 <audio id="shhAudio" preload="auto"><source src="Shh.mp3"></audio>
 <audio id="xddAudio" preload="auto"><source src="XDD.mp3"></audio>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
 <script>
 (function(){
+// ======================== INTRO ========================
+const introOverlay=document.getElementById('introOverlay');
+const introVideo=document.getElementById('introVideo');
+const clickOverlay=document.getElementById('clickOverlay');
+
+clickOverlay.addEventListener('click',async()=>{
+    clickOverlay.style.display='none';
+    introVideo.muted=false;
+    introVideo.currentTime=0;
+    try{
+        await introVideo.play();
+    }catch(err){
+        console.log('Error al reproducir intro:',err);
+    }
+});
+
+introVideo.addEventListener('ended',()=>{
+    introOverlay.classList.add('hidden');
+});
+
 // ======================== ESTADO ========================
 let logoState=0,isGameOver=!1,isMusicPlaying=!1,isMultiplayer=!1;
 let hearts=[!0,!0,!0],heartColor='#ff2b4f';
@@ -139,6 +180,7 @@ const HC=document.getElementById('heartCounter'),HE=document.querySelectorAll('#
 const H1=document.querySelectorAll('#hearts1 .heart'),H2=document.querySelectorAll('#hearts2 .heart'),R1=document.getElementById('resetBtn1'),R2=document.getElementById('resetBtn2'),S1=document.getElementById('status1'),S2=document.getElementById('status2'),P1L=document.getElementById('player1Label'),P2L=document.getElementById('player2Label');
 const PI=document.getElementById('playerInput'),PLB=document.getElementById('playerLoadBtn'),PIF=document.getElementById('playerIframe'),PP=document.getElementById('playerPlaceholder'),PPM=document.getElementById('playerPlaceholderMsg');
 const CB=document.querySelectorAll('#colorPicker .color-btn'),PC=document.getElementById('playersContainer');
+const VO=document.getElementById('vhsOverlay'),VE=document.getElementById('vhsExit'),VC=document.getElementById('vhsCanvas');
 const GOT=document.getElementById('goText'),GOS=document.getElementById('goSubText'),GOR=document.getElementById('goResetBtn'),GOO=document.getElementById('gameOverOverlay'),MC=document.getElementById('mainContainer');
 const CT=document.getElementById('creditsText');
 
@@ -179,13 +221,97 @@ PLB.addEventListener('click',function(){let url=PI.value.trim();if(!url){PP.styl
 PI.addEventListener('keypress',e=>{if(e.key==='Enter')PLB.click()});
 HE.forEach(e=>{e.addEventListener('click',handleHeart)});H1.forEach(e=>{e.addEventListener('click',handlePHeart)});H2.forEach(e=>{e.addEventListener('click',handlePHeart)});
 
-// ======================== BOTÓN CÓMO JUGAR DESACTIVADO ========================
-HTP.classList.add('disabled');
-HTP.title = 'Próximamente';
+// ======================== VHS 3D ========================
+let vInit=!1,vScene,vCamera,vRenderer,vVideoEl=null,vVideoTex=null,vHasVHS=!1,vWatching=!1,vDragging=!1,vTapeGroup,vTapeClone=null;
+let isPointerDown=!1,dragOffset=new THREE.Vector3();
+const tapePos={x:1.2,y:0.15,z:-0.5};
+
+function showVHSMsg(t){/* sin textos */}
+
+function createVideoEl(src,l=!0){const v=document.createElement('video');v.src=src;v.crossOrigin='anonymous';v.playsInline=!0;v.muted=!1;v.loop=l;v.volume=.5;return v}
+
+function initVHS(){if(vInit)return;vInit=!0;const canvas=VC;vScene=new THREE.Scene();vScene.background=new THREE.Color(0x0a0a1a);vCamera=new THREE.PerspectiveCamera(50,canvas.clientWidth/canvas.clientHeight,.1,100);vCamera.position.set(0,1.8,3.2);vCamera.lookAt(0,0.8,-1.2);vRenderer=new THREE.WebGLRenderer({canvas,antialias:!0});vRenderer.setSize(canvas.clientWidth,canvas.clientHeight);vRenderer.setPixelRatio(Math.min(window.devicePixelRatio,2));vRenderer.shadowMap.enabled=!0;vRenderer.shadowMap.type=THREE.PCFSoftShadowMap;vRenderer.toneMapping=THREE.ACESFilmicToneMapping;vRenderer.toneMappingExposure=1.2;
+
+// Luces
+const am=new THREE.AmbientLight(0x4466aa,0.8);vScene.add(am);
+const dl=new THREE.DirectionalLight(0xffeedd,1.2);dl.position.set(0,4,2);vScene.add(dl);
+const dl2=new THREE.DirectionalLight(0x8888ff,0.6);dl2.position.set(-2,2,3);vScene.add(dl2);
+const dl3=new THREE.DirectionalLight(0x6666aa,0.5);dl3.position.set(1,1,4);vScene.add(dl3);
+const spot=new THREE.SpotLight(0xffeedd,1.5);spot.position.set(0,3.5,1);spot.target.position.set(0,0.8,-1.2);spot.angle=0.5;spot.penumbra=0.4;vScene.add(spot);vScene.add(spot.target);
+const tvLight=new THREE.PointLight(0x4488ff,0.8,5);tvLight.position.set(0,1.1,0);vScene.add(tvLight);
+
+// Suelo
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(8,8),new THREE.MeshStandardMaterial({color:0x1a1a3a,roughness:.8,metalness:.2}));floor.rotation.x=-Math.PI/2;floor.position.y=-.3;floor.receiveShadow=!0;vScene.add(floor);
+
+// Pared
+const wall=new THREE.Mesh(new THREE.PlaneGeometry(8,4.5),new THREE.MeshStandardMaterial({color:0x1a1a3a,roughness:.7,metalness:.2}));wall.position.set(0,1.8,-3);vScene.add(wall);
+
+// Mesa
+const mesaMat=new THREE.MeshStandardMaterial({color:0x333355,roughness:.5,metalness:.3});
+const mesaTop=new THREE.Mesh(new THREE.BoxGeometry(2.2,.08,1.2),mesaMat);mesaTop.position.set(0,.2,-1.2);mesaTop.castShadow=!0;mesaTop.receiveShadow=!0;vScene.add(mesaTop);
+const pataMat=new THREE.MeshStandardMaterial({color:0x444466,metalness:.5,roughness:.3});
+[[-.8,-.3,-.8],[.8,-.3,-.8],[-.8,-.3,-1.6],[.8,-.3,-1.6]].forEach(p=>{const pata=new THREE.Mesh(new THREE.CylinderGeometry(.04,.04,.5,6),pataMat);pata.position.set(p[0],p[1],p[2]);vScene.add(pata)});
+
+// TV
+const tvG=new THREE.Group();tvG.position.set(0,.65,-1.2);
+const tvMat=new THREE.MeshStandardMaterial({color:0x333355,roughness:.4,metalness:.4});
+const tvB=new THREE.Mesh(new THREE.BoxGeometry(1.2,1,.35),tvMat);tvB.position.z=0;tvB.castShadow=!0;tvG.add(tvB);
+const scr=new THREE.Mesh(new THREE.PlaneGeometry(1,.75),new THREE.MeshStandardMaterial({color:0x0a0a2a,emissive:0x224466,emissiveIntensity:.5,roughness:.3,metalness:.1}));scr.position.set(0,.02,.18);tvG.add(scr);
+const fM=new THREE.MeshStandardMaterial({color:0x444466,roughness:.4,metalness:.3});
+const fG=new THREE.BoxGeometry(1.05,.03,.03);const fT=new THREE.Mesh(fG,fM);fT.position.set(0,.38,.18);tvG.add(fT);const fB=new THREE.Mesh(fG,fM);fB.position.set(0,-.38,.18);tvG.add(fB);const fL=new THREE.Mesh(new THREE.BoxGeometry(.03,.75,.03),fM);fL.position.set(-.52,.02,.18);tvG.add(fL);const fR=new THREE.Mesh(new THREE.BoxGeometry(.03,.75,.03),fM);fR.position.set(.52,.02,.18);tvG.add(fR);
+const pBtn=new THREE.Mesh(new THREE.SphereGeometry(.03,8,8),new THREE.MeshStandardMaterial({color:0x44ff44,emissive:0x44ff44,emissiveIntensity:.5}));pBtn.position.set(.3,-.25,.2);tvG.add(pBtn);
+const baseTV=new THREE.Mesh(new THREE.BoxGeometry(.6,.05,.2),new THREE.MeshStandardMaterial({color:0x222244,roughness:.8}));baseTV.position.set(0,-.53,0);tvG.add(baseTV);
+vScene.add(tvG);const tvScreen=scr;
+
+// Cinta VHS
+const tapeMat=new THREE.MeshStandardMaterial({color:0x2a2a4a,roughness:.5,metalness:.3});
+vTapeGroup=new THREE.Group();vTapeGroup.position.set(tapePos.x,.35,tapePos.z);
+const tBody=new THREE.Mesh(new THREE.BoxGeometry(.35,.2,.5),tapeMat);tBody.castShadow=!0;vTapeGroup.add(tBody);
+const texL=new THREE.TextureLoader().load('VHS.png');
+const lMat=new THREE.MeshStandardMaterial({map:texL,roughness:.4,metalness:.3,side:THREE.DoubleSide});
+const lbl=new THREE.Mesh(new THREE.PlaneGeometry(.25,.12),lMat);lbl.position.set(0,.1,.26);vTapeGroup.add(lbl);
+vScene.add(vTapeGroup);
+
+// Clon para arrastrar
+vTapeClone=new THREE.Group();vTapeClone.position.set(0,0,0);vTapeClone.scale.set(.6,.6,.6);vTapeClone.visible=!1;
+const ctBody=new THREE.Mesh(new THREE.BoxGeometry(.35,.2,.5),tapeMat);ctBody.castShadow=!0;vTapeClone.add(ctBody);
+const clbl=new THREE.Mesh(new THREE.PlaneGeometry(.25,.12),lMat);clbl.position.set(0,.1,.26);vTapeClone.add(clbl);
+vScene.add(vTapeClone);
+
+// Sistema de video
+function setTV(video){if(vVideoTex){vVideoTex.dispose()}vVideoTex=new THREE.VideoTexture(video);vVideoTex.minFilter=THREE.LinearFilter;vVideoTex.magFilter=THREE.LinearFilter;tvScreen.material=new THREE.MeshStandardMaterial({map:vVideoTex,emissive:new THREE.Color(0x4488ff),emissiveIntensity:.6,roughness:.2,metalness:.1,side:THREE.DoubleSide});tvLight.intensity=1.5}
+function playScreen(){if(vVideoEl){vVideoEl.pause();vVideoEl.currentTime=0;vVideoEl=null}vVideoEl=createVideoEl('Screen.mp4',!0);setTV(vVideoEl);vVideoEl.play().catch(()=>{})}
+function playNoIn(){if(vVideoEl){vVideoEl.pause();vVideoEl.currentTime=0;vVideoEl=null}vVideoEl=createVideoEl('NoIn.mp4',!1);setTV(vVideoEl);vVideoEl.addEventListener('ended',function onEnd(){vVideoEl.removeEventListener('ended',onEnd);playScreen()});vVideoEl.play().catch(()=>{playScreen()})}
+function playTutorial(){if(vVideoEl){vVideoEl.pause();vVideoEl.currentTime=0;vVideoEl=null}vVideoEl=createVideoEl('Tutoriall.mp4',!1);setTV(vVideoEl);vVideoEl.addEventListener('ended',function onEnd(){vVideoEl.removeEventListener('ended',onEnd);vWatching=!1;vHasVHS=!1;vTapeClone.visible=!1;vTapeGroup.visible=!0;playScreen()});vVideoEl.play().catch(()=>{playScreen()})}
+setTimeout(playScreen,300);
+
+// Raycaster
+const ray=new THREE.Raycaster();const ptr=new THREE.Vector2();
+
+// Eventos de mouse
+vRenderer.domElement.addEventListener('pointerdown',e=>{if(vWatching)return;const rect=vRenderer.domElement.getBoundingClientRect();ptr.x=((e.clientX-rect.left)/rect.width)*2-1;ptr.y=-((e.clientY-rect.top)/rect.height)*2+1;ray.setFromCamera(ptr,vCamera);const ti=ray.intersectObject(vTapeGroup,!0);if(ti.length>0&&!vHasVHS){isPointerDown=!0;vDragging=!0;vHasVHS=!0;vTapeGroup.visible=!1;vTapeClone.visible=!0;const p=ti[0].point;dragOffset.copy(p).sub(vTapeClone.position);document.body.style.cursor='grabbing'}});
+vRenderer.domElement.addEventListener('pointermove',e=>{if(!vDragging||vWatching)return;const rect=vRenderer.domElement.getBoundingClientRect();const x=((e.clientX-rect.left)/rect.width)*2-1;const y=-((e.clientY-rect.top)/rect.height)*2+1;const plane=new THREE.Plane(new THREE.Vector3(0,0,1),-1.0);const intersect=new THREE.Vector3();ray.setFromCamera(new THREE.Vector2(x,y),vCamera);ray.ray.intersectPlane(plane,intersect);if(intersect){vTapeClone.position.copy(intersect.sub(dragOffset));vTapeClone.position.y=.2}});
+vRenderer.domElement.addEventListener('pointerup',e=>{if(!vDragging)return;vDragging=!1;isPointerDown=!1;document.body.style.cursor='default';const rect=vRenderer.domElement.getBoundingClientRect();ptr.x=((e.clientX-rect.left)/rect.width)*2-1;ptr.y=-((e.clientY-rect.top)/rect.height)*2+1;ray.setFromCamera(ptr,vCamera);const ti=ray.intersectObject(tvG,!0);if(ti.length>0&&vHasVHS){playTutorial();vWatching=!0;vTapeClone.visible=!1;vTapeGroup.visible=!1}else if(vHasVHS){vTapeClone.visible=!1;vTapeGroup.visible=!0}});
+
+// Click directo en TV
+vRenderer.domElement.addEventListener('click',e=>{if(vWatching)return;if(vDragging)return;const rect=vRenderer.domElement.getBoundingClientRect();ptr.x=((e.clientX-rect.left)/rect.width)*2-1;ptr.y=-((e.clientY-rect.top)/rect.height)*2+1;ray.setFromCamera(ptr,vCamera);const ti=ray.intersectObject(tvG,!0);if(ti.length>0){if(vHasVHS){playTutorial();vWatching=!0;vTapeClone.visible=!1;vTapeGroup.visible=!1}else{playNoIn()}}});
+
+// Salir
+VE.addEventListener('click',closeVHS);
+function closeVHS(){if(vVideoEl){vVideoEl.pause();vVideoEl.currentTime=0;vVideoEl.removeEventListener('ended',()=>{});vVideoEl=null}VO.classList.remove('active');vWatching=!1;vHasVHS=!1;vDragging=!1;vTapeClone.visible=!1;vTapeGroup.visible=!0;document.body.style.cursor='default';playScreen()}
+
+// Animación
+function animateVHS(){if(!VO.classList.contains('active')){requestAnimationFrame(animateVHS);return}requestAnimationFrame(animateVHS);vRenderer.render(vScene,vCamera)}
+function resizeVHS(){const w=VC.clientWidth,h=VC.clientHeight;if(vCamera){vCamera.aspect=w/h;vCamera.updateProjectionMatrix()}if(vRenderer){vRenderer.setSize(w,h)}}
+window.addEventListener('resize',resizeVHS);animateVHS();window.vhsResize=resizeVHS}
+
+function openVHS(){if(!vInit){initVHS()}VO.classList.add('active');if(window.vhsResize)setTimeout(window.vhsResize,200);vHasVHS=!1;vDragging=!1;vTapeClone.visible=!1;vTapeGroup.visible=!0;playScreen()}
+
+HTP.addEventListener('click',function(){openVHS()});
 
 // ======================== INICIO ========================
 updateSingle();updateAll();updateAllTexts();
-console.log('❤️ NoTeRias · Corazones (VHS desactivado)');
+console.log('❤️ NoTeRias · VHS 3D + Intro');
 })();
 </script>
 </body>
